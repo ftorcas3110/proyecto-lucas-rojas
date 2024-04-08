@@ -8,7 +8,6 @@ async function page() {
 
   return (
     <>
-      <a href="file:///Z:\Licitaciones PC\2024">asd</a>
     </>
   );
 }
