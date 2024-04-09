@@ -87,57 +87,83 @@ export async function getLicitaciones() {
 }
 
 
-// export async function newArticulo(formData) {
-//   try {
-//     const nombre = formData.get('nombre')
-//     const descripcion = formData.get('descripcion')
-//     const precio = Number( formData.get('precio')) 
+export async function newLicitacion(formData) {
+  try {
+    const fechapresentacion = formData.get('fechapresentacion')
+    const cliente = formData.get('cliente')
+    const importe = Number( formData.get('importe')) 
+    const numexpediente = formData.get('numexpediente')
+    const numlicitadores = formData.get('numlicitadores') 
+    const tipo = formData.get('tipo') 
+    const tipocontrato = formData.get('tipocontrato') 
+    const duracioncontratoanyo = formData.get('duracioncontratoanyo')
+    const estadoini = formData.get('estadoini')
+    const estadofinal = formData.get('estadofinal') 
+    const fechaformalizacion = formData.get('fechaformalizacion') 
+    const observaciones = formData.get('observaciones') 
+    const presentadapor = formData.get('presentadapor') 
+    const presupuesto = formData.get('presupuesto') 
+    const titulo = formData.get('titulo') 
 
-//     const articulo = await prisma.articulo.create({
-//       data: { nombre, descripcion, precio  },
-//     })
+    const licitacion = await prisma.licitacion.create({
+      data: { fechapresentacion, 
+        cliente, 
+        importe, 
+        numexpediente, 
+        numlicitadores,
+        tipo,
+        tipocontrato,
+        duracioncontratoanyo,
+        estadoini,
+        estadofinal,
+        fechaformalizacion,
+        observaciones,
+        presentadapor,
+        presupuesto,
+        titulo  },
+    })
 
-//     console.log(articulo);
-//     revalidatePath('/dashboard')
-//   } catch (error) {
-//     console.log(error);
-//   }
-//   redirect('/dashboard');
-// }
+    console.log(licitacion);
+    revalidatePath('/dashboard')
+  } catch (error) {
+    console.log(error);
+  }
+  redirect('/dashboard');
+}
 
-// export async function editArticulo(formData) {
-//   const id = Number( formData.get('id') )
-//   const nombre = formData.get('nombre')
-//   const descripcion = formData.get('descripcion')
-//   const precio = Number( formData.get('precio')) 
+export async function editArticulo(formData) {
+  const id = Number( formData.get('id') )
+  const nombre = formData.get('nombre')
+  const descripcion = formData.get('descripcion')
+  const precio = Number( formData.get('precio')) 
 
-//   try {
-//     const articulo = await prisma.articulo.update({
-//       where: { id },
-//       data: {  nombre, descripcion, precio },
-//     })
-//     console.log(articulo);
-//     revalidatePath('/proveedor')
-//   } catch (error) {
-//     console.log(error);
-//   }
-//   redirect('/proveedor');
-// }
+  try {
+    const articulo = await prisma.articulo.update({
+      where: { id },
+      data: {  nombre, descripcion, precio },
+    })
+    console.log(articulo);
+    revalidatePath('/proveedor')
+  } catch (error) {
+    console.log(error);
+  }
+  redirect('/proveedor');
+}
 
-// export async function deleteArticulo(formData) {
-//   try {
-//     const id = Number( formData.get('id') )
+export async function deleteArticulo(formData) {
+  try {
+    const id = Number( formData.get('id') )
   
-//     const articulo = await prisma.articulo.delete({
-//       where: {
-//         id: id,
-//       },
-//     })
-//     console.log(articulo);
-//     revalidatePath('/proveedor')
-//   } catch (error) {
-//     console.log(error);
-//   }
+    const articulo = await prisma.articulo.delete({
+      where: {
+        id: id,
+      },
+    })
+    console.log(articulo);
+    revalidatePath('/proveedor')
+  } catch (error) {
+    console.log(error);
+  }
 
-//   redirect('/proveedor');
-// }
+  redirect('/proveedor');
+}
