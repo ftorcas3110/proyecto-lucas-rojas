@@ -37,7 +37,7 @@ export function LoginForm() {
         <input
           type="password"
           name="password"
-          placeholder="******"
+          placeholder="********"
           className="border p-2 rounded"
         />
       </div>
