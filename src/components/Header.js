@@ -8,7 +8,7 @@ async function Header() {
 
   return (
     <header
-      className={`bg-amber-50 flex md:flex-row justify-between items-center md:justify-between md:px-5 font-Rounded font-bold`}
+      className={`bg-amber-50 flex md:flex-row justify-between items-center md:justify-between md:px-5 font-Rounded font-bold `}
     >
       <div className="hidden lg:flex">
         <Image
@@ -17,8 +17,10 @@ async function Header() {
           width={100}
           height={24}
         />
-        <ul className="flex space-x-5 text-black md:space-x-32 text-[2vh]">
-          {session && <li className="transition duration-500 hover:text-blue-700">
+      </div>
+      <div>
+        <ul className="flex space-x-5 text-black md:space-x-32 text-[2vh] items-center justify-center">
+          {session && <li className="transition duration-500 hover:text-blue-700 pl-200px">
             <Link href="/dashboard">Inicio</Link>
           </li>}
           {<li>
