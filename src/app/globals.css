@@ -26,6 +26,28 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+a.enlace {
+  text-decoration: none;
+  color: black;
+  background-color: rgb(219, 219, 219);
+  margin: 2px;
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 0 0 2px gray;
+  display: inline-block;
+  text-align: right;
+}
+
+a.enlace:hover {
+  color: white;
+  background-color: rgb(139, 132, 0);
+  box-shadow: 1px 1px 2px gray;
+}
+
+hr, p {
+  margin-bottom: 10px;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

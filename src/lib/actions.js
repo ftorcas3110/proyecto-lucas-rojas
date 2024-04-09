@@ -2,6 +2,8 @@
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { signIn, signOut } from "@/auth";
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 // REGISTER
 export async function register(formData) {
@@ -71,3 +73,71 @@ export async function logout() {
     throw error;
   }
 }
+
+// Acciones base de datos
+
+export async function getLicitaciones() {
+  try {
+    const licitaciones = await prisma.licitacion.findMany()
+    return licitaciones;
+  } catch (error) {
+    // console.log(error);  
+    return null;
+  }
+}
+
+
+// export async function newArticulo(formData) {
+//   try {
+//     const nombre = formData.get('nombre')
+//     const descripcion = formData.get('descripcion')
+//     const precio = Number( formData.get('precio')) 
+
+//     const articulo = await prisma.articulo.create({
+//       data: { nombre, descripcion, precio  },
+//     })
+
+//     console.log(articulo);
+//     revalidatePath('/dashboard')
+//   } catch (error) {
+//     console.log(error);
+//   }
+//   redirect('/dashboard');
+// }
+
+// export async function editArticulo(formData) {
+//   const id = Number( formData.get('id') )
+//   const nombre = formData.get('nombre')
+//   const descripcion = formData.get('descripcion')
+//   const precio = Number( formData.get('precio')) 
+
+//   try {
+//     const articulo = await prisma.articulo.update({
+//       where: { id },
+//       data: {  nombre, descripcion, precio },
+//     })
+//     console.log(articulo);
+//     revalidatePath('/proveedor')
+//   } catch (error) {
+//     console.log(error);
+//   }
+//   redirect('/proveedor');
+// }
+
+// export async function deleteArticulo(formData) {
+//   try {
+//     const id = Number( formData.get('id') )
+  
+//     const articulo = await prisma.articulo.delete({
+//       where: {
+//         id: id,
+//       },
+//     })
+//     console.log(articulo);
+//     revalidatePath('/proveedor')
+//   } catch (error) {
+//     console.log(error);
+//   }
+
+//   redirect('/proveedor');
+// }

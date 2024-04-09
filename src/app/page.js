@@ -1,6 +1,10 @@
 import { LoginForm } from "@/components/login-form";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
+  const sesion = await auth();
+  if (sesion) redirect('/dashboard')
   return (
     <div className="flex flex-col items-center justify-center sm:h-[90vh] py-5 md:h-[90vh] p-5">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 sm:gap-10 md:gap-10">
