@@ -1,20 +1,26 @@
-import Form from "@/components/Form"
-import prisma from '@/lib/prisma'
-import { editArticulo } from "@/lib/actions"
+import Form from "@/components/formLicitacion"
+import { prisma } from '@/lib/prisma'
+import { editLicitacion } from "@/lib/actions"
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 export const dynamic = 'force-dynamic'
 
 async function page({searchParams}) {
-  const articulo = await prisma.articulo.findUnique({
+
+  const sesion = await auth();
+  if (!sesion) redirect('/')
+  
+  const licitacion = await prisma.licitacion.findUnique({
     where: {
-      id: Number(searchParams.id),
+      item: Number(searchParams.item),
     },
   })
 
   return (
     <div>
-        <h3>Editar artículo {searchParams.id}</h3>
-        <Form action={editArticulo} title='Editar artículo' articulo={articulo}  />
+        <h3>Editar licitación {searchParams.numexpediente}</h3>
+        <Form action={editLicitacion} title='Editar licitación' licitacion={licitacion}  />
     </div>
   )
 }

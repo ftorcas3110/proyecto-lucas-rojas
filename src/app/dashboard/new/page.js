@@ -1,11 +1,15 @@
-import Form from "@/components/Form"
-import { newArticulo } from "@/lib/actions"
+import Form from "@/components/formLicitacion"
+import { newLicitacion} from "@/lib/actions"
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-function page() {
+async function page() {
+  const sesion = await auth();
+  if (!sesion) redirect('/')
   return (
     <div>
-        <h3>Nuevo artículo</h3>
-        <Form action={newArticulo} title='Crear artículo' articulo={null}  />
+        <h3 className="text-4xl text-center mb-3">Nueva licitación</h3>
+        <Form action={newLicitacion} title='Crear licitación' articulo={null}  />
     </div>
   )
 }

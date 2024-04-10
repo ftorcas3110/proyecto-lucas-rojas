@@ -8,8 +8,8 @@ function Licitacion({ children, licitacion }) {
             <p>Fecha de presentación: {licitacion.fechapresentacion}</p>
             <p>Tipo de Contrato: {licitacion.tipocontrato}</p>
             {/* <p></p>
-            <p></p>
             <p></p> */}
+            <p>{licitacion.item}</p>
             <p>Importe: {licitacion.importe.toString()} €</p>
             {children}
         </div>

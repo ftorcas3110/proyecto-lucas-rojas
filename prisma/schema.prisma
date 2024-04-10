@@ -42,7 +42,7 @@ model Account {
 }
 
 model Licitacion {
-  item                  String @id @default(cuid())
+  item                  Int @id @default(autoincrement())
   fechapresentacion     String
   cliente               String
   titulo                String
@@ -55,7 +55,6 @@ model Licitacion {
   presentadapor         String?
   estadoini             String
   estadofinal           String
-  numlicitadores        String?
   duracioncontratoanyo  String
   observaciones         String?
 }

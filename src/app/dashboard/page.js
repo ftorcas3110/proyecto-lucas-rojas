@@ -20,15 +20,15 @@ export default async function Home() {
           <Link className='enlace' href="/dashboard/new"> Nueva licitación </Link>
           {
               licitaciones.map((licitacion) => (
-                  <Licitacion key={licitacion.id} licitacion={licitacion} >
+                  <Licitacion key={licitacion.item} licitacion={licitacion} >
                       <Link
                           className='enlace'
-                          href={{ pathname: '/dashboard/edit', query: { id: licitacion.id } }}>
+                          href={{ pathname: '/dashboard/edit', query: { item: licitacion.item } }}>
                           Editar licitación
                       </Link>
                       <Link
                           className='enlace'
-                          href={{ pathname: '/dashboard/delete', query: { id: licitacion.id } }}>
+                          href={{ pathname: '/dashboard/delete', query: { item: licitacion.item } }}>
                           Eliminar licitación
                       </Link>
                   </Licitacion>

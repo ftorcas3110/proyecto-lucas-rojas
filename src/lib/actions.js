@@ -78,7 +78,9 @@ export async function logout() {
 
 export async function getLicitaciones() {
   try {
-    const licitaciones = await prisma.licitacion.findMany()
+    const licitaciones = await prisma.licitacion.findMany({
+      orderBy: [{item: "desc"}]
+    })
     return licitaciones;
   } catch (error) {
     // console.log(error);  
@@ -92,8 +94,7 @@ export async function newLicitacion(formData) {
     const fechapresentacion = formData.get('fechapresentacion')
     const cliente = formData.get('cliente')
     const importe = Number( formData.get('importe')) 
-    const numexpediente = formData.get('numexpediente')
-    const numlicitadores = formData.get('numlicitadores') 
+    const numexpediente = formData.get('numexpediente') 
     const tipo = formData.get('tipo') 
     const tipocontrato = formData.get('tipocontrato') 
     const duracioncontratoanyo = formData.get('duracioncontratoanyo')
@@ -110,7 +111,6 @@ export async function newLicitacion(formData) {
         cliente, 
         importe, 
         numexpediente, 
-        numlicitadores,
         tipo,
         tipocontrato,
         duracioncontratoanyo,
@@ -131,39 +131,65 @@ export async function newLicitacion(formData) {
   redirect('/dashboard');
 }
 
-export async function editArticulo(formData) {
-  const id = Number( formData.get('id') )
-  const nombre = formData.get('nombre')
-  const descripcion = formData.get('descripcion')
-  const precio = Number( formData.get('precio')) 
+export async function editLicitacion(formData) {
+  const item = Number(formData.get('item'))
+  const fechapresentacion = formData.get('fechapresentacion')
+  const cliente = formData.get('cliente')
+  const importe = Number( formData.get('importe')) 
+  const numexpediente = formData.get('numexpediente') 
+  const tipo = formData.get('tipo') 
+  const tipocontrato = formData.get('tipocontrato') 
+  const duracioncontratoanyo = formData.get('duracioncontratoanyo')
+  const estadoini = formData.get('estadoini')
+  const estadofinal = formData.get('estadofinal') 
+  const fechaformalizacion = formData.get('fechaformalizacion') 
+  const observaciones = formData.get('observaciones') 
+  const presentadapor = formData.get('presentadapor') 
+  const presupuesto = formData.get('presupuesto') 
+  const titulo = formData.get('titulo') 
 
   try {
-    const articulo = await prisma.articulo.update({
-      where: { id },
-      data: {  nombre, descripcion, precio },
+    const licitacion = await prisma.licitacion.update({
+      where: { item },
+      data: {  
+        fechapresentacion,
+        cliente,
+        importe,
+        numexpediente,
+        tipo,
+        tipocontrato,
+        duracioncontratoanyo,
+        estadoini,
+        estadofinal,
+        fechaformalizacion,
+        observaciones,
+        presentadapor,
+        presupuesto,
+        titulo
+       },
     })
-    console.log(articulo);
-    revalidatePath('/proveedor')
+    console.log(licitacion);
+    revalidatePath('/dashboard')
   } catch (error) {
     console.log(error);
   }
-  redirect('/proveedor');
+  redirect('/dashboard');
 }
 
-export async function deleteArticulo(formData) {
+export async function deleteLicitacion(formData) {
   try {
-    const id = Number( formData.get('id') )
+    const item = Number( formData.get('item') )
   
-    const articulo = await prisma.articulo.delete({
+    const licitacion = await prisma.licitacion.delete({
       where: {
-        id: id,
+        item: item,
       },
     })
-    console.log(articulo);
-    revalidatePath('/proveedor')
+    console.log(licitacion);
+    revalidatePath('/dashboard')
   } catch (error) {
     console.log(error);
   }
 
-  redirect('/proveedor');
+  redirect('/dashboard');
 }
