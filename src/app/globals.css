@@ -30,12 +30,9 @@ a.enlace {
   text-decoration: none;
   color: black;
   background-color: rgb(219, 219, 219);
-  margin: 2px;
-  padding: 5px;
   border-radius: 5px;
   box-shadow: 0 0 2px gray;
   display: inline-block;
-  text-align: right;
 }
 
 a.enlace:hover {
@@ -46,6 +43,18 @@ a.enlace:hover {
 
 hr, p {
   margin-bottom: 10px;
+}
+
+.background-container {
+  display: grid;
+  background-color: #fff;
+  place-items: center;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
 }
 
 @layer utilities {

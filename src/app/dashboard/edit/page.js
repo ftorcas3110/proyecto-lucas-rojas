@@ -19,8 +19,8 @@ async function page({searchParams}) {
 
   return (
     <div>
-        <h3>Editar licitación {searchParams.numexpediente}</h3>
-        <Form action={editLicitacion} title='Editar licitación' licitacion={licitacion}  />
+        <h3 className="text-4xl text-center mb-3">Editar licitación {licitacion.numexpediente}</h3>
+        <Form action={editLicitacion} title='Editar licitación' licitacion={licitacion} edicion={true}  />
     </div>
   )
 }

@@ -51,7 +51,9 @@ model Licitacion {
   tipocontrato          String
   importe               Decimal? @db.Decimal(12,2)
   fechaformalizacion    String?
-  presupuesto           String
+  captadapor            String?
+  presupuestopor        String?
+  estudiopor            String?
   presentadapor         String?
   estadoini             String
   estadofinal           String

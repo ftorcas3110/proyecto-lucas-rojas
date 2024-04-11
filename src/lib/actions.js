@@ -1,10 +1,11 @@
 "use server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
-import { signIn, signOut } from "@/auth";
+import { auth, signIn, signOut } from "@/auth";
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
+const session = await auth();
 // REGISTER
 export async function register(formData) {
   const name = formData.get("name");
@@ -88,6 +89,62 @@ export async function getLicitaciones() {
   }
 }
 
+export async function getLicitacionesAsignadas() {
+  try {
+    const licitaciones = await prisma.licitacion.findMany({
+      where : {
+        estudiopor: {
+          endsWith: session.user.name,
+        },
+      },
+    },
+    {
+      orderBy: [{item: "desc"}]
+    })
+    return licitaciones;
+  } catch (error) {
+    // console.log(error);  
+    return null;
+  }
+}
+
+export async function getLicitacionesEnPresupuesto() {
+  try {
+    const licitaciones = await prisma.licitacion.findMany({
+      where : {
+        presupuestopor: {
+          endsWith: session.user.name,
+        },
+      },
+    },
+    {
+      orderBy: [{item: "desc"}]
+    })
+    return licitaciones;
+  } catch (error) {
+    // console.log(error);  
+    return null;
+  }
+}
+
+export async function misLicitaciones(formData) {
+    const presupuestopor = session.user.name
+  
+    try {
+      const licitacion = await prisma.licitacion.update({
+        where: { item },
+        data: {
+          presupuestopor
+         },
+      })
+      console.log(licitacion);
+      revalidatePath('/asignadas')
+    } catch (error) {
+      console.log(error);
+    }
+    redirect('/asignadas');
+  }
+
 
 export async function newLicitacion(formData) {
   try {
@@ -103,8 +160,10 @@ export async function newLicitacion(formData) {
     const fechaformalizacion = formData.get('fechaformalizacion') 
     const observaciones = formData.get('observaciones') 
     const presentadapor = formData.get('presentadapor') 
-    const presupuesto = formData.get('presupuesto') 
+    const presupuestopor = formData.get('presupuesto') 
+    const estudiopor = formData.get('estudiopor') 
     const titulo = formData.get('titulo') 
+    const captadapor = formData.get('captadapor')
 
     const licitacion = await prisma.licitacion.create({
       data: { fechapresentacion, 
@@ -119,8 +178,10 @@ export async function newLicitacion(formData) {
         fechaformalizacion,
         observaciones,
         presentadapor,
-        presupuesto,
-        titulo  },
+        estudiopor,
+        presupuestopor,
+        titulo,
+        captadapor  },
     })
 
     console.log(licitacion);
@@ -145,8 +206,10 @@ export async function editLicitacion(formData) {
   const fechaformalizacion = formData.get('fechaformalizacion') 
   const observaciones = formData.get('observaciones') 
   const presentadapor = formData.get('presentadapor') 
-  const presupuesto = formData.get('presupuesto') 
+  const presupuestopor = formData.get('presupuesto') 
+  const estudiopor = formData.get('estudiopor') 
   const titulo = formData.get('titulo') 
+  const captadapor = formData.get('captadapor')
 
   try {
     const licitacion = await prisma.licitacion.update({
@@ -164,8 +227,10 @@ export async function editLicitacion(formData) {
         fechaformalizacion,
         observaciones,
         presentadapor,
-        presupuesto,
-        titulo
+        estudiopor,
+        presupuestopor,
+        titulo,
+        captadapor
        },
     })
     console.log(licitacion);

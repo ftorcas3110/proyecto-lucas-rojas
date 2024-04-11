@@ -11,18 +11,31 @@ async function Header() {
       className={`bg-amber-50 flex md:flex-row justify-between items-center md:justify-between md:px-5 font-Rounded font-bold `}
     >
       <div className="hidden lg:flex">
-        <Image
-          src="/images/logo.png"
-          alt=""
-          width={100}
-          height={24}
-        />
+        <a href="/">
+          <Image
+            src="/images/logo.png"
+            alt=""
+            width={100}
+            height={24}
+          />
+        </a>
       </div>
       <div>
         <ul className="flex space-x-5 text-black md:space-x-32 text-[2vh] items-center justify-center">
-          {session && <li className="transition duration-500 hover:text-blue-700 pl-200px">
-            <Link href="/dashboard">Inicio</Link>
-          </li>}
+          {session && <>
+            <li className="transition duration-500 hover:text-blue-700 pl-200px">
+              <Link href="/mislicitaciones">Mis licitaciones</Link>
+            </li>
+            <li className="transition duration-500 hover:text-blue-700 pl-200px">
+              <Link href="/asignadas">Asignadas</Link>
+            </li>
+            <li className="transition duration-500 hover:text-blue-700 pl-200px">
+              <Link href="/dashboard">Búsqueda</Link>
+            </li>
+            <li className="transition duration-500 hover:text-blue-700 pl-200px">
+              <Link href="/dashboard/new"> Nueva licitación </Link>  
+            </li>
+            </>}
           {<li>
             {session?.user?.role == 'ADMIN'
               && <Link href="/registro" className=' transition duration-500 hover:text-blue-700'>Añadir usuario</Link>
