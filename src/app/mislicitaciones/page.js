@@ -28,8 +28,8 @@ export default async function Home() {
                                 </Link>
                                 <Link
                                     className='enlace col-span-2 flex justify-center align-middle text-center items-center h-full pt-[15%] mt-2'
-                                    href={{ pathname: '/dashboard/delete', query: { item: licitacion.item } }}>
-                                    Eliminar licitación
+                                    href={{ pathname: '/mislicitaciones/eliminar', query: { item: licitacion.item } }}>
+                                    Eliminar de mis licitaciones
                                 </Link>
                             </div>
                         </Licitacion>

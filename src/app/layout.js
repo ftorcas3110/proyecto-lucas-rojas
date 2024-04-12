@@ -2,6 +2,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Background from "@/components/Background";
+import { Toaster } from "react-hot-toast";
 
 //const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +24,7 @@ export default function RootLayout({ children }) {
       <body className={poppins.className}>
         <Header/>
         <Background/>
+        <Toaster/>
         {children}
         </body>
     </html>

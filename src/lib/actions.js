@@ -15,9 +15,9 @@ export async function register(formData) {
   // Comprobamos si el usuario ya está registrado
   const user = await prisma.user.findUnique({
     where: {
-        email
+      email
     }
-})
+  })
 
   if (user) {
     return { error: "El email ya está registrado" };
@@ -45,23 +45,23 @@ export async function login(formData) {
 
   // Comprobamos si el usuario está registrado
   const user = await prisma.user.findUnique({
-      where: {
-          email
-      }
+    where: {
+      email
+    }
   })
 
   if (!user) {
-      return { error: 'Usuario no registrado.' }
+    return { error: 'Usuario no registrado.' }
   }
 
   // Comparamos password 
   const matchPassword = await bcrypt.compare(password, user.password)
 
   if (user && matchPassword) {  // && user.emailVerified
-        await signIn('credentials', { email, password, redirectTo: '/dashboard' })
-      return { success: "Inicio de sesión correcto" }
+    await signIn('credentials', { email, password, redirectTo: '/dashboard' })
+    return { success: "Inicio de sesión correcto" }
   } else {
-      return { error: 'Credenciales incorrectas.' }
+    return { error: 'Credenciales incorrectas.' }
   }
 }
 
@@ -80,7 +80,7 @@ export async function logout() {
 export async function getLicitaciones() {
   try {
     const licitaciones = await prisma.licitacion.findMany({
-      orderBy: [{item: "desc"}]
+      orderBy: [{ item: "desc" }]
     })
     return licitaciones;
   } catch (error) {
@@ -92,18 +92,22 @@ export async function getLicitaciones() {
 export async function getLicitacionesAsignadas() {
   try {
     const licitaciones = await prisma.licitacion.findMany({
-      where : {
-        estudiopor: {
-          endsWith: session.user.name,
-        },
+      orderBy: [{ item: "desc" }],
+      where: {
+        AND: [
+          {
+            presupuestopor: null,
+            estudiopor: {
+                contains: session.user.name, 
+            },
+          },
+        ],
       },
-    },
-    {
-      orderBy: [{item: "desc"}]
     })
+    console.log(licitaciones);
     return licitaciones;
   } catch (error) {
-    // console.log(error);  
+    console.log(error);  
     return null;
   }
 }
@@ -111,14 +115,12 @@ export async function getLicitacionesAsignadas() {
 export async function getLicitacionesEnPresupuesto() {
   try {
     const licitaciones = await prisma.licitacion.findMany({
-      where : {
+      orderBy: [{ item: "desc" }],
+      where: {
         presupuestopor: {
           endsWith: session.user.name,
         },
       },
-    },
-    {
-      orderBy: [{item: "desc"}]
     })
     return licitaciones;
   } catch (error) {
@@ -128,93 +130,64 @@ export async function getLicitacionesEnPresupuesto() {
 }
 
 export async function misLicitaciones(formData) {
-    const presupuestopor = session.user.name
-  
-    try {
-      const licitacion = await prisma.licitacion.update({
-        where: { item },
-        data: {
-          presupuestopor
-         },
-      })
-      console.log(licitacion);
-      revalidatePath('/asignadas')
-    } catch (error) {
-      console.log(error);
-    }
-    redirect('/asignadas');
-  }
+  const item = Number(formData.get('item'))
+  const presupuestopor = session.user.name
 
+  try {
+    const licitacion = await prisma.licitacion.update({
+      where: { item },
+      data: {
+        presupuestopor
+      },
+    })
+    console.log(licitacion);
+    revalidatePath('/asignadas')
+  } catch (error) {
+    console.log(error);
+  }
+  redirect('/asignadas');
+}
+
+export async function deleteMiLicitacion(formData) {
+  const item = Number(formData.get('item'))
+  const presupuestopor = null
+
+  try {
+    const licitacion = await prisma.licitacion.update({
+      where: { item },
+      data: {
+        presupuestopor
+      },
+    })
+    console.log(licitacion);
+    revalidatePath('/mislicitaciones')
+  } catch (error) {
+    console.log(error);
+  }
+  redirect('/mislicitaciones');
+}
 
 export async function newLicitacion(formData) {
   try {
     const fechapresentacion = formData.get('fechapresentacion')
     const cliente = formData.get('cliente')
-    const importe = Number( formData.get('importe')) 
-    const numexpediente = formData.get('numexpediente') 
-    const tipo = formData.get('tipo') 
-    const tipocontrato = formData.get('tipocontrato') 
+    const importe = Number(formData.get('importe'))
+    const numexpediente = formData.get('numexpediente')
+    const tipo = formData.get('tipo')
+    const tipocontrato = formData.get('tipocontrato')
     const duracioncontratoanyo = formData.get('duracioncontratoanyo')
     const estadoini = formData.get('estadoini')
-    const estadofinal = formData.get('estadofinal') 
-    const fechaformalizacion = formData.get('fechaformalizacion') 
-    const observaciones = formData.get('observaciones') 
-    const presentadapor = formData.get('presentadapor') 
-    const presupuestopor = formData.get('presupuesto') 
-    const estudiopor = formData.get('estudiopor') 
-    const titulo = formData.get('titulo') 
+    const estadofinal = formData.get('estadofinal')
+    const fechaformalizacion = formData.get('fechaformalizacion')
+    const observaciones = formData.get('observaciones')
+    const presentadapor = formData.get('presentadapor')
+    const presupuestopor = formData.get('presupuesto')
+    const estudiopor = formData.get('estudiopor')
+    const titulo = formData.get('titulo')
     const captadapor = formData.get('captadapor')
 
     const licitacion = await prisma.licitacion.create({
-      data: { fechapresentacion, 
-        cliente, 
-        importe, 
-        numexpediente, 
-        tipo,
-        tipocontrato,
-        duracioncontratoanyo,
-        estadoini,
-        estadofinal,
-        fechaformalizacion,
-        observaciones,
-        presentadapor,
-        estudiopor,
-        presupuestopor,
-        titulo,
-        captadapor  },
-    })
-
-    console.log(licitacion);
-    revalidatePath('/dashboard')
-  } catch (error) {
-    console.log(error);
-  }
-  redirect('/dashboard');
-}
-
-export async function editLicitacion(formData) {
-  const item = Number(formData.get('item'))
-  const fechapresentacion = formData.get('fechapresentacion')
-  const cliente = formData.get('cliente')
-  const importe = Number( formData.get('importe')) 
-  const numexpediente = formData.get('numexpediente') 
-  const tipo = formData.get('tipo') 
-  const tipocontrato = formData.get('tipocontrato') 
-  const duracioncontratoanyo = formData.get('duracioncontratoanyo')
-  const estadoini = formData.get('estadoini')
-  const estadofinal = formData.get('estadofinal') 
-  const fechaformalizacion = formData.get('fechaformalizacion') 
-  const observaciones = formData.get('observaciones') 
-  const presentadapor = formData.get('presentadapor') 
-  const presupuestopor = formData.get('presupuesto') 
-  const estudiopor = formData.get('estudiopor') 
-  const titulo = formData.get('titulo') 
-  const captadapor = formData.get('captadapor')
-
-  try {
-    const licitacion = await prisma.licitacion.update({
-      where: { item },
-      data: {  
+      data: {
         fechapresentacion,
         cliente,
         importe,
@@ -231,7 +204,57 @@ export async function editLicitacion(formData) {
         presupuestopor,
         titulo,
         captadapor
-       },
+      },
+    })
+
+    console.log(licitacion);
+    revalidatePath('/dashboard')
+  } catch (error) {
+    console.log(error);
+  }
+  redirect('/dashboard');
+}
+
+export async function editLicitacion(formData) {
+  const item = Number(formData.get('item'))
+  const fechapresentacion = formData.get('fechapresentacion')
+  const cliente = formData.get('cliente')
+  const importe = Number(formData.get('importe'))
+  const numexpediente = formData.get('numexpediente')
+  const tipo = formData.get('tipo')
+  const tipocontrato = formData.get('tipocontrato')
+  const duracioncontratoanyo = formData.get('duracioncontratoanyo')
+  const estadoini = formData.get('estadoini')
+  const estadofinal = formData.get('estadofinal')
+  const fechaformalizacion = formData.get('fechaformalizacion')
+  const observaciones = formData.get('observaciones')
+  const presentadapor = formData.get('presentadapor')
+  const presupuestopor = formData.get('presupuesto')
+  const estudiopor = formData.get('estudiopor')
+  const titulo = formData.get('titulo')
+  const captadapor = formData.get('captadapor')
+
+  try {
+    const licitacion = await prisma.licitacion.update({
+      where: { item },
+      data: {
+        fechapresentacion,
+        cliente,
+        importe,
+        numexpediente,
+        tipo,
+        tipocontrato,
+        duracioncontratoanyo,
+        estadoini,
+        estadofinal,
+        fechaformalizacion,
+        observaciones,
+        presentadapor,
+        estudiopor,
+        presupuestopor,
+        titulo,
+        captadapor
+      },
     })
     console.log(licitacion);
     revalidatePath('/dashboard')
@@ -243,8 +266,8 @@ export async function editLicitacion(formData) {
 
 export async function deleteLicitacion(formData) {
   try {
-    const item = Number( formData.get('item') )
-  
+    const item = Number(formData.get('item'))
+
     const licitacion = await prisma.licitacion.delete({
       where: {
         item: item,
