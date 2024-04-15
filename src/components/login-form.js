@@ -42,7 +42,7 @@ export function LoginForm() {
         />
       </div>
       <p className={`info ${tipo} mb-4`}> {resultado} </p>      
-        <Button title="Iniciar sesión" />
+        <Button title="Iniciar sesión" onClick={"Sesión iniciada con éxito"}/>
     </form>
   );
 }

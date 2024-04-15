@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { editLicitacion } from "@/lib/actions"
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import toast from "react-hot-toast";
 
 export const dynamic = 'force-dynamic'
 
@@ -20,7 +21,7 @@ async function page({searchParams}) {
   return (
     <div>
         <h3 className="text-4xl text-center mb-3">Editar licitación {licitacion.numexpediente}</h3>
-        <Form action={editLicitacion} title='Editar licitación' licitacion={licitacion} edicion={true}  />
+        <Form action={editLicitacion} title='Editar licitación' onClick='Licitación editada' licitacion={licitacion} edicion={true}  />
     </div>
   )
 }

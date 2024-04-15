@@ -140,7 +140,6 @@ export async function misLicitaciones(formData) {
         presupuestopor
       },
     })
-    console.log(licitacion);
     revalidatePath('/asignadas')
   } catch (error) {
     console.log(error);
@@ -159,7 +158,6 @@ export async function deleteMiLicitacion(formData) {
         presupuestopor
       },
     })
-    console.log(licitacion);
     revalidatePath('/mislicitaciones')
   } catch (error) {
     console.log(error);
@@ -169,7 +167,7 @@ export async function deleteMiLicitacion(formData) {
 
 export async function newLicitacion(formData) {
   try {
-    const fechapresentacion = formData.get('fechapresentacion')
+    const fechapresentacion = new Date(formData.get('fechapresentacion')).toISOString(); 
     const cliente = formData.get('cliente')
     const importe = Number(formData.get('importe'))
     const numexpediente = formData.get('numexpediente')
@@ -206,8 +204,6 @@ export async function newLicitacion(formData) {
         captadapor
       },
     })
-
-    console.log(licitacion);
     revalidatePath('/dashboard')
   } catch (error) {
     console.log(error);
@@ -217,7 +213,7 @@ export async function newLicitacion(formData) {
 
 export async function editLicitacion(formData) {
   const item = Number(formData.get('item'))
-  const fechapresentacion = formData.get('fechapresentacion')
+  const fechapresentacion = new Date(formData.get('fechapresentacion')).toISOString();
   const cliente = formData.get('cliente')
   const importe = Number(formData.get('importe'))
   const numexpediente = formData.get('numexpediente')
@@ -256,7 +252,6 @@ export async function editLicitacion(formData) {
         captadapor
       },
     })
-    console.log(licitacion);
     revalidatePath('/dashboard')
   } catch (error) {
     console.log(error);
@@ -273,7 +268,6 @@ export async function deleteLicitacion(formData) {
         item: item,
       },
     })
-    console.log(licitacion);
     revalidatePath('/dashboard')
   } catch (error) {
     console.log(error);

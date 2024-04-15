@@ -18,7 +18,7 @@ async function page({ searchParams }) {
   return (
     <div>
       <h3 className="text-4xl text-center mb-3">Eliminar licitación a {licitacion.numexpediente}</h3>
-      <Form action={deleteLicitacion} title='Eliminar licitación' licitacion={licitacion} disabled={true} />
+      <Form action={deleteLicitacion} title='Eliminar licitación' licitacion={licitacion} onClick='Licitación eliminada con éxito' disabled={true} />
     </div>
   )
 }

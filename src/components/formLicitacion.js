@@ -1,8 +1,9 @@
 import { auth } from '@/auth'
 import Button from '@/components/button-form'
 
-async function Form({ action, title, licitacion, disabled = false, edicion = false }) {
+async function Form({ action, title, licitacion, disabled = false, edicion = false, onClick }) {
     const session = await auth();
+    
 
     return (
 
@@ -15,22 +16,22 @@ async function Form({ action, title, licitacion, disabled = false, edicion = fal
                     <div className='grid grid-cols-2 w-[80vw] items-center justify-center align-middle text-right'>
                         <label htmlFor='cliente' className='mb-2 text-3xl mr-20'>Cliente</label>
                         <input type='text' id='cliente' name='cliente'
-                            defaultValue={licitacion?.cliente} className="border p-2 rounded text-center text-xl my-1"></input>
+                            defaultValue={licitacion?.cliente} className="border p-2 rounded text-center text-xl my-1" required></input>
 
                         <label htmlFor='titulo' className='mb-2 text-3xl mr-20'>Título</label>
                         <input type='text' id='titulo' name='titulo'
-                            defaultValue={licitacion?.titulo} className="border p-2 rounded text-center text-xl my-1" />
+                            defaultValue={licitacion?.titulo} className="border p-2 rounded text-center text-xl my-1" required/>
 
                         <label htmlFor='numexpediente' className='mb-2 text-3xl mr-20'>Número de expediente</label>
                         <input type='text' id='numexpediente' name='numexpediente'
-                            defaultValue={licitacion?.numexpediente} className="border p-2 rounded text-center text-xl my-1" />
+                            defaultValue={licitacion?.numexpediente} className="border p-2 rounded text-center text-xl my-1" required/>
 
-                        <label htmlFor='fechapresentacion' className='mb-2 text-3xl mr-20'>Fecha de presentación (DD/MM/AAAA)</label>
-                        <input type='text' id='fechapresentacion' name='fechapresentacion'
-                            defaultValue={licitacion?.fechapresentacion}
-                            className="border p-2 rounded text-center text-xl my-1"
-                            pattern='^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$' />
-
+                        <label htmlFor='fechapresentacion' className='mb-2 text-3xl mr-20'>Fecha de presentación</label>
+                        <input type="datetime-local" id="fechapresentacion" name="fechapresentacion" 
+                        defaultValue={licitacion?.fechapresentacion}
+                        className="border p-2 rounded text-center text-xl my-1"
+                        pattern='^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$'/>
+                        
                         {edicion || disabled ? (
                             <>
                                 <label htmlFor='tipo' className='mb-2 text-3xl mr-20'>Tipo</label>
@@ -224,7 +225,7 @@ async function Form({ action, title, licitacion, disabled = false, edicion = fal
                     </div>
                 </div>
             </fieldset>
-            <Button title={title} />
+            <Button title={title} onClick={onClick}/>
         </form>
     )
 }

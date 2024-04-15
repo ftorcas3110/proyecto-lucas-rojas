@@ -43,7 +43,7 @@ model Account {
 
 model Licitacion {
   item                  Int @id @default(autoincrement())
-  fechapresentacion     String
+  fechapresentacion     DateTime @db.DateTime
   cliente               String
   titulo                String
   numexpediente         String 

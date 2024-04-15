@@ -22,7 +22,7 @@ async function page({searchParams}) {
     <>
     <div>
         <h3 className="text-4xl text-center mb-3">¿Añadir a mis licitaciones {licitacion.numexpediente} de {licitacion.cliente}?</h3>
-        <Form action={misLicitaciones} title='Añadir licitación' licitacion={licitacion} disabled={true}  />
+        <Form action={misLicitaciones} title='Añadir licitación' licitacion={licitacion} onClick='Licitación añadida a mis licitaciones' disabled={true}  />
     </div>
     </>
   )

@@ -24,7 +24,20 @@ export default function RootLayout({ children }) {
       <body className={poppins.className}>
         <Header/>
         <Background/>
-        <Toaster/>
+        <Toaster position="top-center"
+        containerClassName=""
+        containerStyle={{
+          top: 80
+        }}
+        toastOptions={{
+          // Define default options
+          className: "",
+          duration: 5000,
+          style: {
+            background: "#21b026",
+            color: "#fff",
+          },
+        }} />
         {children}
         </body>
     </html>

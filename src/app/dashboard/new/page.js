@@ -9,7 +9,7 @@ async function page() {
   return (
     <div>
         <h3 className="text-4xl text-center mb-3">Nueva licitación</h3>
-        <Form action={newLicitacion} title='Crear licitación' articulo={null}  />
+        <Form action={newLicitacion} title='Crear licitación' onClick="Licitación creada con éxito" articulo={null}  />
     </div>
   )
 }
