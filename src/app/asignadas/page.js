@@ -11,7 +11,7 @@ export default async function Home() {
     const licitaciones = await getLicitacionesAsignadas()
     const sesion = await auth();
     if (!sesion) redirect('/')
-    //console.log(licitaciones);
+    console.log(licitaciones);
 
     return (
         <>
