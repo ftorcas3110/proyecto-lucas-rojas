@@ -3,8 +3,6 @@ import Button from '@/components/button-form'
 
 async function Form({ action, title, licitacion, disabled = false, edicion = false, onClick }) {
     const session = await auth();
-
-
     return (
 
         <form action={action}>
@@ -29,8 +27,10 @@ async function Form({ action, title, licitacion, disabled = false, edicion = fal
                         {edicion || disabled ? (
                             <>
                                 <label htmlFor='fechapresentacion' className='mb-2 text-3xl mr-20'>fechapresentacion</label>
-                                <input type='text' id='fechapresentacion' name='fechapresentacion'
+                                <input type='hidden' id='fechapresentacion' name='fechapresentacion'
                                     value={licitacion?.fechapresentacion} className="border p-2 rounded text-center text-xl my-1" disabled />
+                                <input type='text' id='fechapresentacionmostrada' name='fechapresentacionmostrada'
+                                    value={`${licitacion?.fechapresentacion.getDay()}/${licitacion?.fechapresentacion.getMonth()}/${licitacion?.fechapresentacion.getFullYear()} ${licitacion?.fechapresentacion.getHours()}:${licitacion.fechapresentacion.getMinutes()}`} className="border p-2 rounded text-center text-xl my-1" disabled />
                                 <select id='fechapresentacion' name='fechapresentacion' className="border p-2 rounded text-center text-xl my-1" hidden>
                                     <option value={licitacion?.fechapresentacion}></option>
                                 </select>

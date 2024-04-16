@@ -43,15 +43,21 @@ function Licitacion({ children, licitacion }) {
         }
     }
 
+    const dia = licitacion.fechapresentacion.getDate()
+    const mes = licitacion.fechapresentacion.getMonth()+1
+    const anyo = licitacion.fechapresentacion.getFullYear()
+    const hora = (licitacion.fechapresentacion.getHours() < 10 ? '0' : '') + licitacion.fechapresentacion.getHours() 
+    const minuto = (licitacion.fechapresentacion.getMinutes() < 10 ? '0' : '') + licitacion.fechapresentacion.getMinutes() 
+
     return (
         <div className="grid grid-cols-1 gap-4">
             <div className="col-span-4">
-                <div style={{ 'border': '1px solid black', 'padding': '20px' }} className="mb-4 rounded-xl flex">
+                <div style={{ 'border': '1px solid black', 'padding': '20px' }} className="mb-4 rounded-xl flex text-black">
                     <div className="w-1/3 pr-8">
                         <p><strong>Cliente: {licitacion.cliente}</strong></p>
                         <p><strong>Número expediente: {licitacion.numexpediente}</strong></p>
                         <p>Título: {licitacion.titulo}</p>
-                        <p>Fecha de presentación: {licitacion.fechapresentacion.toString()}</p>
+                        <p>Fecha de presentación: {dia}/{mes}/{anyo} {hora}:{minuto}</p>
                     </div>
                     <div className="w-1/3 pl-8">
                         <p>Tipo de Contrato: {licitacion.tipocontrato}</p>

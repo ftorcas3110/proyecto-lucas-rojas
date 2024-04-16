@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Background from "@/components/Background";
 import { Toaster } from "react-hot-toast";
+import Buscador from "@/components/buscador";
 
 //const inter = Inter({ subsets: ["latin"] });
 
@@ -38,6 +39,7 @@ export default function RootLayout({ children }) {
             color: "#fff",
           },
         }} />
+        <Buscador/>
         {children}
         </body>
     </html>

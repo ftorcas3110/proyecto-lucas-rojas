@@ -89,6 +89,25 @@ export async function getLicitaciones() {
   }
 }
 
+export async function getLicitacionesBuscador(formData) {
+  const campoABuscar = formData.get("campo");
+  const query = formData.get("query")
+  try {
+    const licitaciones = await prisma.licitacion.findMany({
+      orderBy: [{ item: "desc" }],
+      where: {
+          [campoABuscar]: {
+            contains: query, 
+          },
+      },
+    })
+    return licitaciones;
+  } catch (error) {
+    console.log(error);  
+    return null;
+  }
+}
+
 export async function getLicitacionesAsignadas() {
   try {
     const licitaciones = await prisma.licitacion.findMany({
