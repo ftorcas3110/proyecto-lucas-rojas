@@ -25,7 +25,7 @@ function Buscador() {
         if (campo === "importe") {
             return "number";
         } else if (campo === "fechapresentacion" || campo === "fechaformalizacion") {
-            return "datetime-local";
+            return "date";
         } else {
             return "text";
         }
@@ -41,17 +41,16 @@ function Buscador() {
 
     // Function to format date to ISO-8601 datetime format without milliseconds and with correct timezone format
     const formatDateToISO = (dateString) => {
-        const date = new Date(dateString);
-        if (isNaN(date.getTime())) {
-            return ""; // Return empty string if the date is invalid
-        }
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
-        const hours = String(date.getHours()).padStart(2, "0");
-        const minutes = String(date.getMinutes()).padStart(2, "0");
-        return `${year}-${month}-${day}T${hours}:${minutes}`; // Return "yyyy-MM-ddTHH:mm" format
+        if (!dateString) return ""; // Handle empty or undefined dateString
+        const dateParts = dateString.split('-');
+        if (dateParts.length < 3) return ""; // Invalid format, return empty string
+        // Ensure year, month, and day parts are padded with leading zeros if necessary
+        const year = dateParts[0].padStart(4, '0');
+        const month = dateParts[1].padStart(2, '0');
+        const day = dateParts[2].padStart(2, '0');
+        return `${year}-${month}-${day}`;
     };
+    
 
     return (
         <>
@@ -59,7 +58,7 @@ function Buscador() {
                 <div className="w-[100%]">
                     <form onSubmit={handleSubmit} className="credentials w-[50%] mx-auto">
                         <div className="flex flex-col space-y-4">
-                            <label className="flex flex-col text-xl">Campo</label>
+                            <label className="flex flex-col text-xl">Buscar por</label>
                             <select
                                 name="campo"
                                 className="border p-2 rounded text-center text-xl my-1"

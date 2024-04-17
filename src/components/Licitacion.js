@@ -57,7 +57,7 @@ function Licitacion({ children, licitacion }) {
                         <p><strong>Cliente: {licitacion.cliente}</strong></p>
                         <p><strong>Número expediente: {licitacion.numexpediente}</strong></p>
                         <p>Título: {licitacion.titulo}</p>
-                        <p>Fecha de presentación: {dia}/{mes}/{anyo} {hora}:{minuto}</p>
+                        <p>Fecha de presentación: {dia}/{mes}/{anyo} - {hora}:{minuto}h</p>
                     </div>
                     <div className="w-1/3 pl-8">
                         <p>Tipo de Contrato: {licitacion.tipocontrato}</p>
