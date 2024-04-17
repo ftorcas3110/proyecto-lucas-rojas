@@ -91,22 +91,40 @@ export async function getLicitaciones() {
 
 export async function getLicitacionesBuscador(formData) {
   const campoABuscar = formData.get("campo");
-  const query = formData.get("query")
+  const query = formData.get("query");
+
   try {
-    const licitaciones = await prisma.licitacion.findMany({
-      orderBy: [{ item: "desc" }],
-      where: {
+    let licitaciones;
+    if (campoABuscar === 'fechapresentacion' || campoABuscar === 'fechaformalizacion') {
+      // Assuming the datetime format in formData is "yyyy-MM-ddTHH:mm"
+      const queryDatetime = new Date(query);
+
+      // Adjust the Prisma query to properly filter datetime fields
+      licitaciones = await prisma.licitacion.findMany({
+        orderBy: [{ item: "desc" }],
+        where: {
+          [campoABuscar]: queryDatetime,
+        },
+      });
+    } else {
+      // For non-datetime fields, use equals operator
+      licitaciones = await prisma.licitacion.findMany({
+        orderBy: [{ item: "desc" }],
+        where: {
           [campoABuscar]: {
-            contains: query, 
+            equals: query,
           },
-      },
-    })
+        },
+      });
+    }
+
     return licitaciones;
   } catch (error) {
-    console.log(error);  
+    console.log(error);
     return null;
   }
 }
+
 
 export async function getLicitacionesAsignadas() {
   try {
