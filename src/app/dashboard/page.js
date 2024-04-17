@@ -21,12 +21,12 @@ export default async function Home() {
                         <Licitacion key={licitacion.item} licitacion={licitacion}>
                             <div className="grid grid-cols-1 w-[200px] justify-center align-middle text-center px-[10px]">
                                 <Link
-                                    className='enlace col-span-2 flex justify-center align-middle text-center items-center h-full pt-[15%] mb-2'
+                                    className='enlace col-span-2 flex justify-center align-middle text-center items-center h-full pt-[12.5%] mb-2'
                                     href={{ pathname: '/dashboard/edit', query: { item: licitacion.item } }}>
                                     Editar licitación
                                 </Link>
                                 <Link
-                                    className='enlace col-span-2 flex justify-center align-middle text-center items-center h-full pt-[15%] mt-2'
+                                    className='enlace col-span-2 flex justify-center align-middle text-center items-center h-full pt-[12.5%] mt-2'
                                     href={{ pathname: '/dashboard/delete', query: { item: licitacion.item } }}>
                                     Eliminar licitación
                                 </Link>
