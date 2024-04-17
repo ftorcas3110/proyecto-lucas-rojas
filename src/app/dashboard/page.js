@@ -14,7 +14,7 @@ export default async function Home() {
 
     return (
         <>
-            <div className="w-[80%] mx-auto">
+            <div className="mx-auto">
 
                 {
                     licitaciones.map((licitacion) => (

@@ -5,8 +5,11 @@ function layoutLicitaciones({ children }) {
         <section>
             <h1 className="text-4xl">Licitaciones Lucas Rojas</h1>
             <hr />
+            <div className="w-[80%] mx-auto">
             <Buscador/>
+            <p className="text-3xl">Todas las licitaciones</p>
             {children}
+            </div>
         </section>
     )
 }

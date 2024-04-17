@@ -106,13 +106,23 @@ export async function getLicitacionesBuscador(formData) {
           [campoABuscar]: queryDatetime,
         },
       });
+    } else if (campoABuscar === "importe") {
+      // For "importe" field, use equals operator
+      licitaciones = await prisma.licitacion.findMany({
+        orderBy: [{ item: "desc" }],
+        where: {
+          [campoABuscar]: {
+            equals: parseFloat(query), // Parse query to float for comparison
+          },
+        },
+      });
     } else {
       // For non-datetime fields, use equals operator
       licitaciones = await prisma.licitacion.findMany({
         orderBy: [{ item: "desc" }],
         where: {
           [campoABuscar]: {
-            equals: query,
+            contains: query,
           },
         },
       });
