@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { auth, signIn, signOut } from "@/auth";
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { google } from 'googleapis';
+import fs from 'fs';
 
 const session = await auth();
 // REGISTER
@@ -218,6 +220,80 @@ export async function deleteMiLicitacion(formData) {
   redirect('/mislicitaciones');
 }
 
+//google
+//id: 1cAcgzxl_N0NG0S14astjJ7cWl-00nDBaWc4Zba6mAew
+// Function to insert data into Google Spreadsheet
+export async function insertIntoGoogleSheet(formData) {
+  try {
+    // Log the FormData object for inspection
+    console.log('FormData:', formData);
+
+    // Load credentials from JSON file
+    const credentials = JSON.parse(fs.readFileSync('config/proyecto-lucas-rojas-bee0220e8bba.json'));
+
+    // Create authentication client
+    const auth = new google.auth.JWT(
+      credentials.client_email,
+      null,
+      credentials.private_key,
+      ['https://www.googleapis.com/auth/spreadsheets']
+    );
+
+    // Initialize Google Sheets API
+    const sheets = google.sheets({ version: 'v4', auth });
+
+    // ID of the spreadsheet
+    const spreadsheetId = '1cAcgzxl_N0NG0S14astjJ7cWl-00nDBaWc4Zba6mAew';
+
+    // Range to insert the data (e.g., 'Sheet1!A:A' for the first column of Sheet1)
+    const range = 'Sheet1!A:Q'; // Adjust as per your spreadsheet structure
+
+    // Prepare data to be inserted into the spreadsheet
+    const data = {};
+    for (const [key, value] of formData.entries()) {
+      data[key] = value;
+    }
+
+    const values = [
+      [
+        data.fechapresentacion,
+        data.cliente,
+        data.importe,
+        data.numexpediente,
+        data.tipo,
+        data.tipocontrato,
+        data.duracioncontratoanyo,
+        data.estadoini,
+        data.estadofinal,
+        data.fechaformalizacion,
+        data.observaciones,
+        data.presentadapor,
+        data.estudiopor,
+        data.presupuestopor,
+        data.titulo,
+        data.captadapor
+      ]
+    ];
+
+    // Insert data into the spreadsheet
+    await sheets.spreadsheets.values.append({
+      spreadsheetId,
+      range,
+      valueInputOption: 'RAW',
+      resource: {
+        values
+      },
+    });
+
+    console.log('Data inserted into Google Sheet successfully.');
+  } catch (error) {
+    console.error('Error inserting data into Google Sheet:', error);
+    throw error;
+  }
+}
+
+
+
 export async function newLicitacion(formData) {
   try {
     const fechapresentacion = new Date(formData.get('fechapresentacion')).toISOString(); 
@@ -257,6 +333,7 @@ export async function newLicitacion(formData) {
         captadapor
       },
     })
+  await insertIntoGoogleSheet(formData);
     revalidatePath('/dashboard')
   } catch (error) {
     console.log(error);
