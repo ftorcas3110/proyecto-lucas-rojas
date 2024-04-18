@@ -195,6 +195,7 @@ export async function misLicitaciones(formData) {
         presupuestopor
       },
     })
+    await misLicitacionesGoogleSheet(item, presupuestopor);
     revalidatePath('/asignadas')
   } catch (error) {
     console.log(error);
@@ -213,6 +214,7 @@ export async function deleteMiLicitacion(formData) {
         presupuestopor
       },
     })
+    await misLicitacionesGoogleSheet(item, presupuestopor);
     revalidatePath('/mislicitaciones')
   } catch (error) {
     console.log(error);
@@ -220,14 +222,8 @@ export async function deleteMiLicitacion(formData) {
   redirect('/mislicitaciones');
 }
 
-//google
-//id: 1cAcgzxl_N0NG0S14astjJ7cWl-00nDBaWc4Zba6mAew
-// Function to insert data into Google Spreadsheet
-export async function insertIntoGoogleSheet(formData) {
+async function misLicitacionesGoogleSheet(item, presupuestoPor) {
   try {
-    // Log the FormData object for inspection
-    console.log('FormData:', formData);
-
     // Load credentials from JSON file
     const credentials = JSON.parse(fs.readFileSync('config/proyecto-lucas-rojas-bee0220e8bba.json'));
 
@@ -245,35 +241,58 @@ export async function insertIntoGoogleSheet(formData) {
     // ID of the spreadsheet
     const spreadsheetId = '1cAcgzxl_N0NG0S14astjJ7cWl-00nDBaWc4Zba6mAew';
 
-    // Range to insert the data (e.g., 'Sheet1!A:A' for the first column of Sheet1)
+    // Find the row number corresponding to the specified item
     const range = 'Sheet1!A:Q'; // Adjust as per your spreadsheet structure
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range,
+    });
+    const rows = response.data.values;
+    const rowToUpdateIndex = rows.findIndex(row => Number(row[0]) === item);
+    if (rowToUpdateIndex !== -1) {
+      // Prepare the values to be updated in the row
+      const values = rows[rowToUpdateIndex];
+      const columnIndex = 9; // Index 9 corresponds to column J (presupuestopor)
+      if (presupuestoPor === null) {
+        // If presupuestoPor is null, remove the content of the cell
+        values[columnIndex] = '';
+      } else {
+        // Otherwise, update the cell with the new value
+        values[columnIndex] = presupuestoPor;
+      }
 
-    // Prepare data to be inserted into the spreadsheet
-    const data = {};
-    for (const [key, value] of formData.entries()) {
-      data[key] = value;
+      // Update the row in the spreadsheet
+      await sheets.spreadsheets.values.update({
+        spreadsheetId,
+        range: `Sheet1!A${rowToUpdateIndex + 1}:Q${rowToUpdateIndex + 1}`, // Adjust the range as per your spreadsheet structure
+        valueInputOption: 'RAW',
+        resource: {
+          values: [values],
+        },
+      });
+    } else {
+      console.error('Row not found for item:', item);
     }
+  } catch (error) {
+    console.error('Error updating Google Sheet:', error);
+    throw error;
+  }
+}
 
-    const values = [
-      [
-        data.fechapresentacion,
-        data.cliente,
-        data.importe,
-        data.numexpediente,
-        data.tipo,
-        data.tipocontrato,
-        data.duracioncontratoanyo,
-        data.estadoini,
-        data.estadofinal,
-        data.fechaformalizacion,
-        data.observaciones,
-        data.presentadapor,
-        data.estudiopor,
-        data.presupuestopor,
-        data.titulo,
-        data.captadapor
-      ]
-    ];
+
+
+//google
+//id: 1cAcgzxl_N0NG0S14astjJ7cWl-00nDBaWc4Zba6mAew
+// Function to insert data into Google Spreadsheet
+export async function insertIntoGoogleSheet(data) {
+  try {
+    const credentials = JSON.parse(fs.readFileSync('config/proyecto-lucas-rojas-bee0220e8bba.json'));
+    const auth = new google.auth.JWT(credentials.client_email, null, credentials.private_key, ['https://www.googleapis.com/auth/spreadsheets']);
+    const sheets = google.sheets({ version: 'v4', auth });
+    const spreadsheetId = '1cAcgzxl_N0NG0S14astjJ7cWl-00nDBaWc4Zba6mAew';
+    const range = 'Sheet1!A:Q';
+
+    const values = Object.values(data); // Extract values from the data object
 
     // Insert data into the spreadsheet
     await sheets.spreadsheets.values.append({
@@ -281,11 +300,9 @@ export async function insertIntoGoogleSheet(formData) {
       range,
       valueInputOption: 'RAW',
       resource: {
-        values
+        values: [values] // Wrap values in an array
       },
     });
-
-    console.log('Data inserted into Google Sheet successfully.');
   } catch (error) {
     console.error('Error inserting data into Google Sheet:', error);
     throw error;
@@ -297,21 +314,21 @@ export async function insertIntoGoogleSheet(formData) {
 export async function newLicitacion(formData) {
   try {
     const fechapresentacion = new Date(formData.get('fechapresentacion')).toISOString(); 
-    const cliente = formData.get('cliente')
-    const importe = Number(formData.get('importe'))
-    const numexpediente = formData.get('numexpediente')
-    const tipo = formData.get('tipo')
-    const tipocontrato = formData.get('tipocontrato')
-    const duracioncontratoanyo = formData.get('duracioncontratoanyo')
-    const estadoini = formData.get('estadoini')
-    const estadofinal = formData.get('estadofinal')
-    const fechaformalizacion = formData.get('fechaformalizacion')
-    const observaciones = formData.get('observaciones')
-    const presentadapor = formData.get('presentadapor')
-    const presupuestopor = formData.get('presupuesto')
-    const estudiopor = formData.get('estudiopor')
-    const titulo = formData.get('titulo')
-    const captadapor = formData.get('captadapor')
+    const cliente = formData.get('cliente');
+    const importe = Number(formData.get('importe'));
+    const numexpediente = formData.get('numexpediente');
+    const titulo = formData.get('titulo');
+    const tipo = formData.get('tipo');
+    const tipocontrato = formData.get('tipocontrato');
+    const duracioncontratoanyo = formData.get('duracioncontratoanyo');
+    const estadoini = formData.get('estadoini');
+    const estadofinal = formData.get('estadofinal');
+    const fechaformalizacion = formData.get('fechaformalizacion');
+    const observaciones = formData.get('observaciones');
+    const captadapor = formData.get('captadapor');
+    const estudiopor = formData.get('estudiopor');
+    const presupuestopor = formData.get('presupuesto');
+    const presentadapor = formData.get('presentadapor');
 
     const licitacion = await prisma.licitacion.create({
       data: {
@@ -319,6 +336,7 @@ export async function newLicitacion(formData) {
         cliente,
         importe,
         numexpediente,
+        titulo,
         tipo,
         tipocontrato,
         duracioncontratoanyo,
@@ -326,42 +344,131 @@ export async function newLicitacion(formData) {
         estadofinal,
         fechaformalizacion,
         observaciones,
-        presentadapor,
+        captadapor,
         estudiopor,
         presupuestopor,
-        titulo,
-        captadapor
+        presentadapor
       },
-    })
-  await insertIntoGoogleSheet(formData);
-    revalidatePath('/dashboard')
+      select: {
+        item: true,
+        fechapresentacion: true,
+        cliente: true,
+        importe: true,
+        numexpediente: true,
+        titulo: true,
+        tipo: true,
+        tipocontrato: true,
+        duracioncontratoanyo: true,
+        estadoini: true,
+        estadofinal: true,
+        fechaformalizacion: true,
+        observaciones: true,
+        captadapor: true,
+        estudiopor: true,
+        presupuestopor: true,
+        presentadapor: true
+      }
+    });
+
+    await insertIntoGoogleSheet({
+      item: licitacion.item,
+      fechapresentacion: licitacion.fechapresentacion,
+      cliente: licitacion.cliente,
+      titulo: licitacion.titulo,
+      numexpediente: licitacion.numexpediente,
+      tipo: licitacion.tipo,
+      tipocontrato: licitacion.tipocontrato,
+      importe: licitacion.importe,
+      fechaformalizacion: licitacion.fechaformalizacion,
+      presupuestopor: licitacion.presupuestopor,
+      presentadapor: licitacion.presentadapor,
+      estadoini: licitacion.estadoini,
+      estadofinal: licitacion.estadofinal,
+      duracioncontratoanyo: licitacion.duracioncontratoanyo,
+      observaciones: licitacion.observaciones,
+      captadapor: licitacion.captadapor,
+      estudiopor: licitacion.estudiopor,      
+    });
+
+    revalidatePath('/dashboard');
+    redirect('/dashboard'); // Redirect after successful creation
   } catch (error) {
     console.log(error);
+    redirect('/dashboard'); // Redirect in case of error
   }
-  redirect('/dashboard');
 }
 
+
+// export async function editLicitacion(formData) {
+//   const item = Number(formData.get('item'))
+//   const fechapresentacion = new Date(formData.get('fechapresentacion')).toISOString();
+//   const cliente = formData.get('cliente')
+//   const importe = Number(formData.get('importe'))
+//   const numexpediente = formData.get('numexpediente')
+//   const tipo = formData.get('tipo')
+//   const tipocontrato = formData.get('tipocontrato')
+//   const duracioncontratoanyo = formData.get('duracioncontratoanyo')
+//   const estadoini = formData.get('estadoini')
+//   const estadofinal = formData.get('estadofinal')
+//   const fechaformalizacion = formData.get('fechaformalizacion')
+//   const observaciones = formData.get('observaciones')
+//   const presentadapor = formData.get('presentadapor')
+//   const presupuestopor = formData.get('presupuesto')
+//   const estudiopor = formData.get('estudiopor')
+//   const titulo = formData.get('titulo')
+//   const captadapor = formData.get('captadapor')
+
+//   try {
+//     const licitacion = await prisma.licitacion.update({
+//       where: { item },
+//       data: {
+//         fechapresentacion,
+//         cliente,
+//         importe,
+//         numexpediente,
+//         tipo,
+//         tipocontrato,
+//         duracioncontratoanyo,
+//         estadoini,
+//         estadofinal,
+//         fechaformalizacion,
+//         observaciones,
+//         presentadapor,
+//         estudiopor,
+//         presupuestopor,
+//         titulo,
+//         captadapor
+//       },
+//     })
+//     await updateGoogleSheet(licitacion);
+//     revalidatePath('/dashboard')
+//   } catch (error) {
+//     console.log(error);
+//   }
+//   redirect('/dashboard');
+// }
 export async function editLicitacion(formData) {
-  const item = Number(formData.get('item'))
+  const item = Number(formData.get('item'));
   const fechapresentacion = new Date(formData.get('fechapresentacion')).toISOString();
-  const cliente = formData.get('cliente')
-  const importe = Number(formData.get('importe'))
-  const numexpediente = formData.get('numexpediente')
-  const tipo = formData.get('tipo')
-  const tipocontrato = formData.get('tipocontrato')
-  const duracioncontratoanyo = formData.get('duracioncontratoanyo')
-  const estadoini = formData.get('estadoini')
-  const estadofinal = formData.get('estadofinal')
-  const fechaformalizacion = formData.get('fechaformalizacion')
-  const observaciones = formData.get('observaciones')
-  const presentadapor = formData.get('presentadapor')
-  const presupuestopor = formData.get('presupuesto')
-  const estudiopor = formData.get('estudiopor')
-  const titulo = formData.get('titulo')
-  const captadapor = formData.get('captadapor')
+  const cliente = formData.get('cliente');
+  const importe = Number(formData.get('importe'));
+  const numexpediente = formData.get('numexpediente');
+  const tipo = formData.get('tipo');
+  const tipocontrato = formData.get('tipocontrato');
+  const duracioncontratoanyo = formData.get('duracioncontratoanyo');
+  const estadoini = formData.get('estadoini');
+  const estadofinal = formData.get('estadofinal');
+  const fechaformalizacion = formData.get('fechaformalizacion');
+  const observaciones = formData.get('observaciones');
+  const presentadapor = formData.get('presentadapor');
+  const presupuestopor = formData.get('presupuesto');
+  const estudiopor = formData.get('estudiopor');
+  const titulo = formData.get('titulo');
+  const captadapor = formData.get('captadapor');
 
   try {
-    const licitacion = await prisma.licitacion.update({
+    // Update the database
+    const updatedLicitacion = await prisma.licitacion.update({
       where: { item },
       data: {
         fechapresentacion,
@@ -381,13 +488,102 @@ export async function editLicitacion(formData) {
         titulo,
         captadapor
       },
-    })
-    revalidatePath('/dashboard')
+    });
+
+    // Update the Google Sheet
+    await updateGoogleSheet(item, {
+      fechapresentacion,
+      cliente,
+      titulo,
+      numexpediente,
+      tipo,
+      tipocontrato,
+      importe,
+      fechaformalizacion,
+      presupuestopor,
+      presentadapor,
+      estadoini,
+      estadofinal,
+      duracioncontratoanyo,
+      observaciones,
+      captadapor,
+      estudiopor,  
+    });
+    revalidatePath('/dashboard');
+    redirect('/dashboard');
   } catch (error) {
     console.log(error);
+    redirect('/dashboard');
   }
-  redirect('/dashboard');
 }
+
+
+async function updateGoogleSheet(item, newData) {
+  try {
+    // Load credentials from JSON file
+    const credentials = JSON.parse(fs.readFileSync('config/proyecto-lucas-rojas-bee0220e8bba.json'));
+
+    // Create authentication client
+    const auth = new google.auth.JWT(
+      credentials.client_email,
+      null,
+      credentials.private_key,
+      ['https://www.googleapis.com/auth/spreadsheets']
+    );
+
+    // Initialize Google Sheets API
+    const sheets = google.sheets({ version: 'v4', auth });
+
+    // ID of the spreadsheet
+    const spreadsheetId = '1cAcgzxl_N0NG0S14astjJ7cWl-00nDBaWc4Zba6mAew';
+
+    // Find the row number corresponding to the specified item
+    const range = 'Sheet1!A:A'; // Adjust as per your spreadsheet structure
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range,
+    });
+    const rows = response.data.values;
+    const rowToUpdate = rows.findIndex(row => Number(row[0]) === item) + 1;
+
+    // Prepare the values to be updated in the row
+    const values = [
+      item.toString(),
+      newData.fechapresentacion,
+      newData.cliente,
+      newData.titulo,
+      newData.numexpediente,
+      newData.tipo,
+      newData.tipocontrato,
+      newData.importe.toString(),
+      newData.fechaformalizacion,
+      newData.presupuestopor,
+      newData.presentadapor,
+      newData.estadoini,
+      newData.estadofinal,
+      newData.duracioncontratoanyo.toString(),
+      newData.observaciones,
+      newData.captadapor,
+      newData.estudiopor,  
+    ];
+
+    // Update the row in the spreadsheet
+    await sheets.spreadsheets.values.update({
+      spreadsheetId,
+      range: `Sheet1!A${rowToUpdate}:Q${rowToUpdate}`, // Adjust the range as per your spreadsheet structure
+      valueInputOption: 'RAW',
+      resource: {
+        values: [values],
+      },
+    });
+  } catch (error) {
+    console.error('Error updating Google Sheet:', error);
+    throw error;
+  }
+}
+
+
+
 
 export async function deleteLicitacion(formData) {
   try {
@@ -398,10 +594,63 @@ export async function deleteLicitacion(formData) {
         item: item,
       },
     })
+    await deleteFromGoogleSheet(item);
     revalidatePath('/dashboard')
   } catch (error) {
     console.log(error);
   }
 
   redirect('/dashboard');
+}
+
+async function deleteFromGoogleSheet(itemId) {
+  try {
+    // Load credentials from JSON file
+    const credentials = JSON.parse(fs.readFileSync('config/proyecto-lucas-rojas-bee0220e8bba.json'));
+
+    // Create authentication client
+    const auth = new google.auth.JWT(
+      credentials.client_email,
+      null,
+      credentials.private_key,
+      ['https://www.googleapis.com/auth/spreadsheets']
+    );
+
+    // Initialize Google Sheets API
+    const sheets = google.sheets({ version: 'v4', auth });
+
+    // ID of the spreadsheet
+    const spreadsheetId = '1cAcgzxl_N0NG0S14astjJ7cWl-00nDBaWc4Zba6mAew';
+
+    // Find the row number corresponding to the deleted item
+    const range = `Sheet1!A:A`; // Adjust as per your spreadsheet structure
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range,
+    });
+    const rows = response.data.values;
+    const rowToDelete = rows.findIndex(row => Number(row[0]) === itemId) + 1;
+
+    // Delete the row from the spreadsheet
+    await sheets.spreadsheets.batchUpdate({
+      spreadsheetId,
+      resource: {
+        requests: [
+          {
+            deleteDimension: {
+              range: {
+                sheetId: 0,
+                dimension: 'ROWS',
+                startIndex: rowToDelete - 1,
+                endIndex: rowToDelete,
+              },
+            },
+          },
+        ],
+      },
+    });
+  } catch (error) {
+    console.error('Error deleting from Google Sheet:', error);
+    throw error;
+  }
 }
