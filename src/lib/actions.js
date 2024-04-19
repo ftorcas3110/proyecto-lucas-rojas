@@ -398,55 +398,6 @@ export async function newLicitacion(formData) {
   }
 }
 
-
-// export async function editLicitacion(formData) {
-//   const item = Number(formData.get('item'))
-//   const fechapresentacion = new Date(formData.get('fechapresentacion')).toISOString();
-//   const cliente = formData.get('cliente')
-//   const importe = Number(formData.get('importe'))
-//   const numexpediente = formData.get('numexpediente')
-//   const tipo = formData.get('tipo')
-//   const tipocontrato = formData.get('tipocontrato')
-//   const duracioncontratoanyo = formData.get('duracioncontratoanyo')
-//   const estadoini = formData.get('estadoini')
-//   const estadofinal = formData.get('estadofinal')
-//   const fechaformalizacion = formData.get('fechaformalizacion')
-//   const observaciones = formData.get('observaciones')
-//   const presentadapor = formData.get('presentadapor')
-//   const presupuestopor = formData.get('presupuesto')
-//   const estudiopor = formData.get('estudiopor')
-//   const titulo = formData.get('titulo')
-//   const captadapor = formData.get('captadapor')
-
-//   try {
-//     const licitacion = await prisma.licitacion.update({
-//       where: { item },
-//       data: {
-//         fechapresentacion,
-//         cliente,
-//         importe,
-//         numexpediente,
-//         tipo,
-//         tipocontrato,
-//         duracioncontratoanyo,
-//         estadoini,
-//         estadofinal,
-//         fechaformalizacion,
-//         observaciones,
-//         presentadapor,
-//         estudiopor,
-//         presupuestopor,
-//         titulo,
-//         captadapor
-//       },
-//     })
-//     await updateGoogleSheet(licitacion);
-//     revalidatePath('/dashboard')
-//   } catch (error) {
-//     console.log(error);
-//   }
-//   redirect('/dashboard');
-// }
 export async function editLicitacion(formData) {
   const item = Number(formData.get('item'));
   const fechapresentacion = new Date(formData.get('fechapresentacion')).toISOString();
@@ -465,7 +416,6 @@ export async function editLicitacion(formData) {
   const estudiopor = formData.get('estudiopor');
   const titulo = formData.get('titulo');
   const captadapor = formData.get('captadapor');
-
   try {
     // Update the database
     const updatedLicitacion = await prisma.licitacion.update({
@@ -491,6 +441,7 @@ export async function editLicitacion(formData) {
     });
 
     // Update the Google Sheet
+    console.log(item);
     await updateGoogleSheet(item, {
       fechapresentacion,
       cliente,
@@ -509,6 +460,7 @@ export async function editLicitacion(formData) {
       captadapor,
       estudiopor,  
     });
+    console.log(item);
     revalidatePath('/dashboard');
     redirect('/dashboard');
   } catch (error) {
@@ -538,34 +490,36 @@ async function updateGoogleSheet(item, newData) {
     const spreadsheetId = '1cAcgzxl_N0NG0S14astjJ7cWl-00nDBaWc4Zba6mAew';
 
     // Find the row number corresponding to the specified item
-    const range = 'Sheet1!A:A'; // Adjust as per your spreadsheet structure
-    const response = await sheets.spreadsheets.values.get({
-      spreadsheetId,
-      range,
-    });
-    const rows = response.data.values;
-    const rowToUpdate = rows.findIndex(row => Number(row[0]) === item) + 1;
+    // Find the row number corresponding to the specified item
+const range = 'Sheet1!A:A'; // Adjust as per your spreadsheet structure
+const response = await sheets.spreadsheets.values.get({
+  spreadsheetId,
+  range,
+});
+const rows = response.data.values;
+const rowToUpdate = rows.findIndex(row => Number(row[0]) === item) + 1;
 
-    // Prepare the values to be updated in the row
-    const values = [
-      item.toString(),
-      newData.fechapresentacion,
-      newData.cliente,
-      newData.titulo,
-      newData.numexpediente,
-      newData.tipo,
-      newData.tipocontrato,
-      newData.importe.toString(),
-      newData.fechaformalizacion,
-      newData.presupuestopor,
-      newData.presentadapor,
-      newData.estadoini,
-      newData.estadofinal,
-      newData.duracioncontratoanyo.toString(),
-      newData.observaciones,
-      newData.captadapor,
-      newData.estudiopor,  
-    ];
+// Prepare the values to be updated in the row
+const values = [
+  item, // Remove leading and trailing ' characters
+  newData.fechapresentacion,
+  newData.cliente,
+  newData.titulo,
+  newData.numexpediente,
+  newData.tipo,
+  newData.tipocontrato,
+  newData.importe.toString(),
+  newData.fechaformalizacion,
+  newData.presupuestopor,
+  newData.presentadapor,
+  newData.estadoini,
+  newData.estadofinal,
+  newData.duracioncontratoanyo.toString(),
+  newData.observaciones,
+  newData.captadapor,
+  newData.estudiopor,  
+];
+
 
     // Update the row in the spreadsheet
     await sheets.spreadsheets.values.update({
@@ -576,6 +530,7 @@ async function updateGoogleSheet(item, newData) {
         values: [values],
       },
     });
+    console.log(values[0]);
   } catch (error) {
     console.error('Error updating Google Sheet:', error);
     throw error;

@@ -35,6 +35,9 @@ async function Header() {
             <li className="transition duration-500 hover:text-blue-700 pl-200px">
               <Link href="/dashboard/new"> Nueva licitación </Link>  
             </li>
+            <li className="transition duration-500 hover:text-blue-700 pl-200px">
+              <Link href="/estadisticas">Estadísticas</Link>
+            </li>
             </>}
           {<li>
             {session?.user?.role == 'ADMIN'
