@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import React, { useState, useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
@@ -34,7 +34,7 @@ const Graficos = () => {
     const presupuestadoresSet = new Set();
     for (let i = 1; i < sheetData.length; i++) {
       const item = sheetData[i];
-      const presupuestador = item[10] || 'Sin presupuestador';
+      const presupuestador = item[9] || 'Sin presupuestador';
       presupuestadoresSet.add(presupuestador);
     }
     setPresupuestadores(Array.from(presupuestadoresSet));
@@ -45,57 +45,52 @@ const Graficos = () => {
 
     const filteredData = data.filter(item => {
       const date = new Date(item[1]);
-      const month = date.toLocaleString('default', { month: 'long' });
+      const month = date.getMonth() + 1;
       const year = date.getFullYear();
-      const presupuestador = item[10] || 'Sin presupuestador';
+      const presupuestador = item[9] || 'Sin presupuestador';
       return (
-        (selectedMonth === 0 || month === selectedMonth) &&
-        (selectedYear === 0 || year === selectedYear) &&
-        (startMonth === 0 || (year > startYear || (year === startYear && month >= startMonth))) &&
-        (endMonth === 0 || (year < endYear || (year === endYear && month <= endMonth))) &&
+        (selectedMonth === 0 || month === parseInt(selectedMonth)) &&
+        (selectedYear === 0 || year === parseInt(selectedYear)) &&
+        (startMonth === 0 || (year > parseInt(startYear) || (year === parseInt(startYear) && month >= parseInt(startMonth)))) &&
+        (endMonth === 0 || (year < parseInt(endYear) || (year === parseInt(endYear) && month <= parseInt(endMonth)))) &&
         (selectedPresupuestador === '' || presupuestador === selectedPresupuestador)
       );
     });
 
     const filteredDataWithoutSinPresupuestador = filteredData.filter(item => {
-      const presupuestador = item[10] || 'Sin presupuestador';
+      const presupuestador = item[9] || 'Sin presupuestador';
       return presupuestador !== 'Sin presupuestador';
     });
 
-    const userCountsByState = filteredDataWithoutSinPresupuestador.reduce((countsByState, item) => {
-      const presupuestador = item[10] || 'Sin presupuestador';
-      const state = item[12] || 'Estado no disponible';
-      countsByState[presupuestador] = countsByState[presupuestador] || {};
-      countsByState[presupuestador][state] = (countsByState[presupuestador][state] || 0) + 1;
-      return countsByState;
+    const estadoFinalCounts = filteredDataWithoutSinPresupuestador.reduce((countsByEstadoFinal, item) => {
+      const estadoFinal = item[12] || 'Estado no disponible';
+      const importe = parseFloat(item[7]) || 0;
+      if (estadoFinal === 'Estado no disponible') return countsByEstadoFinal; // Skip 'Estado no disponible'
+      if (!countsByEstadoFinal[estadoFinal]) {
+        countsByEstadoFinal[estadoFinal] = importe;
+      } else {
+        countsByEstadoFinal[estadoFinal] += importe;
+      }
+      return countsByEstadoFinal;
     }, {});
 
-    const totalOccurrencesByUser = Object.keys(userCountsByState).reduce((totalCounts, user) => {
-      totalCounts[user] = Object.values(userCountsByState[user]).reduce((sum, value) => sum + value, 0);
-      return totalCounts;
-    }, {});
-
-    const labels = Object.keys(userCountsByState);
-    const datasets = labels.length > 0 ? Object.keys(userCountsByState[labels[0]]).map((state, index) => {
-      const values = labels.map(user => userCountsByState[user][state] || 0);
+    const labels = Object.keys(estadoFinalCounts);
+    const datasets = labels.map((estadoFinal, index) => {
+      const dataForLabel = estadoFinalCounts[estadoFinal];
       return {
-        label: state,
-        data: values,
-        backgroundColor: getBackgroundColor(state),
-        borderColor: getBorderColor(state),
-        borderWidth: 1,
-      };
-    }) : [];
-
-    datasets.unshift({
-      label: 'Total',
-      data: labels.map(user => totalOccurrencesByUser[user] || 0),
-      backgroundColor: 'rgba(0, 0, 0, 0.8)', // Black
-      borderColor: 'rgba(0, 0, 0, 1)', // Black
-      borderWidth: 1,
+        label: estadoFinal,
+        data: [dataForLabel], // Wrap in an array
+        backgroundColor: getBackgroundColor(estadoFinal),
+        borderColor: getBorderColor(estadoFinal),
+        borderWidth: 1
+      }
     });
 
-    const ctx = document.getElementById('myChart');
+    renderChart(labels, datasets);
+  }, [data, selectedMonth, selectedYear, startMonth, endMonth, startYear, endYear, selectedPresupuestador]);
+
+  const renderChart = (labels, datasets) => {
+    const ctx = document.getElementById('grafico3').getContext('2d');
     if (chartRef.current) {
       chartRef.current.destroy();
     }
@@ -106,20 +101,23 @@ const Graficos = () => {
         datasets: datasets,
       },
       options: {
+        indexAxis: 'x',
         scales: {
+          x: {
+            stacked: false,
+          },
           y: {
-            beginAtZero: true
+            stacked: false
+          }
+        },
+        plugins: {
+          legend: {
+            position: 'top',
           }
         }
       }
     });
-
-    return () => {
-      if (chartRef.current) {
-        chartRef.current.destroy();
-      }
-    };
-  }, [data, selectedMonth, selectedYear, startMonth, endMonth, startYear, endYear, selectedPresupuestador]);
+  };
 
   const handleStartMonthChange = (event) => {
     setStartMonth(event.target.value);
@@ -141,10 +139,20 @@ const Graficos = () => {
     setSelectedPresupuestador(event.target.value);
   };
 
+  const handleResetFilters = () => {
+    setSelectedMonth(0);
+    setSelectedYear(0);
+    setStartMonth(0);
+    setEndMonth(0);
+    setStartYear(0);
+    setEndYear(0);
+    setSelectedPresupuestador('');
+  };
+
   const staticYears = Array.from({ length: 8 }, (_, index) => 2023 + index);
 
-  const getBackgroundColor = (state) => {
-    switch (state) {
+  const getBackgroundColor = (estadoFinal) => {
+    switch (estadoFinal) {
       case 'ADJUDICADA':
         return 'rgba(0, 255, 0, 0.8)'; // Green
       case 'EN ESPERA RESOLUCIÓN':
@@ -153,13 +161,19 @@ const Graficos = () => {
         return 'rgba(255, 0, 0, 0.8)'; // Red
       case 'DESESTIMADA':
         return 'rgba(128, 0, 128, 0.8)'; // Purple
+      case 'DESIERTA':
+        return 'rgba(255, 255, 0, 0.8)'; // Yellow
+      case 'ANULADA':
+        return 'rgba(0, 255, 255, 0.8)'; // Cyan
+      case 'Estado no disponible':
+        return 'rgba(0, 0, 0, 0.8)'; // Black
       default:
         return 'rgba(0, 0, 0, 0.8)'; // Black for 'Total'
     }
   };
 
-  const getBorderColor = (state) => {
-    switch (state) {
+  const getBorderColor = (estadoFinal) => {
+    switch (estadoFinal) {
       case 'ADJUDICADA':
         return 'rgba(0, 255, 0, 1)'; // Green
       case 'EN ESPERA RESOLUCIÓN':
@@ -168,6 +182,12 @@ const Graficos = () => {
         return 'rgba(255, 0, 0, 1)'; // Red
       case 'DESESTIMADA':
         return 'rgba(128, 0, 128, 1)'; // Purple
+      case 'DESIERTA':
+        return 'rgba(255, 255, 0, 0.8)'; // Yellow
+      case 'ANULADA':
+        return 'rgba(0, 255, 255, 0.8)'; // Cyan
+      case 'Estado no disponible':
+        return 'rgba(0, 0, 0, 1)'; // Black
       default:
         return 'rgba(0, 0, 0, 1)'; // Black for 'Total'
     }
@@ -175,16 +195,17 @@ const Graficos = () => {
 
   return (
     <div>
+      <p>Importes (en €)</p>
       <div>
         <label htmlFor="startMonthSelect">Inicio Mes:</label>
-        <select id="startMonthSelect" onChange={handleStartMonthChange}>
+        <select id="startMonthSelect" onChange={handleStartMonthChange} value={startMonth}>
           <option value="0">Todos los meses</option>
           {Array.from({ length: 12 }, (_, index) => index + 1).map(month => (
             <option key={month} value={month}>{new Date(2000, month - 1).toLocaleString('default', { month: 'long' })}</option>
           ))}
         </select>
         <label htmlFor="endMonthSelect">Fin Mes:</label>
-        <select id="endMonthSelect" onChange={handleEndMonthChange}>
+        <select id="endMonthSelect" onChange={handleEndMonthChange} value={endMonth}>
           <option value="0">Todos los meses</option>
           {Array.from({ length: 12 }, (_, index) => index + 1).map(month => (
             <option key={month} value={month}>{new Date(2000, month - 1).toLocaleString('default', { month: 'long' })}</option>
@@ -193,14 +214,14 @@ const Graficos = () => {
       </div>
       <div>
         <label htmlFor="startYearSelect">Inicio Año:</label>
-        <select id="startYearSelect" onChange={handleStartYearChange}>
+        <select id="startYearSelect" onChange={handleStartYearChange} value={startYear}>
           <option value="0">Todos los años</option>
           {staticYears.map(year => (
             <option key={year} value={year}>{year}</option>
           ))}
         </select>
         <label htmlFor="endYearSelect">Fin Año:</label>
-        <select id="endYearSelect" onChange={handleEndYearChange}>
+        <select id="endYearSelect" onChange={handleEndYearChange} value={endYear}>
           <option value="0">Todos los años</option>
           {staticYears.map(year => (
             <option key={year} value={year}>{year}</option>
@@ -209,16 +230,20 @@ const Graficos = () => {
       </div>
       <div>
         <label htmlFor="presupuestadorSelect">Presupuestador:</label>
-        <select id="presupuestadorSelect" onChange={handlePresupuestadorChange}>
-          <option value="">Todos los presupuestadores</option>
-          {presupuestadores.map(presupuestador => (
-            <option key={presupuestador} value={presupuestador}>{presupuestador}</option>
-          ))}
+        <select id="presupuestadorSelect" onChange={handlePresupuestadorChange} value={selectedPresupuestador}>
+          <option value="">Seleccione un presentador</option>
+          {presupuestadores
+            .filter(presupuestador => presupuestador !== 'Sin presupuestador')
+            .map((presupuestador, index) => (
+              <option key={index} value={presupuestador}>{presupuestador}</option>
+            ))}
         </select>
       </div>
-      <canvas id="myChart" width="400" height="400"></canvas>
+      <button onClick={handleResetFilters}>Resetear Filtros</button>
+      <canvas id="grafico3" width="400" height="400"></canvas>
     </div>
   );
 };
 
 export default Graficos;
+
