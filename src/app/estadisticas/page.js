@@ -3,6 +3,7 @@ import GraficoPresentadas from "@/components/GraficoPresentadas";
 import GraficoImportes from "@/components/GraficoImportes";
 import GraficoCircularPresupuesto from "@/components/GraficoCircularPresupuesto";
 import GraficoCircularPresentadas from "@/components/GraficoCircularPresentadas";
+import GraficoCircularImportes from "@/components/GraficoCircularImportes";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
@@ -13,7 +14,7 @@ async function page() {
   if (!sesion) redirect('/')
 
   return (
-    <div className="flex flex-col items-center justify-center sm:h-[90vh] py-5 md:h-[90vh] p-5">
+    <div className="flex flex-col items-center justify-center sm:h-[90vh] py-5 md:h-[90vh] mt-[1000px] p-5">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-10 md:gap-10 w-full">
         <div className="col-span-1 h-full">
           <div className="text-center container items-center border-2 border-black relative p-8 rounded-lg shadow-lg text-black mt-4 h-full">
@@ -43,7 +44,7 @@ async function page() {
           <div className="text-center container items-center border-2 border-black relative p-8 rounded-lg shadow-lg text-black mt-4 h-full">
             <div className="absolute -top-8 left-1/2 transform -translate-x-1/2"></div>
             <div className="h-full">
-              {/* <GraficoCircularPresupuesto /> */}
+              <GraficoCircularPresupuesto />
             </div>
           </div>
         </div>
@@ -51,7 +52,7 @@ async function page() {
           <div className="text-center container items-center border-2 border-black relative p-8 rounded-lg shadow-lg text-black mt-4 h-full">
             <div className="absolute -top-8 left-1/2 transform -translate-x-1/2"></div>
             <div className="h-full">
-              {/* <GraficoCircularPresentadas /> */}
+              <GraficoCircularPresentadas /> 
             </div>
           </div>
         </div>
@@ -59,7 +60,7 @@ async function page() {
           <div className="text-center container items-center border-2 border-black relative p-8 rounded-lg shadow-lg text-black mt-4 h-full">
             <div className="absolute -top-8 left-1/2 transform -translate-x-1/2"></div>
             <div className="h-full">
-              {/* Component 6 */}
+              <GraficoCircularImportes />
             </div>
           </div>
         </div>

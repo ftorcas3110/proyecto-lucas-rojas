@@ -30,7 +30,10 @@ async function Header() {
               <Link href="/asignadas">Asignadas</Link>
             </li>
             <li className="transition duration-500 hover:text-blue-700 pl-200px">
-              <Link href="/dashboard">Búsqueda</Link>
+              <Link href="/dashboard">Todas las licitaciones</Link>
+            </li>
+            <li className="transition duration-500 hover:text-blue-700 pl-200px">
+              <Link href="/busqueda">Buscador</Link>
             </li>
             <li className="transition duration-500 hover:text-blue-700 pl-200px">
               <Link href="/dashboard/new"> Nueva licitación </Link>  

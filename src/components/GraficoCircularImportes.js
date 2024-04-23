@@ -10,7 +10,8 @@ const Graficos = () => {
   const [endMonth, setEndMonth] = useState(0);
   const [startYear, setStartYear] = useState(0);
   const [endYear, setEndYear] = useState(0);
-  const [selectedUser, setSelectedUser] = useState('');
+  const [selectedPresupuestador, setSelectedPresupuestador] = useState('');
+  const [presupuestadores, setPresupuestadores] = useState([]);
   const chartRef = useRef(null);
 
   useEffect(() => {
@@ -20,6 +21,7 @@ const Graficos = () => {
         const jsonData = await response.json();
         const sheetData = jsonData.values || [];
         setData(sheetData.slice(1));
+        updatePresupuestadores(sheetData);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -28,40 +30,64 @@ const Graficos = () => {
     fetchData();
   }, []);
 
+  const updatePresupuestadores = (sheetData) => {
+    const presupuestadoresSet = new Set();
+    for (let i = 1; i < sheetData.length; i++) {
+      const item = sheetData[i];
+      const presupuestador = item[9] || 'Sin presupuestador';
+      presupuestadoresSet.add(presupuestador);
+    }
+    setPresupuestadores(Array.from(presupuestadoresSet));
+  };
+
   useEffect(() => {
     if (data.length === 0) return;
-
+  
     const filteredData = data.filter(item => {
       const date = new Date(item[1]);
       const month = date.getMonth() + 1;
       const year = date.getFullYear();
-      const user = item[9] || 'Sin usuario';
+      const presupuestador = item[9] || 'Sin presupuestador';
       return (
         (selectedMonth === 0 || month === parseInt(selectedMonth)) &&
         (selectedYear === 0 || year === parseInt(selectedYear)) &&
         (startMonth === 0 || (year > parseInt(startYear) || (year === parseInt(startYear) && month >= parseInt(startMonth)))) &&
         (endMonth === 0 || (year < parseInt(endYear) || (year === parseInt(endYear) && month <= parseInt(endMonth)))) &&
-        (selectedUser === '' || user === selectedUser)
+        (selectedPresupuestador === '' || presupuestador === selectedPresupuestador)
       );
     });
-
-    const values = filteredData
-      .map(item => item[12])
-      .filter(value => value && value !== "Valor no disponible");
-
-    const valueCounts = values.reduce((counts, value) => {
-      counts[value] = (counts[value] || 0) + 1;
-      return counts;
+  
+    const filteredDataWithoutSinPresupuestador = filteredData.filter(item => {
+      const presupuestador = item[9] || 'Sin presupuestador';
+      return presupuestador !== 'Sin presupuestador';
+    });
+  
+    const estadoFinalCounts = filteredDataWithoutSinPresupuestador.reduce((countsByEstadoFinal, item) => {
+      const estadoFinal = item[12] || 'Estado no disponible';
+      const importe = parseFloat(item[7]) || 0;
+      if (estadoFinal === 'Estado no disponible') return countsByEstadoFinal; // Skip 'Estado no disponible'
+      if (!countsByEstadoFinal[estadoFinal]) {
+        countsByEstadoFinal[estadoFinal] = importe;
+      } else {
+        countsByEstadoFinal[estadoFinal] += importe;
+      }
+      return countsByEstadoFinal;
     }, {});
+  
+    const labels = Object.keys(estadoFinalCounts);
+    const datasets = [{
+      label: 'Importes',
+      data: labels.map(label => estadoFinalCounts[label]),
+      backgroundColor: labels.map(label => getBackgroundColor(label)),
+      borderColor: labels.map(label => getBorderColor(label)),
+      borderWidth: 1
+    }];
+  
+    renderChart(labels, datasets);
+  }, [data, selectedMonth, selectedYear, startMonth, endMonth, startYear, endYear, selectedPresupuestador]);
 
-    const labels = Object.keys(valueCounts);
-    const dataCounts = Object.values(valueCounts);
-
-    renderChart(labels, dataCounts);
-  }, [data, selectedMonth, selectedYear, startMonth, endMonth, startYear, endYear, selectedUser]);
-
-  const renderChart = (labels, dataCounts) => {
-    const ctx = document.getElementById('grafico5').getContext('2d');
+  const renderChart = (labels, datasets) => {
+    const ctx = document.getElementById('grafico6').getContext('2d');
     if (chartRef.current) {
       chartRef.current.destroy();
     }
@@ -69,37 +95,16 @@ const Graficos = () => {
       type: 'pie',
       data: {
         labels: labels,
-        datasets: [
-          {
-            label: 'Cantidad',
-            data: dataCounts,
-            backgroundColor: [
-              'rgba(0, 255, 0, 0.8)', // Green              
-              'rgba(0, 0, 255, 0.8)', // Blue              
-              'rgba(255, 0, 0, 0.8)', // Red      
-              'rgba(255, 255, 0, 0.8)', // Yellow         
-              'rgba(128, 0, 128, 0.8)', // Purple             
-              'rgba(0, 255, 255, 0.8)', // Cyan             
-            ],
-            borderColor: [
-              'rgba(0, 255, 0, 1)', // Green              
-              'rgba(0, 0, 255, 1)', // Blue              
-              'rgba(255, 0, 0, 1)', // Red                   
-              'rgba(255, 255, 0, 1)', // Yellow   
-              'rgba(128, 0, 128, 1)', // Purple              
-              'rgba(0, 255, 255, 1)', // Cyan       
-            ],
-            borderWidth: 1,
-          },
-        ],
+        datasets: datasets,
       },
-    });
-
-    return () => {
-      if (chartRef.current) {
-        chartRef.current.destroy();
+      options: {
+        plugins: {
+          legend: {
+            position: 'top',
+          }
+        }
       }
-    };
+    });
   };
 
   const handleStartMonthChange = (event) => {
@@ -118,8 +123,8 @@ const Graficos = () => {
     setEndYear(event.target.value);
   };
 
-  const handleUserChange = (event) => {
-    setSelectedUser(event.target.value);
+  const handlePresupuestadorChange = (event) => {
+    setSelectedPresupuestador(event.target.value);
   };
 
   const handleResetFilters = () => {
@@ -129,14 +134,56 @@ const Graficos = () => {
     setEndMonth(0);
     setStartYear(0);
     setEndYear(0);
-    setSelectedUser('');
+    setSelectedPresupuestador('');
   };
 
   const staticYears = Array.from({ length: 8 }, (_, index) => 2023 + index);
 
+  const getBackgroundColor = (estadoFinal) => {
+    switch (estadoFinal) {
+      case 'ADJUDICADA':
+        return 'rgba(0, 255, 0, 0.8)'; // Green
+      case 'EN ESPERA RESOLUCIÓN':
+        return 'rgba(0, 0, 255, 0.8)'; // Blue
+      case 'NO ADJUDICADA':
+        return 'rgba(255, 0, 0, 0.8)'; // Red
+      case 'DESESTIMADA':
+        return 'rgba(128, 0, 128, 0.8)'; // Purple
+      case 'DESIERTA':
+        return 'rgba(255, 255, 0, 0.8)'; // Yellow
+      case 'ANULADA':
+        return 'rgba(0, 255, 255, 0.8)'; // Cyan
+      case 'Estado no disponible':
+        return 'rgba(0, 0, 0, 0.8)'; // Black
+      default:
+        return 'rgba(0, 0, 0, 0.8)'; // Black for 'Total'
+    }
+  };
+
+  const getBorderColor = (estadoFinal) => {
+    switch (estadoFinal) {
+      case 'ADJUDICADA':
+        return 'rgba(0, 255, 0, 1)'; // Green
+      case 'EN ESPERA RESOLUCIÓN':
+        return 'rgba(0, 0, 255, 1)'; // Blue
+      case 'NO ADJUDICADA':
+        return 'rgba(255, 0, 0, 1)'; // Red
+      case 'DESESTIMADA':
+        return 'rgba(128, 0, 128, 1)'; // Purple
+      case 'DESIERTA':
+        return 'rgba(255, 255, 0, 0.8)'; // Yellow
+      case 'ANULADA':
+        return 'rgba(0, 255, 255, 0.8)'; // Cyan
+      case 'Estado no disponible':
+        return 'rgba(0, 0, 0, 1)'; // Black
+      default:
+        return 'rgba(0, 0, 0, 1)'; // Black for 'Total'
+    }
+  };
+
   return (
     <div>
-      <p>Presupuestos</p>
+      <p>Importes (en €)</p>
       <div>
         <label htmlFor="startMonthSelect">Inicio Mes:</label>
         <select id="startMonthSelect" onChange={handleStartMonthChange} value={startMonth}>
@@ -170,19 +217,18 @@ const Graficos = () => {
         </select>
       </div>
       <div>
-        <label htmlFor="userSelect">Usuario:</label>
-        <select id="userSelect" onChange={handleUserChange} value={selectedUser}>
-          <option value="">Todos los usuarios</option>
-          {data
-            .map(item => item[9])
-            .filter((value, index, self) => value && self.indexOf(value) === index)
-            .map((user, index) => (
-              <option key={index} value={user}>{user}</option>
+        <label htmlFor="presupuestadorSelect">Presupuestador:</label>
+        <select id="presupuestadorSelect" onChange={handlePresupuestadorChange} value={selectedPresupuestador}>
+          <option value="">Seleccione un presentador</option>
+          {presupuestadores
+            .filter(presupuestador => presupuestador !== 'Sin presupuestador')
+            .map((presupuestador, index) => (
+              <option key={index} value={presupuestador}>{presupuestador}</option>
             ))}
         </select>
       </div>
       <button onClick={handleResetFilters}>Resetear Filtros</button>
-      <canvas id="grafico5" width="400" height="400"></canvas>
+      <canvas id="grafico6" width="400" height="400"></canvas>
     </div>
   );
 };

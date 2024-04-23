@@ -42,7 +42,7 @@ const Graficos = () => {
 
   useEffect(() => {
     if (data.length === 0) return;
-
+  
     const filteredData = data.filter(item => {
       const date = new Date(item[1]);
       const month = date.getMonth() + 1;
@@ -56,12 +56,12 @@ const Graficos = () => {
         (selectedPresupuestador === '' || presupuestador === selectedPresupuestador)
       );
     });
-
+  
     const filteredDataWithoutSinPresupuestador = filteredData.filter(item => {
       const presupuestador = item[9] || 'Sin presupuestador';
       return presupuestador !== 'Sin presupuestador';
     });
-
+  
     const estadoFinalCounts = filteredDataWithoutSinPresupuestador.reduce((countsByEstadoFinal, item) => {
       const estadoFinal = item[12] || 'Estado no disponible';
       const importe = parseFloat(item[7]) || 0;
@@ -73,19 +73,16 @@ const Graficos = () => {
       }
       return countsByEstadoFinal;
     }, {});
-
+  
     const labels = Object.keys(estadoFinalCounts);
-    const datasets = labels.map((estadoFinal, index) => {
-      const dataForLabel = estadoFinalCounts[estadoFinal];
-      return {
-        label: estadoFinal,
-        data: [dataForLabel], // Wrap in an array
-        backgroundColor: getBackgroundColor(estadoFinal),
-        borderColor: getBorderColor(estadoFinal),
-        borderWidth: 1
-      }
-    });
-
+    const datasets = labels.map((label, index) => ({
+      label: label,
+      data: [estadoFinalCounts[label]],
+      backgroundColor: getBackgroundColor(label),
+      borderColor: getBorderColor(label),
+      borderWidth: 1
+    }));
+  
     renderChart(labels, datasets);
   }, [data, selectedMonth, selectedYear, startMonth, endMonth, startYear, endYear, selectedPresupuestador]);
 
@@ -97,7 +94,7 @@ const Graficos = () => {
     chartRef.current = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: labels,
+        labels: ['Importes'],
         datasets: datasets,
       },
       options: {
@@ -246,4 +243,3 @@ const Graficos = () => {
 };
 
 export default Graficos;
-
