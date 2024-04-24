@@ -8,9 +8,9 @@ function formatForInput(dateString) {
     let hours = '' + date.getHours();
     let minutes = '' + date.getMinutes();
 
-    if (month.length < 2) 
+    if (month.length < 2)
         month = '0' + month;
-    if (day.length < 2) 
+    if (day.length < 2)
         day = '0' + day;
     if (hours.length < 2)
         hours = '0' + hours;
@@ -20,7 +20,7 @@ function formatForInput(dateString) {
     return `${date.getFullYear()}-${month}-${day}T${hours}:${minutes}`;
 }
 
-async function Form({ action, title, licitacion, disabled = false,   onClick }) {
+async function Form({ action, title, licitacion, disabled = false, onClick }) {
     const session = await auth();
 
     return (
@@ -44,7 +44,7 @@ async function Form({ action, title, licitacion, disabled = false,   onClick }) 
                         <input type='text' id='numexpediente' name='numexpediente'
                             defaultValue={licitacion?.numexpediente} className="border p-2 rounded text-center text-xl my-1" required />
 
-                        { disabled ? (
+                        {disabled ? (
                             <>
                                 <label htmlFor='fechapresentacion' className='mb-2 text-3xl mr-20'>fechapresentacion</label>
                                 <input type='hidden' id='fechapresentacion' name='fechapresentacion'
@@ -62,20 +62,27 @@ async function Form({ action, title, licitacion, disabled = false,   onClick }) 
                                 className="border p-2 rounded text-center text-xl my-1"
                                 pattern='^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$' />
                         </>)}
-                        { disabled ? (
+                        {disabled ? (
                             <>
                                 <label htmlFor='tipo' className='mb-2 text-3xl mr-20'>Tipo</label>
-                                <input type='text' id='tipo' name='tipo'
-                                    value={licitacion?.tipo} className="border p-2 rounded text-center text-xl my-1" disabled />
-                                <select id='tipo' name='tipo' className="border p-2 rounded text-center text-xl my-1" hidden>
-                                    <option value={licitacion?.tipo}></option>
+                                <select id='tipo' name='tipo' className="border p-2 rounded text-center text-xl my-1">
+                                    {licitacion?.tipo == '' && licitacion?.tipo == null && (
+                                        <option value={licitacion?.tipo}>{licitacion?.tipo}</option>
+                                    )}
+                                    <option value="LICITACION">Licitación</option>
+                                    <option value="CONTRATO MENOR">Contrato menor</option>
+                                    <option value="ACUERDO MARCO">Acuerdo marco</option>
+                                    <option value="LIC NO PUBLICA">Licitación no pública</option>
+                                    <option value="INVITACION">Invitación</option>
                                 </select>
                             </>
                         ) : (
                             <>
                                 <label htmlFor='tipo' className='mb-2 text-3xl mr-20'>Tipo</label>
                                 <select id='tipo' name='tipo' className="border p-2 rounded text-center text-xl my-1">
-                                    <option value={licitacion?.tipo}>{licitacion?.tipo}</option>
+                                    {licitacion?.tipo && (
+                                        <option value={licitacion?.tipo}>{licitacion?.tipo}</option>
+                                    )}
                                     <option value="LICITACION">Licitación</option>
                                     <option value="CONTRATO MENOR">Contrato menor</option>
                                     <option value="ACUERDO MARCO">Acuerdo marco</option>
@@ -85,20 +92,32 @@ async function Form({ action, title, licitacion, disabled = false,   onClick }) 
                             </>
                         )}
 
-                        { disabled ? (
+                        {disabled ? (
                             <>
-                                <label htmlFor='tipocontrato' className='mb-2 text-3xl mr-20'>Tipo contrato</label>
-                                <input type='text' id='tipocontrato' name='tipocontrato'
-                                    value={licitacion?.tipocontrato} className="border p-2 rounded text-center text-xl my-1" disabled />
-                                <select id='tipocontrato' name='tipocontrato' className="border p-2 rounded text-center text-xl my-1" hidden>
-                                    <option value={licitacion?.tipocontrato}></option>
+                                <label htmlFor='tipocontrato' className='mb-2 text-3xl mr-20'>Tipo de contrato</label>
+                                <select id='tipocontrato' name='tipocontrato' className="border p-2 rounded text-center text-xl my-1">
+                                    {licitacion?.tipocontrato !== '' && (
+                                        <option value={licitacion?.tipocontrato}>{licitacion?.tipocontrato}</option>
+                                    )}
+                                    <option value="MAT OFICINA">Material de oficina</option>
+                                    <option value="MAQ OFICINA">Maquinaria de oficina</option>
+                                    <option value="INFORMÁTICA">Informática</option>
+                                    <option value="EPI'S">EPIs</option>
+                                    <option value="MOBILIARIO">Mobiliario</option>
+                                    <option value="ROPA LABORAL">Ropa laboral</option>
+                                    <option value="JUEGOS">Juegos</option>
+                                    <option value="LIMPIEZA">Limpieza</option>
+                                    <option value="SSGG">SSGG</option>
+                                    <option value="OTROS">Otros</option>
                                 </select>
                             </>
                         ) : (
                             <>
                                 <label htmlFor='tipocontrato' className='mb-2 text-3xl mr-20'>Tipo de contrato</label>
                                 <select id='tipocontrato' name='tipocontrato' className="border p-2 rounded text-center text-xl my-1">
-                                    <option value={licitacion?.tipocontrato}>{licitacion?.tipocontrato}</option>
+                                    {licitacion?.tipocontrato && (
+                                        <option value={licitacion?.tipocontrato}>{licitacion?.tipocontrato}</option>
+                                    )}
                                     <option value="MAT OFICINA">Material de oficina</option>
                                     <option value="MAQ OFICINA">Maquinaria de oficina</option>
                                     <option value="INFORMÁTICA">Informática</option>
@@ -119,48 +138,70 @@ async function Form({ action, title, licitacion, disabled = false,   onClick }) 
                             className="border p-2 rounded text-center text-xl my-1"
                             pattern='/^\d*\.?\,?\d*$/' />
 
-                        { !licitacion?.estudiopor == '' || disabled ? (
+                        {!licitacion?.estudiopor == '' || disabled ? (
                             <>
-                                <label htmlFor='estudiopor' className='mb-2 text-3xl mr-20'>Estudio por:</label>
-                                <input type='text' id='estudiopor' name='estudiopor'
-                                    value={licitacion?.estudiopor} className="border p-2 rounded text-center text-xl my-1" disabled />
-                                <select id='estudiopor' name='estudiopor' className="border p-2 rounded text-center text-xl my-1" hidden>
-                                    <option value={licitacion?.estudiopor}></option>
+                                <label htmlFor='estudiopor' className='mb-2 text-3xl mr-20'>Estudio por</label>
+                                <select id='estudiopor' name='estudiopor' className="border p-2 rounded text-center text-xl my-1">
+                                    {licitacion?.estudiopor !== '' && (
+                                        <option value={licitacion?.estudiopor}>{licitacion?.estudiopor}</option>
+                                    )}
+                                    <option value="">En blanco</option>
+                                    <option value="JOSÉ M QUERO">José M Quero</option>
+                                    <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
+                                    <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
+                                    <option value="MARIAM SIERRA">Mariam Sierra</option>
+                                    <option value="MIGUEL JURADO">Miguel Jurado</option>
+                                    <option value="SANTIAGO MONTEJO">Santiago Montejo</option>
+                                    <option value="SARA REYES">Sara Reyes</option>
+                                    <option value="SILVIA ALCAIDE">Silvia Alcaide</option>
                                 </select>
                             </>
                         ) : (
                             <>
-<label htmlFor='estudiopor' className='mb-2 text-3xl mr-20'>Estudio por</label>
-<select id='estudiopor' name='estudiopor' className="border p-2 rounded text-center text-xl my-1">
-    {licitacion?.estudiopor !== '' && (
-        <option value={licitacion?.estudiopor}>{licitacion?.estudiopor}</option>
-    )}
-    <option value="">En blanco</option>
-    <option value="JOSÉ M QUERO">José M Quero</option>
-    <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
-    <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
-    <option value="MARIAM SIERRA">Mariam Sierra</option>
-    <option value="MIGUEL JURADO">Miguel Jurado</option>
-    <option value="SANTIAGO MONTEJO">Santiago Montejo</option>
-    <option value="SARA REYES">Sara Reyes</option>
-    <option value="SILVIA ALCAIDE">Silvia Alcaide</option>
-</select>
+                                <label htmlFor='estudiopor' className='mb-2 text-3xl mr-20'>Estudio por</label>
+                                <select id='estudiopor' name='estudiopor' className="border p-2 rounded text-center text-xl my-1">
+                                    {licitacion?.estudiopor && (
+                                        <option value={licitacion?.estudiopor}>{licitacion?.estudiopor}</option>
+                                    )}
+                                    <option value="">En blanco</option>
+                                    <option value="JOSÉ M QUERO">José M Quero</option>
+                                    <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
+                                    <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
+                                    <option value="MARIAM SIERRA">Mariam Sierra</option>
+                                    <option value="MIGUEL JURADO">Miguel Jurado</option>
+                                    <option value="SANTIAGO MONTEJO">Santiago Montejo</option>
+                                    <option value="SARA REYES">Sara Reyes</option>
+                                    <option value="SILVIA ALCAIDE">Silvia Alcaide</option>
+                                </select>
                             </>
                         )}
 
-                        { !licitacion?.presupuestopor == '' || disabled ? (
+                        {!licitacion?.presupuestopor == '' || disabled ? (
                             <>
                                 <label htmlFor='presupuestopor' className='mb-2 text-3xl mr-20'>Presupuesto por:</label>
-                                <input type='text' id='presupuestopor' name='presupuestopor'
-                                    value={licitacion?.presupuestopor} className="border p-2 rounded text-center text-xl my-1" disabled />
-                                <select id='presupuestopor' name='presupuestopor' className="border p-2 rounded text-center text-xl my-1" hidden>
-                                    <option value={licitacion?.presupuestopor}></option>
+                                <select id='presupuestopor' name='presupuestopor' className="border p-2 rounded text-center text-xl my-1">
+                                    {licitacion?.presupuestopor !== '' && (
+                                        <option value={licitacion?.presupuestopor}>{licitacion?.presupuestopor}</option>
+                                    )}
+                                    <option value="">En blanco</option>
+                                    <option value="ELENA ALCAIDE">Elena Alcaide</option>
+                                    <option value="JOSÉ M QUERO">José M Quero</option>
+                                    <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
+                                    <option value="MARIAM SIERRA">Mariam Sierra</option>
+                                    <option value="MIGUEL JURADO">Miguel Jurado</option>
+                                    <option value="PILAR MARÍN">Pilar Marín</option>
+                                    <option value="SANTIAGO MONTEJO">Santiago Montejo</option>
+                                    <option value="SARA REYES">Sara Reyes</option>
+                                    <option value="SILVIA ALCAIDE">Silvia Alcaide</option>
                                 </select>
                             </>
                         ) : (
                             <>
                                 <label htmlFor='presupuestopor' className='mb-2 text-3xl mr-20'>Presupuesto por:</label>
                                 <select id='presupuestopor' name='presupuestopor' className="border p-2 rounded text-center text-xl my-1">
+                                    {licitacion?.presupuestopor && (
+                                        <option value={licitacion?.presupuestopor}>{licitacion?.presupuestopor}</option>
+                                    )}
                                     <option value="">En blanco</option>
                                     <option value="ELENA ALCAIDE">Elena Alcaide</option>
                                     <option value="JOSÉ M QUERO">José M Quero</option>
@@ -175,19 +216,31 @@ async function Form({ action, title, licitacion, disabled = false,   onClick }) 
                             </>
                         )}
 
-                        { !licitacion?.presentadapor == '' || disabled ? (
+                        {!licitacion?.presentadapor == '' || disabled ? (
                             <>
-                                <label htmlFor='presentadapor' className='mb-2 text-3xl mr-20'>Presentada por:</label>
-                                <input type='text' id='presentadapor' name='presentadapor'
-                                    value={licitacion?.presentadapor} className="border p-2 rounded text-center text-xl my-1" disabled />
-                                <select id='presentadapor' name='presentadapor' className="border p-2 rounded text-center text-xl my-1" hidden>
-                                    <option value={licitacion?.presentadapor}></option>
+                                <label htmlFor='presentadapor' className='mb-2 text-3xl mr-20'>Presentada por</label>
+                                <select id='presentadapor' name='presentadapor' className="border p-2 rounded text-center text-xl my-1">
+                                    {licitacion?.presentadapor !== '' && (
+                                        <option value={licitacion?.presentadapor}>{licitacion?.presentadapor}</option>
+                                    )}
+                                    <option value="">En blanco</option>
+                                    <option value="JOSÉ M QUERO">José M Quero</option>
+                                    <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
+                                    <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
+                                    <option value="MARIAM SIERRA">Mariam Sierra</option>
+                                    <option value="MIGUEL JURADO">Miguel Jurado</option>
+                                    <option value="SANTIAGO MONTEJO">Santiago Montejo</option>
+                                    <option value="SARA REYES">Sara Reyes</option>
+                                    <option value="SILVIA ALCAIDE">Silvia Alcaide</option>
                                 </select>
                             </>
                         ) : (
                             <>
                                 <label htmlFor='presentadapor' className='mb-2 text-3xl mr-20'>Presentada por</label>
                                 <select id='presentadapor' name='presentadapor' className="border p-2 rounded text-center text-xl my-1">
+                                    {licitacion?.presentadapor && (
+                                        <option value={licitacion?.presentadapor}>{licitacion?.presentadapor}</option>
+                                    )}
                                     <option value="">En blanco</option>
                                     <option value="JOSÉ M QUERO">José M Quero</option>
                                     <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
@@ -203,17 +256,24 @@ async function Form({ action, title, licitacion, disabled = false,   onClick }) 
 
                         {disabled ? (
                             <>
-                                <label htmlFor='estadoini' className='mb-2 text-3xl mr-20'>Estado inicial:</label>
-                                <input type='text' id='estadoini' name='estadoini'
-                                    value={licitacion?.estadoini} className="border p-2 rounded text-center text-xl my-1" disabled />
-                                <select id='estadoini' name='estadoini' className="border p-2 rounded text-center text-xl my-1" hidden>
-                                    <option value={licitacion?.estadoini}></option>
+                                <label htmlFor='estadoini' className='mb-2 text-3xl mr-20'>Estado inicial</label>
+                                <select id='estadoini' name='estadoini' className="my-1 border p-2 rounded text-center text-xl">
+                                    {licitacion?.estadoini !== '' && (
+                                        <option value={licitacion?.estadoini}>{licitacion?.estadoini}</option>
+                                    )}
+                                    <option value="PRESENTADA">Presentada</option>
+                                    <option value="EN ESTUDIO">En estudio</option>
+                                    <option value="ANULADA">Anulada</option>
+                                    <option value="DESESTIMADA">Desestimada</option>
                                 </select>
                             </>
                         ) : (
                             <>
                                 <label htmlFor='estadoini' className='mb-2 text-3xl mr-20'>Estado inicial</label>
                                 <select id='estadoini' name='estadoini' className="my-1 border p-2 rounded text-center text-xl">
+                                    {licitacion?.estadoini && (
+                                        <option value={licitacion?.estadoini}>{licitacion?.estadoini}</option>
+                                    )}
                                     <option value="PRESENTADA">Presentada</option>
                                     <option value="EN ESTUDIO">En estudio</option>
                                     <option value="ANULADA">Anulada</option>
@@ -224,17 +284,27 @@ async function Form({ action, title, licitacion, disabled = false,   onClick }) 
 
                         {disabled ? (
                             <>
-                                <label htmlFor='estadofinal' className='mb-2 text-3xl mr-20'>Estado final:</label>
-                                <input type='text' id='estadofinal' name='estadofinal'
-                                    value={licitacion?.estadofinal} className="border p-2 rounded text-center text-xl my-1" disabled />
-                                <select id='estadofinal' name='estadofinal' className="border p-2 rounded text-center text-xl my-1" hidden>
-                                    <option value={licitacion?.estadofinal}></option>
+                                <label htmlFor='estadofinal' className='mb-2 text-3xl mr-20'>Estado final</label>
+                                <select id='estadofinal' name='estadofinal' className="my-1 border p-2 rounded text-center text-xl">
+                                    {licitacion?.estadofinal !== '' && (
+                                        <option value={licitacion?.estadofinal}>{licitacion?.estadofinal}</option>
+                                    )}
+                                    <option value="">En blanco</option>
+                                    <option value="ADJUDICADA">Adjudicada</option>
+                                    <option value="ANULADA">Anulada</option>
+                                    <option value="DESESTIMADA">Desestimada</option>
+                                    <option value="DESIERTA">Desierta</option>
+                                    <option value="EN ESPERA RESOLUCIÓN">En espera resolución</option>
+                                    <option value="NO ADJUDICADA">No adjudicada</option>
                                 </select>
                             </>
                         ) : (
                             <>
                                 <label htmlFor='estadofinal' className='mb-2 text-3xl mr-20'>Estado final</label>
                                 <select id='estadofinal' name='estadofinal' className="my-1 border p-2 rounded text-center text-xl">
+                                    {licitacion?.estadofinal && (
+                                        <option value={licitacion?.estadofinal}>{licitacion?.estadofinal}</option>
+                                    )}
                                     <option value="">En blanco</option>
                                     <option value="ADJUDICADA">Adjudicada</option>
                                     <option value="ANULADA">Anulada</option>
