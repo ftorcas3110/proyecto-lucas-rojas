@@ -1,8 +1,28 @@
 import { auth } from '@/auth'
 import Button from '@/components/button-form'
 
-async function Form({ action, title, licitacion, disabled = false, edicion = false, onClick }) {
+function formatForInput(dateString) {
+    const date = new Date(dateString);
+    let month = '' + (date.getMonth() + 1);
+    let day = '' + date.getDate();
+    let hours = '' + date.getHours();
+    let minutes = '' + date.getMinutes();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+    if (hours.length < 2)
+        hours = '0' + hours;
+    if (minutes.length < 2)
+        minutes = '0' + minutes;
+
+    return `${date.getFullYear()}-${month}-${day}T${hours}:${minutes}`;
+}
+
+async function Form({ action, title, licitacion, disabled = false,   onClick }) {
     const session = await auth();
+
     return (
 
         <form action={action}>
@@ -24,7 +44,7 @@ async function Form({ action, title, licitacion, disabled = false, edicion = fal
                         <input type='text' id='numexpediente' name='numexpediente'
                             defaultValue={licitacion?.numexpediente} className="border p-2 rounded text-center text-xl my-1" required />
 
-                        {edicion || disabled ? (
+                        { disabled ? (
                             <>
                                 <label htmlFor='fechapresentacion' className='mb-2 text-3xl mr-20'>fechapresentacion</label>
                                 <input type='hidden' id='fechapresentacion' name='fechapresentacion'
@@ -38,12 +58,11 @@ async function Form({ action, title, licitacion, disabled = false, edicion = fal
                         ) : (<>
                             <label htmlFor='fechapresentacion' className='mb-2 text-3xl mr-20'>Fecha de presentación</label>
                             <input type="datetime-local" id="fechapresentacion" name="fechapresentacion"
-                                defaultValue={licitacion?.fechapresentacion}
+                                defaultValue={licitacion?.fechapresentacion ? formatForInput(licitacion.fechapresentacion) : ''} // Se muestra el valor existente si existe
                                 className="border p-2 rounded text-center text-xl my-1"
                                 pattern='^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$' />
                         </>)}
-
-                        {edicion || disabled ? (
+                        { disabled ? (
                             <>
                                 <label htmlFor='tipo' className='mb-2 text-3xl mr-20'>Tipo</label>
                                 <input type='text' id='tipo' name='tipo'
@@ -56,6 +75,7 @@ async function Form({ action, title, licitacion, disabled = false, edicion = fal
                             <>
                                 <label htmlFor='tipo' className='mb-2 text-3xl mr-20'>Tipo</label>
                                 <select id='tipo' name='tipo' className="border p-2 rounded text-center text-xl my-1">
+                                    <option value={licitacion?.tipo}>{licitacion?.tipo}</option>
                                     <option value="LICITACION">Licitación</option>
                                     <option value="CONTRATO MENOR">Contrato menor</option>
                                     <option value="ACUERDO MARCO">Acuerdo marco</option>
@@ -65,7 +85,7 @@ async function Form({ action, title, licitacion, disabled = false, edicion = fal
                             </>
                         )}
 
-                        {edicion || disabled ? (
+                        { disabled ? (
                             <>
                                 <label htmlFor='tipocontrato' className='mb-2 text-3xl mr-20'>Tipo contrato</label>
                                 <input type='text' id='tipocontrato' name='tipocontrato'
@@ -78,6 +98,7 @@ async function Form({ action, title, licitacion, disabled = false, edicion = fal
                             <>
                                 <label htmlFor='tipocontrato' className='mb-2 text-3xl mr-20'>Tipo de contrato</label>
                                 <select id='tipocontrato' name='tipocontrato' className="border p-2 rounded text-center text-xl my-1">
+                                    <option value={licitacion?.tipocontrato}>{licitacion?.tipocontrato}</option>
                                     <option value="MAT OFICINA">Material de oficina</option>
                                     <option value="MAQ OFICINA">Maquinaria de oficina</option>
                                     <option value="INFORMÁTICA">Informática</option>
@@ -98,7 +119,7 @@ async function Form({ action, title, licitacion, disabled = false, edicion = fal
                             className="border p-2 rounded text-center text-xl my-1"
                             pattern='/^\d*\.?\,?\d*$/' />
 
-                        {edicion && !licitacion?.estudiopor == '' || disabled ? (
+                        { !licitacion?.estudiopor == '' || disabled ? (
                             <>
                                 <label htmlFor='estudiopor' className='mb-2 text-3xl mr-20'>Estudio por:</label>
                                 <input type='text' id='estudiopor' name='estudiopor'
@@ -109,22 +130,25 @@ async function Form({ action, title, licitacion, disabled = false, edicion = fal
                             </>
                         ) : (
                             <>
-                                <label htmlFor='estudiopor' className='mb-2 text-3xl mr-20'>Estudio por</label>
-                                <select id='estudiopor' name='estudiopor' className="border p-2 rounded text-center text-xl my-1">
-                                    <option value="">En blanco</option>
-                                    <option value="JOSÉ M QUERO">José M Quero</option>
-                                    <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
-                                    <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
-                                    <option value="MARIAM SIERRA">Mariam Sierra</option>
-                                    <option value="MIGUEL JURADO">Miguel Jurado</option>
-                                    <option value="SANTIAGO MONTEJO">Santiago Montejo</option>
-                                    <option value="SARA REYES">Sara Reyes</option>
-                                    <option value="SILVIA ALCAIDE">Silvia Alcaide</option>
-                                </select>
+<label htmlFor='estudiopor' className='mb-2 text-3xl mr-20'>Estudio por</label>
+<select id='estudiopor' name='estudiopor' className="border p-2 rounded text-center text-xl my-1">
+    {licitacion?.estudiopor !== '' && (
+        <option value={licitacion?.estudiopor}>{licitacion?.estudiopor}</option>
+    )}
+    <option value="">En blanco</option>
+    <option value="JOSÉ M QUERO">José M Quero</option>
+    <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
+    <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
+    <option value="MARIAM SIERRA">Mariam Sierra</option>
+    <option value="MIGUEL JURADO">Miguel Jurado</option>
+    <option value="SANTIAGO MONTEJO">Santiago Montejo</option>
+    <option value="SARA REYES">Sara Reyes</option>
+    <option value="SILVIA ALCAIDE">Silvia Alcaide</option>
+</select>
                             </>
                         )}
 
-                        {edicion && !licitacion?.presupuestopor == '' || disabled ? (
+                        { !licitacion?.presupuestopor == '' || disabled ? (
                             <>
                                 <label htmlFor='presupuestopor' className='mb-2 text-3xl mr-20'>Presupuesto por:</label>
                                 <input type='text' id='presupuestopor' name='presupuestopor'
@@ -151,7 +175,7 @@ async function Form({ action, title, licitacion, disabled = false, edicion = fal
                             </>
                         )}
 
-                        {edicion && !licitacion?.presentadapor == '' || disabled ? (
+                        { !licitacion?.presentadapor == '' || disabled ? (
                             <>
                                 <label htmlFor='presentadapor' className='mb-2 text-3xl mr-20'>Presentada por:</label>
                                 <input type='text' id='presentadapor' name='presentadapor'

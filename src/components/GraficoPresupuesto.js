@@ -83,15 +83,7 @@ const Graficos = () => {
       };
     }) : [];
 
-    datasets.unshift({
-      label: 'Total',
-      data: labels.map(user => Object.values(userCountsByState[user] || {}).reduce((sum, value) => sum + value, 0)),
-      backgroundColor: 'rgba(0, 0, 0, 0.8)', // Black
-      borderColor: 'rgba(0, 0, 0, 1)', // Black
-      borderWidth: 1,
-    });
-
-    const ctx = document.getElementById('grafico2');
+    const ctx = document.getElementById('grafico1');
     if (chartRef.current) {
       chartRef.current.destroy();
     }
@@ -164,7 +156,7 @@ const Graficos = () => {
       case 'ANULADA':
         return 'rgba(0, 255, 255, 0.8)'; // Yellow     
       default:
-        return 'rgba(0, 0, 0, 0.8)'; // Black for 'Total'
+        return 'rgba(0, 0, 0, 0.8)';
     }
   };
 
@@ -183,7 +175,7 @@ const Graficos = () => {
       case 'ANULADA':
         return 'rgba(0, 255, 255, 0.8)'; // Yellow  
       default:
-        return 'rgba(0, 0, 0, 1)'; // Black for 'Total'
+        return 'rgba(0, 0, 0, 1)';
     }
   };
 
@@ -191,51 +183,102 @@ const Graficos = () => {
     <>
     <div>
       <p>Presupuestos</p>
-      <div>
-        <label htmlFor="startMonthSelect">Inicio Mes:</label>
-        <select id="startMonthSelect" onChange={handleStartMonthChange} value={startMonth}>
-          <option value="0">Todos los meses</option>
-          {Array.from({ length: 12 }, (_, index) => index + 1).map(month => (
-            <option key={month} value={month}>{new Date(2000, month - 1).toLocaleString('default', { month: 'long' })}</option>
-          ))}
-        </select>
-        <label htmlFor="endMonthSelect">Fin Mes:</label>
-        <select id="endMonthSelect" onChange={handleEndMonthChange} value={endMonth}>
-          <option value="0">Todos los meses</option>
-          {Array.from({ length: 12 }, (_, index) => index + 1).map(month => (
-            <option key={month} value={month}>{new Date(2000, month - 1).toLocaleString('default', { month: 'long' })}</option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <label htmlFor="startYearSelect">Inicio Año:</label>
-        <select id="startYearSelect" onChange={handleStartYearChange} value={startYear}>
-          <option value="0">Todos los años</option>
-          {staticYears.map(year => (
-            <option key={year} value={year}>{year}</option>
-          ))}
-        </select>
-        <label htmlFor="endYearSelect">Fin Año:</label>
-        <select id="endYearSelect" onChange={handleEndYearChange} value={endYear}>
-          <option value="0">Todos los años</option>
-          {staticYears.map(year => (
-            <option key={year} value={year}>{year}</option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <label htmlFor="presupuestadorSelect">Presupuestador:</label>
-        <select id="presupuestadorSelect" onChange={handlePresupuestadorChange} value={selectedPresupuestador}>
-          <option value="">Seleccione un presentador</option>
-          {presupuestadores
-            .filter(presupuestador => presupuestador !== 'Sin presupuestador')
-            .map((presupuestador, index) => (
-              <option key={index} value={presupuestador}>{presupuestador}</option>
-            ))}
-        </select>
-      </div>
-      <button onClick={handleResetFilters}>Resetear Filtros</button>
-      <canvas id="grafico2" width="400" height="400"></canvas>
+      <div className="grid grid-cols-2 gap-4">
+  <div>
+    <label htmlFor="startMonthSelect">Inicio Mes:</label>
+    <select
+      id="startMonthSelect"
+      onChange={handleStartMonthChange}
+      value={startMonth}
+      className="w-full p-2 border border-gray-300 rounded-md text-center"
+    >
+      <option value="0">Todos los meses</option>
+      {Array.from({ length: 12 }, (_, index) => index + 1).map(month => (
+        <option key={month} value={month}>
+          {new Date(2000, month - 1).toLocaleString('default', { month: 'long' })}
+        </option>
+      ))}
+    </select>
+  </div>
+  <div>
+    <label htmlFor="endMonthSelect">Fin Mes:</label>
+    <select
+      id="endMonthSelect"
+      onChange={handleEndMonthChange}
+      value={endMonth}
+      className="w-full p-2 border border-gray-300 rounded-md text-center"
+    >
+      <option value="0">Todos los meses</option>
+      {Array.from({ length: 12 }, (_, index) => index + 1).map(month => (
+        <option key={month} value={month}>
+          {new Date(2000, month - 1).toLocaleString('default', { month: 'long' })}
+        </option>
+      ))}
+    </select>
+  </div>
+  <div>
+    <label htmlFor="startYearSelect">Inicio Año:</label>
+    <select
+      id="startYearSelect"
+      onChange={handleStartYearChange}
+      value={startYear}
+      className="w-full p-2 border border-gray-300 rounded-md text-center"
+    >
+      <option value="0">Todos los años</option>
+      {staticYears.map(year => (
+        <option key={year} value={year}>
+          {year}
+        </option>
+      ))}
+    </select>
+  </div>
+  <div>
+    <label htmlFor="endYearSelect">Fin Año:</label>
+    <select
+      id="endYearSelect"
+      onChange={handleEndYearChange}
+      value={endYear}
+      className="w-full p-2 border border-gray-300 rounded-md text-center"
+    >
+      <option value="0">Todos los años</option>
+      {staticYears.map(year => (
+        <option key={year} value={year}>
+          {year}
+        </option>
+      ))}
+    </select>
+  </div>
+  <div className="col-span-2 flex flex-col items-center">
+    <label htmlFor="presupuestadorSelect">Presupuestador:</label>
+    <select
+      id="presupuestadorSelect"
+      onChange={handlePresupuestadorChange}
+      value={selectedPresupuestador}
+      className="w-full p-2 border border-gray-300 rounded-md text-center"
+    >
+      <option value="">Todos los usuarios</option>
+      {presupuestadores
+        .filter(presupuestador => presupuestador !== 'Sin presupuestador')
+        .map((presupuestador, index) => (
+          <option key={index} value={presupuestador}>
+            {presupuestador}
+          </option>
+        ))}
+    </select>
+  </div>
+  <div className="col-span-2">
+    <button
+      onClick={handleResetFilters}
+      className="w-full p-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600"
+    >
+      Resetear Filtros
+    </button>
+  </div>
+  <div className="col-span-2">
+    <canvas id="grafico1" width="600" height="600"></canvas>
+  </div>
+</div>
+
     </div>
     </>
   );

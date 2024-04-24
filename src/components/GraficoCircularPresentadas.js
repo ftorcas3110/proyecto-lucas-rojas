@@ -137,53 +137,101 @@ const Graficos = () => {
   return (
     <div>
       <p>Presentadas</p>
-      <div>
-        <label htmlFor="startMonthSelect">Inicio Mes:</label>
-        <select id="startMonthSelect" onChange={handleStartMonthChange} value={startMonth}>
-          <option value="0">Todos los meses</option>
-          {Array.from({ length: 12 }, (_, index) => index + 1).map(month => (
-            <option key={month} value={month}>{new Date(2000, month - 1).toLocaleString('default', { month: 'long' })}</option>
-          ))}
-        </select>
-        <label htmlFor="endMonthSelect">Fin Mes:</label>
-        <select id="endMonthSelect" onChange={handleEndMonthChange} value={endMonth}>
-          <option value="0">Todos los meses</option>
-          {Array.from({ length: 12 }, (_, index) => index + 1).map(month => (
-            <option key={month} value={month}>{new Date(2000, month - 1).toLocaleString('default', { month: 'long' })}</option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <label htmlFor="startYearSelect">Inicio Año:</label>
-        <select id="startYearSelect" onChange={handleStartYearChange} value={startYear}>
-          <option value="0">Todos los años</option>
-          {staticYears.map(year => (
-            <option key={year} value={year}>{year}</option>
-          ))}
-        </select>
-        <label htmlFor="endYearSelect">Fin Año:</label>
-        <select id="endYearSelect" onChange={handleEndYearChange} value={endYear}>
-          <option value="0">Todos los años</option>
-          {staticYears.map(year => (
-            <option key={year} value={year}>{year}</option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <label htmlFor="userSelect">Usuario:</label>
-        <select id="userSelect" onChange={handleUserChange} value={selectedUser}>
+      <div className="grid grid-cols-2 gap-4">
+  <div>
+    <label htmlFor="startMonthSelect">Inicio Mes:</label>
+    <select
+      id="startMonthSelect"
+      onChange={handleStartMonthChange}
+      value={startMonth}
+      className="w-full p-2 border border-gray-300 rounded-md text-center"
+    >
+      <option value="0">Todos los meses</option>
+      {Array.from({ length: 12 }, (_, index) => index + 1).map(month => (
+        <option key={month} value={month}>
+          {new Date(2000, month - 1).toLocaleString('default', { month: 'long' })}
+        </option>
+      ))}
+    </select>
+  </div>
+  <div>
+    <label htmlFor="endMonthSelect">Fin Mes:</label>
+    <select
+      id="endMonthSelect"
+      onChange={handleEndMonthChange}
+      value={endMonth}
+      className="w-full p-2 border border-gray-300 rounded-md text-center"
+    >
+      <option value="0">Todos los meses</option>
+      {Array.from({ length: 12 }, (_, index) => index + 1).map(month => (
+        <option key={month} value={month}>
+          {new Date(2000, month - 1).toLocaleString('default', { month: 'long' })}
+        </option>
+      ))}
+    </select>
+  </div>
+  <div>
+    <label htmlFor="startYearSelect">Inicio Año:</label>
+    <select
+      id="startYearSelect"
+      onChange={handleStartYearChange}
+      value={startYear}
+      className="w-full p-2 border border-gray-300 rounded-md text-center"
+    >
+      <option value="0">Todos los años</option>
+      {staticYears.map(year => (
+        <option key={year} value={year}>
+          {year}
+        </option>
+      ))}
+    </select>
+  </div>
+  <div>
+    <label htmlFor="endYearSelect">Fin Año:</label>
+    <select
+      id="endYearSelect"
+      onChange={handleEndYearChange}
+      value={endYear}
+      className="w-full p-2 border border-gray-300 rounded-md text-center"
+    >
+      <option value="0">Todos los años</option>
+      {staticYears.map(year => (
+        <option key={year} value={year}>
+          {year}
+        </option>
+      ))}
+    </select>
+  </div>
+  <div className="col-span-2 flex flex-col items-center">
+    <label htmlFor="presupuestadorSelect">Presentador:</label>
+    <select
+      id="userSelect"
+      onChange={handleUserChange}
+      value={selectedUser}
+      className="w-full p-2 border border-gray-300 rounded-md text-center"
+    >
           <option value="">Todos los usuarios</option>
           {data
             .map(item => item[10])
             .filter((value, index, self) => value && self.indexOf(value) === index)
             .map((user, index) => (
               <option key={index} value={user}>{user}</option>
-            ))}
-        </select>
-      </div>
-      <button onClick={handleResetFilters}>Resetear Filtros</button>
-      <canvas id="grafico4" width="400" height="400"></canvas>
-    </div>
+        ))}
+    </select>
+  </div>
+  <div className="col-span-2">
+    <button
+      onClick={handleResetFilters}
+      className="w-full p-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600"
+    >
+      Resetear Filtros
+    </button>
+  </div>
+  <div className="col-span-2">
+    <canvas id="grafico4" width="600" height="600"></canvas>
+  </div>
+</div>
+</div>
   );
 };
 

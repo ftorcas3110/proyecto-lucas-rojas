@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import Link from 'next/link'
 import Licitacion from '@/components/Licitacion'
 import { getLicitaciones } from '@/lib/actions'
-import Buscador from "@/components/buscador";
 
 export const dynamic = 'force-dynamic'
 
@@ -15,9 +14,7 @@ export default async function Home() {
 
     return (
         <>
-        <Buscador/>
             <div className="mx-auto">
-            <p className="text-3xl">Todas las licitaciones</p>
 
                 {
                     licitaciones.map((licitacion) => (

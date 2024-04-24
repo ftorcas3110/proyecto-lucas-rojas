@@ -12,7 +12,6 @@ export default async function Home() {
     return (
         <>
             <div className="mx-auto w-[80%]">
-            <p className="text-3xl">Buscador</p>
             <Buscador/>
 
             </div>
