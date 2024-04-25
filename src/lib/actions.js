@@ -609,3 +609,20 @@ async function deleteFromGoogleSheet(itemId) {
     throw error;
   }
 }
+
+// /lib/actions/calendarActions.js
+
+// Importa cualquier librería necesaria para interactuar con el calendario
+// Por ejemplo, si estás usando la API de Google Calendar, aquí importarías las funciones necesarias
+
+// Esta función obtiene los eventos del calendario
+export async function getCalendarEvents() {
+  // Aquí realizarías la lógica para obtener los eventos del calendario
+  // Por simplicidad, aquí retornamos una lista de eventos predefinida
+  return [
+    { id: 1, summary: 'Evento 1' },
+    { id: 2, summary: 'Evento 2' },
+    { id: 3, summary: 'Evento 3' },
+    // Agrega más eventos según sea necesario
+  ];
+}
