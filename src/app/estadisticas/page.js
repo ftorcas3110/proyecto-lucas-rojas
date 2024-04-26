@@ -13,7 +13,7 @@ async function page() {
   if (!sesion) redirect('/')
 
   return (
-    <div className="flex flex-col items-center sm:h-[90vh] py-5 md:h-[90vh] mt-auto p-5 w-[80%] mx-auto mb-auto">
+    <div className="flex flex-col items-center sm:h-[90vh] py-5 md:h-[90vh] mt-auto p-5 w-[80%] mx-auto">
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-4 sm:gap-4 md:gap-8 w-full">
 
         <div className="col-span-1">

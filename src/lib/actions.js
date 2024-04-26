@@ -279,8 +279,6 @@ async function misLicitacionesGoogleSheet(item, presupuestoPor) {
   }
 }
 
-
-
 //google
 //id: 1cAcgzxl_N0NG0S14astjJ7cWl-00nDBaWc4Zba6mAew
 // Function to insert data into Google Spreadsheet
@@ -610,19 +608,91 @@ async function deleteFromGoogleSheet(itemId) {
   }
 }
 
-// /lib/actions/calendarActions.js
+export async function newEvento(formData) {
+  try {
+    const creador = formData.get('creador');
+    const start = new Date(formData.get('inicio')); 
+    const end = new Date(formData.get('fin'));
+    const title = formData.get('descripcion');
+    const categoria =formData.get('categoria');
 
-// Importa cualquier librería necesaria para interactuar con el calendario
-// Por ejemplo, si estás usando la API de Google Calendar, aquí importarías las funciones necesarias
+    const evento = await prisma.evento.create({
+      data: {
+        creador,
+        start,
+        end,
+        title,
+        categoria,
+      },
+      select: {
+        id: true,
+        creador: true,
+        start: true,
+        end: true,
+        title: true,
+        categoria: true,
+      }
+    });
 
-// Esta función obtiene los eventos del calendario
-export async function getCalendarEvents() {
-  // Aquí realizarías la lógica para obtener los eventos del calendario
-  // Por simplicidad, aquí retornamos una lista de eventos predefinida
-  return [
-    { id: 1, summary: 'Evento 1' },
-    { id: 2, summary: 'Evento 2' },
-    { id: 3, summary: 'Evento 3' },
-    // Agrega más eventos según sea necesario
-  ];
+    revalidatePath('/calendario');
+    redirect('/calendario'); // Redirect after successful creation
+  } catch (error) {
+    console.log(error);
+    redirect('/calendario'); // Redirect in case of error
+  }
+}
+
+export async function getEventos() {
+  try {
+    const eventos = await prisma.evento.findMany()
+    //console.log(eventos);
+    return eventos;
+  } catch (error) {
+    // console.log(error);  
+    return null;
+  }
+}
+
+export async function editEvento(formData) {
+  const id = Number(formData.get('id'));
+  const creador = formData.get('creador');
+  const start = new Date(formData.get('inicio')); 
+  const end = new Date(formData.get('fin'));
+  const title = formData.get('descripcion');
+  const categoria = formData.get('categoria')
+  try {
+    // Update the database
+    const updatedEvento = await prisma.evento.update({
+      where: { id },
+      data: {
+        creador,
+        start,
+        end,
+        title,
+        categoria,
+      },
+    });
+    console.log(item);
+    revalidatePath('/calendario');
+    redirect('/calendario');
+  } catch (error) {
+    console.log(error);
+    redirect('/calendario');
+  }
+}
+
+export async function eliminarEvento(formData) {
+  try {
+    const id = Number(formData.get('id'))
+
+    const evento = await prisma.evento.delete({
+      where: {
+        id: id,
+      },
+    })
+  } catch (error) {
+    console.log(error);
+  }
+
+  redirect('/calendario');
 }

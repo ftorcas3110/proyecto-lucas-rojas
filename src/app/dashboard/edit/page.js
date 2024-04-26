@@ -3,7 +3,6 @@ import { prisma } from '@/lib/prisma'
 import { editLicitacion } from "@/lib/actions"
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import toast from "react-hot-toast";
 
 export const dynamic = 'force-dynamic'
 

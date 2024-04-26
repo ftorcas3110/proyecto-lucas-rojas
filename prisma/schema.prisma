@@ -60,3 +60,12 @@ model Licitacion {
   duracioncontratoanyo  String
   observaciones         String?
 }
+
+model Evento {
+  id                    Int   @id @default(autoincrement())
+  creador               String
+  title                 String
+  start                 DateTime @db.Date
+  end                   DateTime @db.Date
+  categoria             String  
+}
