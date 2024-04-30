@@ -9,6 +9,7 @@ export const dynamic = 'force-dynamic'
 export default async function Home() {
     const licitaciones = await getLicitaciones()
     const sesion = await auth();
+    const rutaCarpeta = 'D:\\'; // Cambia esto por la ruta de la carpeta que deseas comprobar/crear
     if (!sesion) redirect('/')
     //console.log(licitaciones);
 

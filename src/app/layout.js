@@ -16,6 +16,7 @@ const poppins = Poppins({
 export const metadata = {
   title: "Licitaciones Lucas Rojas",
   description: "Licitaciones Lucas Rojas",
+  manifest: '/manifest.json'
 };
 
 export default function RootLayout({ children }) {
