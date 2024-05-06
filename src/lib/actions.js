@@ -672,7 +672,7 @@ export async function editEvento(formData) {
         categoria,
       },
     });
-    console.log(item);
+    //console.log(item);
     revalidatePath('/calendario');
     redirect('/calendario');
   } catch (error) {

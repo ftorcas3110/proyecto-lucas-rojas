@@ -11,12 +11,12 @@ export default async function HomePage(){
   const sesion = await auth();
   if (!sesion) redirect('/');
   const events = await getEventos();
-  console.log(events);
+  // console.log(events);
   return (
     <div>
       <h1>Calendario</h1>
       <Link href="/calendario/new" className='bg-black text-white rounded align-middle items-center text-center'> Nuevo evento </Link>
-      <Calendario events={events} usuario={sesion?.user.name}/>
+      <Calendario events={events}/>
     </div>
   );
 };

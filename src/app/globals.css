@@ -57,6 +57,17 @@ hr, p {
   z-index: -1;
 }
 
+.fc-event {
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  border: none;
+}
+
+.fc-event:hover {
+  background-color: transparent;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

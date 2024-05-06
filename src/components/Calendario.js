@@ -1,17 +1,24 @@
 "use client"
-import React, { useState } from 'react';
-import { useRouter } from 'next/router';
+import React from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import esLocale from '@fullcalendar/core/locales/es';
 import Link from 'next/link';
 
-// Configuración del idioma para FullCalendar
-import esLocale from '@fullcalendar/core/locales/es';
-
-const Calendar = ({ events: initialEvents, usuario }) => {
-  const [events, setEvents] = useState(initialEvents);
-
+const Calendar = ({ events: initialEvents }) => {
   const eventContent = ({ event }) => {
+    const eventStart = event.start;
+    const eventEnd = event.end;
+
+    // Calcular la diferencia en días entre la fecha de inicio y fin del evento
+    const eventDurationInDays = Math.round((eventEnd - eventStart) / (1000 * 60 * 60 * 24));
+
+    // Determinar si el evento dura más de un día
+    const isMultiDayEvent = eventDurationInDays > 1;
+
+    // Clase de Tailwind CSS para eventos de más de un día
+    const eventClass = isMultiDayEvent ? 'min-w-[100%]' : '';
+
     let backgroundColorClass = '';
     if (event.extendedProps?.categoria === 'ANEXOS') {
       backgroundColorClass = 'bg-blue-500 text-white';
@@ -28,25 +35,30 @@ const Calendar = ({ events: initialEvents, usuario }) => {
     } else if (event.extendedProps?.categoria === "REQUERIMIENTOS") {
       backgroundColorClass = 'bg-purple-200 text-black';
     }
-    return (
+
+    const title = `${event.extendedProps.creador} - ${event.title}`;
+
+    return (  
       <Link
-      className='justify-left align-left text-left'
-      href={{ pathname: '/calendario/edit', query: { id: event.id } }}>
-      <div className= {`p-2 m-[-1px] rounded ${backgroundColorClass}`}>
-        {usuario} - {event.title}       
-      </div>
+        className='justify-left align-left text-left w-[100%]'
+        href={{ pathname: '/calendario/edit', query: { id: event.id } }}>
+        <div className={`p-2 rounded truncate ${backgroundColorClass} ${eventClass} max-w-[200px] min-w-[100%] flex justify-center items-center`}>
+          <p className="overflow-hidden whitespace-nowrap max-w-[100%]" title={title}>
+            {title}
+          </p>
+        </div>
       </Link>
     );
   };
 
   return (
-    <div className='w-[80%] mx-auto max-h-[calc(100vh - 100px)] overflow-y-auto'>
+    <div className='w-[80%] mx-auto max-h-[calc(100vh - 100px)] overflow-y-auto overflow-x-auto'>
       <FullCalendar
         plugins={[dayGridPlugin]}
         initialView="dayGridMonth"
         locales={[esLocale]}
-        events={events}
-        eventContent={eventContent} // Usamos la función eventContent para personalizar la representación de cada evento
+        events={initialEvents}
+        eventContent={eventContent}
       />
     </div>
   );

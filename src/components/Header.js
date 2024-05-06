@@ -33,14 +33,14 @@ async function Header() {
         <ul className="flex text-black items-center justify-center">
           {firstRowContent.map((item, index) => (
             <li key={index} className="text-center w-1/4">
-              <Link href={item.href}>{item.text}</Link>
+              <Link className=' transition duration-500 hover:text-blue-700' href={item.href}>{item.text}</Link>
             </li>
           ))}
         </ul>
         <ul className="flex text-black items-center justify-center pt-[10px]">
           {secondRowContent.map((item, index) => (
             <li key={index} className="text-center w-1/4">
-              <Link href={item.href}>{item.text}</Link>
+              <Link className=' transition duration-500 hover:text-blue-700' href={item.href}>{item.text}</Link>
             </li>
           ))}
           {session?.user?.role == 'ADMIN' && (

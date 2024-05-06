@@ -74,20 +74,20 @@ const Graficos = () => {
             label: 'Cantidad',
             data: dataCounts,
             backgroundColor: [
-              'rgba(0, 255, 0, 0.8)', // Green              
-              'rgba(0, 0, 255, 0.8)', // Blue              
-              'rgba(255, 0, 0, 0.8)', // Red      
-              'rgba(255, 255, 0, 0.8)', // Yellow         
-              'rgba(128, 0, 128, 0.8)', // Purple             
-              'rgba(0, 255, 255, 0.8)', // Cyan             
+              'rgba(0, 255, 0, 0.5)', // Green              
+              'rgba(0, 0, 255, 0.5)', // Blue              
+              'rgba(255, 0, 0, 0.5)', // Red      
+              'rgba(255, 255, 0, 0.5)', // Yellow         
+              'rgba(128, 0, 128, 0.5)', // Purple             
+              'rgba(0, 255, 255, 0.5)', // Cyan             
             ],
             borderColor: [
-              'rgba(0, 255, 0, 1)', // Green              
-              'rgba(0, 0, 255, 1)', // Blue              
-              'rgba(255, 0, 0, 1)', // Red                   
-              'rgba(255, 255, 0, 1)', // Yellow   
-              'rgba(128, 0, 128, 1)', // Purple              
-              'rgba(0, 255, 255, 1)', // Cyan       
+              'rgba(0, 255, 0, 0.5)', // Green              
+              'rgba(0, 0, 255, 0.5)', // Blue              
+              'rgba(255, 0, 0, 0.5)', // Red                   
+              'rgba(255, 255, 0, 0.5)', // Yellow   
+              'rgba(128, 0, 128, 0.5)', // Purple              
+              'rgba(0, 255, 255, 0.5)', // Cyan       
             ],
             borderWidth: 1,
           },

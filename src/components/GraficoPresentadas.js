@@ -144,36 +144,36 @@ const Graficos = () => {
   const getBackgroundColor = (state) => {
     switch (state) {
       case 'ADJUDICADA':
-        return 'rgba(0, 255, 0, 0.8)'; // Green
+        return 'rgba(0, 255, 0, 0.5)'; // Green
       case 'EN ESPERA RESOLUCIÓN':
-        return 'rgba(0, 0, 255, 0.8)'; // Blue
+        return 'rgba(0, 0, 255, 0.5)'; // Blue
       case 'NO ADJUDICADA':
-        return 'rgba(255, 0, 0, 0.8)'; // Red
+        return 'rgba(255, 0, 0, 0.5)'; // Red
       case 'DESESTIMADA':
-        return 'rgba(128, 0, 128, 0.8)'; // Purple
+        return 'rgba(128, 0, 128, 0.5)'; // Purple
       case 'DESIERTA':
-        return 'rgba(255, 255, 0, 0.8)'; // Yellow
+        return 'rgba(255, 255, 0, 0.5)'; // Yellow
       case 'ANULADA':
-        return 'rgba(0, 255, 255, 0.8)'; // Yellow     
+        return 'rgba(0, 255, 255, 0.5)'; // Yellow     
       default:
-        return 'rgba(0, 0, 0, 0.8)'; // Black for 'Total'
+        return 'rgba(0, 0, 0, 0.5)'; // Black for 'Total'
     }
   };
 
   const getBorderColor = (state) => {
     switch (state) {
       case 'ADJUDICADA':
-        return 'rgba(0, 255, 0, 1)'; // Green
+        return 'rgba(0, 255, 0, 0.5)'; // Green
       case 'EN ESPERA RESOLUCIÓN':
-        return 'rgba(0, 0, 255, 1)'; // Blue
+        return 'rgba(0, 0, 255, 0.5)'; // Blue
       case 'NO ADJUDICADA':
-        return 'rgba(255, 0, 0, 1)'; // Red
+        return 'rgba(255, 0, 0, 0.5)'; // Red
       case 'DESESTIMADA':
-        return 'rgba(128, 0, 128, 1)'; // Purple
+        return 'rgba(128, 0, 128, 0.5)'; // Purple
       case 'DESIERTA':
-        return 'rgba(255, 255, 0, 0.8)'; // Yellow
+        return 'rgba(255, 255, 0, 0.5)'; // Yellow
       default:
-        return 'rgba(0, 0, 0, 1)'; // Black for 'Total'
+        return 'rgba(0, 0, 0, 0.5)'; // Black for 'Total'
     }
   };
 
