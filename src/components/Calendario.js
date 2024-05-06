@@ -42,7 +42,7 @@ const Calendar = ({ events: initialEvents }) => {
       <Link
         className='justify-left align-left text-left w-[100%]'
         href={{ pathname: '/calendario/edit', query: { id: event.id } }}>
-        <div className={`p-2 rounded truncate ${backgroundColorClass} ${eventClass} max-w-[200px] min-w-[100%] flex justify-center items-center`}>
+        <div className={`p-2 rounded truncate ${backgroundColorClass} ${eventClass} max-w-[200px] min-w-[100%] flex justify-left items-center m-1`}>
           <p className="overflow-hidden whitespace-nowrap max-w-[100%]" title={title}>
             {title}
           </p>
