@@ -13,7 +13,7 @@ export default async function HomePage(){
   const events = await getEventos();
   // console.log(events);
   return (
-    <div>
+    <div className='mb-[4vh]'>
       <h1>Calendario</h1>
       <Link href="/calendario/new" className='bg-black text-white rounded align-middle items-center text-center'> Nuevo evento </Link>
       <Calendario events={events}/>

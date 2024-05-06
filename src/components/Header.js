@@ -54,7 +54,7 @@ async function Header() {
   <div className="flex flex-col items-center">
     {session ? (
       <>
-        <p className="text-black mb-2 text-center">Sesión iniciada como {session.user.name}</p>
+        <p className="text-black mb-2 text-center">Sesión iniciada como{<br/>}{session.user.name}</p>
         <div>
           <form>
             <button formAction={logout} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Cerrar sesión</button>
