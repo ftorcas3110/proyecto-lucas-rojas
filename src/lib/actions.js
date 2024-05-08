@@ -522,10 +522,10 @@ const values = [
   newData.estadoini,
   newData.estadofinal,
   newData.duracioncontratoanyo.toString(),
-  newData.rutacarpeta,
   newData.observaciones,
   newData.captadapor,
   newData.estudiopor,  
+  newData.rutacarpeta,
 ];
 
 

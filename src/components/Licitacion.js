@@ -48,23 +48,25 @@ function Licitacion({ children, licitacion }) {
 
     useEffect(() => {
         // Función para cambiar el enlace después de medio segundo
-        const cambiarEnlace = () => {
-            // Obtener el enlace
-            const enlace = document.querySelector('a[href^="LocalExplorer:"]');
-            if (enlace) {
+        const cambiarEnlaces = () => {
+            // Obtener todos los enlaces que contienen "LocalExplorer:"
+            const localExplorerLinks = document.querySelectorAll('a[href^="LocalExplorer:"]');
+
+            // Iterar sobre los enlaces y cambiar el href
+            localExplorerLinks.forEach(link => {
                 // Obtener el valor actual del href
-                const currentHref = enlace.getAttribute('href');
+                const currentHref = link.getAttribute('href');
                 // Reemplazar "LocalExplorer:" por "file:///"
                 const newHref = currentHref.replace("LocalExplorer:", "file:///");
                 // Establecer el nuevo valor del href después de medio segundo
                 setTimeout(() => {
-                    enlace.setAttribute('href', newHref);
-                }, 550);
-            }
+                    link.setAttribute('href', newHref);
+                }, 1000);
+            });
         };
 
         // Ejecutar la función después de medio segundo
-        setTimeout(cambiarEnlace, 550);
+        setTimeout(cambiarEnlaces, 1000);
     }, []); // Ejecutar una vez después del montaje del componente
 
     const dia = licitacion.fechapresentacion.getDate()
