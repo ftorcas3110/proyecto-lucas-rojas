@@ -46,7 +46,7 @@ async function Form({ action, title, evento, disabled = false, eliminar = false,
                                 </>
                             ) : (<>
                                 <label htmlFor='inicio' className='mb-2 text-3xl mr-20'>Fecha de inicio</label>
-                                <input type="date" id="inicio" name="inicio"
+                                <input type="datetime-local" id="inicio" name="inicio"
                                     defaultValue={evento?.inicio ? formatForInput(evento.inicio) : ''} // Se muestra el valor existente si existe
                                     className="border p-2 rounded text-center text-xl my-1"
                                     pattern='^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$' />
@@ -65,7 +65,7 @@ async function Form({ action, title, evento, disabled = false, eliminar = false,
                                 </>
                             ) : (<>
                                 <label htmlFor='fin' className='mb-2 text-3xl mr-20'>Fecha de finalización</label>
-                                <input type="date" id="fin" name="fin"
+                                <input type="datetime-local" id="fin" name="fin"
                                     defaultValue={evento?.fin ? formatForInput(evento.fin) : ''} // Se muestra el valor existente si existe
                                     className="border p-2 rounded text-center text-xl my-1"
                                     pattern='^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$' />

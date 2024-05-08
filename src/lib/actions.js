@@ -391,12 +391,22 @@ export async function newLicitacion(formData) {
       estudiopor: licitacion.estudiopor,      
       rutacarpeta: licitacion.rutacarpeta,
     });
+    
+    await newEventoLicitacion({
+      fechapresentacion,
+      titulo,
+      tipo,
+      cliente,
+      estadoini,
+      captadapor,
+      item: licitacion.item
+    })
 
-    revalidatePath('/dashboard');
-    redirect('/dashboard'); // Redirect after successful creation
+    revalidatePath('/calendario');
+    redirect('/calendario'); // Redirect after successful creation
   } catch (error) {
     console.log(error);
-    redirect('/dashboard'); // Redirect in case of error
+    redirect('/calendario'); // Redirect in case of error
   }
 }
 
@@ -446,7 +456,6 @@ export async function editLicitacion(formData) {
     });
 
     // Update the Google Sheet
-    console.log(item);
     await updateGoogleSheet(item, {
       fechapresentacion,
       cliente,
@@ -467,7 +476,17 @@ export async function editLicitacion(formData) {
       estudiopor,
       rutacarpeta  
     });
-    console.log(item);
+    
+    await editEventoLicitacion({
+      fechapresentacion,
+      titulo,
+      tipo,
+      cliente,
+      estadoini,
+      captadapor,
+      item
+    })
+
     revalidatePath('/dashboard');
     redirect('/dashboard');
   } catch (error) {
@@ -558,6 +577,7 @@ export async function deleteLicitacion(formData) {
       },
     })
     await deleteFromGoogleSheet(item);
+    await deleteEventoLicitacion({item});
     revalidatePath('/dashboard')
   } catch (error) {
     console.log(error);
@@ -651,6 +671,90 @@ export async function newEvento(formData) {
     redirect('/calendario'); // Redirect in case of error
   }
 }
+
+export async function newEventoLicitacion({     
+  fechapresentacion,
+  titulo,
+  tipo,
+  cliente,
+  estadoini,
+  captadapor,
+  item}) {
+  try {
+    const creador = captadapor;
+    const start = new Date(fechapresentacion).toISOString(); 
+    const end = new Date(fechapresentacion).toISOString();
+    const title = `${cliente} ${titulo} ${tipo}`;
+    const categoria = estadoini;
+    const idLicitacion = item;
+
+    const evento = await prisma.evento.create({
+      data: {
+        creador,
+        start,
+        end,
+        title,
+        categoria,
+        idLicitacion
+      },
+      select: {
+        id: true,
+        creador: true,
+        start: true,
+        end: true,
+        title: true,
+        categoria: true,
+        idLicitacion: true
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function editEventoLicitacion({      
+  fechapresentacion,
+  titulo,
+  tipo,
+  cliente,
+  estadoini,
+  captadapor,
+  item}) {
+  try {
+    const idLicitacion = item;
+    const creador = captadapor;
+    const start = new Date(fechapresentacion).toISOString(); 
+    const end = new Date(fechapresentacion).toISOString();
+    const title = `${cliente} ${titulo} ${tipo}`;
+    const categoria = estadoini;
+
+    const evento = await prisma.evento.update({
+      where: { idLicitacion },
+      data: {
+        creador,
+        start,
+        end,
+        title,
+        categoria,
+        idLicitacion
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function deleteEventoLicitacion({ item }) {
+  try {
+    const idLicitacion = item;
+    const evento = await prisma.evento.delete({
+      where: { idLicitacion },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 
 export async function getEventos() {
   try {

@@ -66,7 +66,8 @@ model Evento {
   id                    Int   @id @default(autoincrement())
   creador               String
   title                 String
-  start                 DateTime @db.Date
-  end                   DateTime @db.Date
+  start                 DateTime @db.DateTime
+  end                   DateTime @db.DateTime
   categoria             String  
+  idLicitacion          Int? @unique
 }
