@@ -464,7 +464,8 @@ export async function editLicitacion(formData) {
       rutacarpeta,
       observaciones,
       captadapor,
-      estudiopor,  
+      estudiopor,
+      rutacarpeta  
     });
     console.log(item);
     revalidatePath('/dashboard');

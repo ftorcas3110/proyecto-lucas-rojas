@@ -1,4 +1,6 @@
+"use client"
 import Link from "next/link"
+import { useEffect } from 'react';
 
 function Licitacion({ children, licitacion }) {
 
@@ -19,7 +21,7 @@ function Licitacion({ children, licitacion }) {
                 return (<span className="rounded-xl bg-[#ff474c] text-white border-2 p-1">{licitacion.estadoini}</span>)
                
             default:
-               
+                return null; // Añadido para manejar el caso por defecto
         }
     }
 
@@ -40,9 +42,30 @@ function Licitacion({ children, licitacion }) {
                 return (<span className="rounded-xl bg-[#ff474c] text-white border-2 p-1">{licitacion.estadofinal}</span>)
                
             default:
-               
+                return null; // Añadido para manejar el caso por defecto
         }
     }
+
+    useEffect(() => {
+        // Función para cambiar el enlace después de medio segundo
+        const cambiarEnlace = () => {
+            // Obtener el enlace
+            const enlace = document.querySelector('a[href^="LocalExplorer:"]');
+            if (enlace) {
+                // Obtener el valor actual del href
+                const currentHref = enlace.getAttribute('href');
+                // Reemplazar "LocalExplorer:" por "file:///"
+                const newHref = currentHref.replace("LocalExplorer:", "file:///");
+                // Establecer el nuevo valor del href después de medio segundo
+                setTimeout(() => {
+                    enlace.setAttribute('href', newHref);
+                }, 550);
+            }
+        };
+
+        // Ejecutar la función después de medio segundo
+        setTimeout(cambiarEnlace, 550);
+    }, []); // Ejecutar una vez después del montaje del componente
 
     const dia = licitacion.fechapresentacion.getDate()
     const mes = licitacion.fechapresentacion.getMonth()+1
@@ -50,7 +73,7 @@ function Licitacion({ children, licitacion }) {
     const hora = (licitacion.fechapresentacion.getHours() < 10 ? '0' : '') + licitacion.fechapresentacion.getHours() 
     const minuto = (licitacion.fechapresentacion.getMinutes() < 10 ? '0' : '') + licitacion.fechapresentacion.getMinutes() 
 
-    const rutacarpeta = "file:\\\\\\"+licitacion.rutacarpeta
+    const rutacarpeta = "file:///"+ licitacion.rutacarpeta
 
     return (
         <div className="grid grid-cols-1 gap-4">
@@ -81,7 +104,7 @@ function Licitacion({ children, licitacion }) {
                                 Ruta de carpeta no disponible
                             </div>
                         ) : (
-                            <Link href={rutacarpeta}>
+                            <Link href={rutacarpeta} target="_blank">
                                 <div className="border border-black rounded cursor-pointer bg-green-300">
                                 Abrir carpeta
                                 </div>
@@ -96,4 +119,4 @@ function Licitacion({ children, licitacion }) {
     )
 }
 
-export default Licitacion
+export default Licitacion;
