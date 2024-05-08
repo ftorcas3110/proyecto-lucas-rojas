@@ -242,7 +242,7 @@ async function misLicitacionesGoogleSheet(item, presupuestoPor) {
     const spreadsheetId = '1cAcgzxl_N0NG0S14astjJ7cWl-00nDBaWc4Zba6mAew';
 
     // Find the row number corresponding to the specified item
-    const range = 'Sheet1!A:Q'; // Adjust as per your spreadsheet structure
+    const range = 'Sheet1!A:R'; // Adjust as per your spreadsheet structure
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
       range,
@@ -264,7 +264,7 @@ async function misLicitacionesGoogleSheet(item, presupuestoPor) {
       // Update the row in the spreadsheet
       await sheets.spreadsheets.values.update({
         spreadsheetId,
-        range: `Sheet1!A${rowToUpdateIndex + 1}:Q${rowToUpdateIndex + 1}`, // Adjust the range as per your spreadsheet structure
+        range: `Sheet1!A${rowToUpdateIndex + 1}:R${rowToUpdateIndex + 1}`, // Adjust the range as per your spreadsheet structure
         valueInputOption: 'RAW',
         resource: {
           values: [values],
@@ -288,7 +288,7 @@ export async function insertIntoGoogleSheet(data) {
     const auth = new google.auth.JWT(credentials.client_email, null, credentials.private_key, ['https://www.googleapis.com/auth/spreadsheets']);
     const sheets = google.sheets({ version: 'v4', auth });
     const spreadsheetId = '1cAcgzxl_N0NG0S14astjJ7cWl-00nDBaWc4Zba6mAew';
-    const range = 'Sheet1!A:Q';
+    const range = 'Sheet1!A:R';
 
     const values = Object.values(data); // Extract values from the data object
 
@@ -319,6 +319,7 @@ export async function newLicitacion(formData) {
     const tipo = formData.get('tipo');
     const tipocontrato = formData.get('tipocontrato');
     const duracioncontratoanyo = formData.get('duracioncontratoanyo');
+    const rutacarpeta = formData.get('rutacarpeta');
     const estadoini = formData.get('estadoini');
     const estadofinal = formData.get('estadofinal');
     const fechaformalizacion = formData.get('fechaformalizacion');
@@ -338,6 +339,7 @@ export async function newLicitacion(formData) {
         tipo,
         tipocontrato,
         duracioncontratoanyo,
+        rutacarpeta,
         estadoini,
         estadofinal,
         fechaformalizacion,
@@ -357,6 +359,7 @@ export async function newLicitacion(formData) {
         tipo: true,
         tipocontrato: true,
         duracioncontratoanyo: true,
+        rutacarpeta: true,
         estadoini: true,
         estadofinal: true,
         fechaformalizacion: true,
@@ -386,6 +389,7 @@ export async function newLicitacion(formData) {
       observaciones: licitacion.observaciones,
       captadapor: licitacion.captadapor,
       estudiopor: licitacion.estudiopor,      
+      rutacarpeta: licitacion.rutacarpeta,
     });
 
     revalidatePath('/dashboard');
@@ -405,6 +409,7 @@ export async function editLicitacion(formData) {
   const tipo = formData.get('tipo');
   const tipocontrato = formData.get('tipocontrato');
   const duracioncontratoanyo = formData.get('duracioncontratoanyo');
+  const rutacarpeta = formData.get('rutacarpeta');
   const estadoini = formData.get('estadoini');
   const estadofinal = formData.get('estadofinal');
   const fechaformalizacion = formData.get('fechaformalizacion');
@@ -426,6 +431,7 @@ export async function editLicitacion(formData) {
         tipo,
         tipocontrato,
         duracioncontratoanyo,
+        rutacarpeta,
         estadoini,
         estadofinal,
         fechaformalizacion,
@@ -434,7 +440,8 @@ export async function editLicitacion(formData) {
         estudiopor,
         presupuestopor,
         titulo,
-        captadapor
+        captadapor,
+        rutacarpeta
       },
     });
 
@@ -454,6 +461,7 @@ export async function editLicitacion(formData) {
       estadoini,
       estadofinal,
       duracioncontratoanyo,
+      rutacarpeta,
       observaciones,
       captadapor,
       estudiopor,  
@@ -513,6 +521,7 @@ const values = [
   newData.estadoini,
   newData.estadofinal,
   newData.duracioncontratoanyo.toString(),
+  newData.rutacarpeta,
   newData.observaciones,
   newData.captadapor,
   newData.estudiopor,  
@@ -522,7 +531,7 @@ const values = [
     // Update the row in the spreadsheet
     await sheets.spreadsheets.values.update({
       spreadsheetId,
-      range: `Sheet1!A${rowToUpdate}:Q${rowToUpdate}`, // Adjust the range as per your spreadsheet structure
+      range: `Sheet1!A${rowToUpdate}:R${rowToUpdate}`, // Adjust the range as per your spreadsheet structure
       valueInputOption: 'RAW',
       resource: {
         values: [values],

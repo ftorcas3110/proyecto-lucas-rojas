@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import Link from 'next/link'
 import Licitacion from '@/components/Licitacion'
 import { getLicitaciones } from '@/lib/actions'
-import Firefox from "@/components/firefox";
 
 export const dynamic = 'force-dynamic'
 
@@ -20,7 +19,6 @@ export default async function Home() {
                 {
                     licitaciones.map((licitacion) => (
                         <Licitacion key={licitacion.item} licitacion={licitacion}>
-                            <Firefox/>
                             <div className="grid grid-cols-1 w-[200px] justify-center align-middle text-center px-[10px]">
                             <div className="h-[50px]">
                                     <Link

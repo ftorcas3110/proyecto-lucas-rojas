@@ -1,3 +1,4 @@
+import Link from "next/link"
 
 function Licitacion({ children, licitacion }) {
 
@@ -49,6 +50,8 @@ function Licitacion({ children, licitacion }) {
     const hora = (licitacion.fechapresentacion.getHours() < 10 ? '0' : '') + licitacion.fechapresentacion.getHours() 
     const minuto = (licitacion.fechapresentacion.getMinutes() < 10 ? '0' : '') + licitacion.fechapresentacion.getMinutes() 
 
+    const rutacarpeta = "file:\\\\\\"+licitacion.rutacarpeta
+
     return (
         <div className="grid grid-cols-1 gap-4">
             <div className="col-span-4">
@@ -73,6 +76,18 @@ function Licitacion({ children, licitacion }) {
                     <div className="w-1/3 pl-8 content-center">
                         <p>Estado inicial: {estadoInicialLicitacion({licitacion})}</p>
                         <p>Estado final: {estadoFinalLicitacion({licitacion})}</p>
+                        {licitacion.rutacarpeta == null ? (                         
+                            <div className="border border-black rounded bg-red-300">
+                                Ruta de carpeta no disponible
+                            </div>
+                        ) : (
+                            <Link href={rutacarpeta}>
+                                <div className="border border-black rounded cursor-pointer bg-green-300">
+                                Abrir carpeta
+                                </div>
+                            </Link>
+                        )}
+
                     </div>
                     {children}
                 </div>

@@ -34,7 +34,7 @@ async function Form({ action, title, licitacion, disabled = false, onClick }) {
                     <div className='grid grid-cols-2 w-[80vw] items-center justify-center align-middle text-right'>
                         <label htmlFor='cliente' className='mb-2 text-3xl mr-20'>Cliente</label>
                         <input type='text' id='cliente' name='cliente'
-                            defaultValue={licitacion?.cliente} className="border p-2 rounded text-center text-xl my-1" required></input>
+                            defaultValue={licitacion?.cliente} className="border p-2 rounded text-center text-xl my-1" required/>
 
                         <label htmlFor='titulo' className='mb-2 text-3xl mr-20'>Título</label>
                         <input type='text' id='titulo' name='titulo'
@@ -320,6 +320,10 @@ async function Form({ action, title, licitacion, disabled = false, onClick }) {
                         <input type='text' id='duracioncontratoanyo' name='duracioncontratoanyo'
                             defaultValue={licitacion?.duracioncontratoanyo}
                             className="border p-2 rounded text-center text-xl my-1" />
+
+                        <label htmlFor='rutacarpeta' className='mb-2 text-3xl mr-20'>Ruta de la carpeta</label>
+                        <input type='text' id='rutacarpeta' name='rutacarpeta'
+                            defaultValue={licitacion?.rutacarpeta} className="border p-2 rounded text-center text-xl my-1" required/>
 
                         <label htmlFor='observaciones' className='mb-2 text-3xl mr-20'>Observaciones</label>
                         <textarea id='observaciones' name='observaciones'

@@ -58,6 +58,7 @@ model Licitacion {
   estadoini             String
   estadofinal           String
   duracioncontratoanyo  String
+  rutacarpeta           String?
   observaciones         String?
 }
 

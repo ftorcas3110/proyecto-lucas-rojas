@@ -16,7 +16,7 @@ const Graficos = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://sheets.googleapis.com/v4/spreadsheets/1cAcgzxl_N0NG0S14astjJ7cWl-00nDBaWc4Zba6mAew/values/Sheet1!A:Q?key=AIzaSyDGmjbYq0W7f60bCn8yjwMZzKCm8KBm420');
+        const response = await fetch('https://sheets.googleapis.com/v4/spreadsheets/1cAcgzxl_N0NG0S14astjJ7cWl-00nDBaWc4Zba6mAew/values/Sheet1!A:R?key=AIzaSyDGmjbYq0W7f60bCn8yjwMZzKCm8KBm420');
         const jsonData = await response.json();
         const sheetData = jsonData.values || [];
         setData(sheetData.slice(1));
