@@ -57,7 +57,7 @@ async function Header() {
             <p className="text-black mb-2 text-center">Sesión iniciada como<br />{session.user.name}</p>
             <div>
               <form>
-                <button onClick={logout} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Cerrar sesión</button>
+                <button formAction={logout} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Cerrar sesión</button>
               </form>
             </div>
           </>

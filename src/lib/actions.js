@@ -153,7 +153,7 @@ export async function getLicitacionesAsignadas() {
           {
             presupuestopor: null,
             estudiopor: {
-                contains: session.user.name, 
+                contains: session?.user?.name, 
             },
           },
         ],
