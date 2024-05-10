@@ -106,15 +106,15 @@ function Licitacion({ children, licitacion }) {
                         <p>Presentada por: <strong>{licitacion.presentadapor}</strong></p>
                     </div>
                     <div className="w-1/3 pl-8 content-center">
-                        <p>Estado inicial: {estadoInicialLicitacion({licitacion})}</p>
-                        <p>Estado final: {estadoFinalLicitacion({licitacion})}</p>
+                        <p className="pb-2">Estado inicial: {estadoInicialLicitacion({licitacion})}</p>
+                        <p className="pb-2">Estado final: {estadoFinalLicitacion({licitacion})}</p>
                         {licitacion.rutacarpeta == null ? (                         
-                            <div className="border border-black rounded bg-red-300">
+                            <div className="border border-black rounded bg-gray-300 transition duration-500 hover:bg-red-300 w-[50%] h-[50px] flex items-center text-center justify-center">
                                 Ruta de carpeta no disponible
                             </div>
                         ) : (
                             <Link href={rutacarpeta} target="_blank">
-                                <div className="border border-black rounded cursor-pointer bg-green-300">
+                                <div className="border border-black rounded bg-gray-300 cursor-pointer trainsition duration-500 hover:bg-blue-500 w-[50%] h-[40px] flex items-center text-center justify-center">
                                 Abrir carpeta
                                 </div>
                             </Link>

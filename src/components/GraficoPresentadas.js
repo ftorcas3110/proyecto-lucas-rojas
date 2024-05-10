@@ -35,7 +35,9 @@ const Graficos = () => {
     for (let i = 1; i < sheetData.length; i++) {
       const item = sheetData[i];
       const presupuestador = item[10] || 'Sin presupuestador';
-      presupuestadoresSet.add(presupuestador);
+      if (presupuestador !== 'Sin presupuestador') {
+        presupuestadoresSet.add(presupuestador);
+      }
     }
     setPresupuestadores(Array.from(presupuestadoresSet));
   };
@@ -62,18 +64,20 @@ const Graficos = () => {
       return presupuestador !== 'Sin presupuestador';
     });
 
-    const userCountsByState = filteredDataWithoutSinPresupuestador.reduce((countsByState, item) => {
+    const stateCountsByPresupuestador = filteredDataWithoutSinPresupuestador.reduce((countsByPresupuestador, item) => {
       const presupuestador = item[10] || 'Sin presupuestador';
-      const state = item[12] || 'Estado no disponible';
-      if (state === 'Estado no disponible') return countsByState; // Skip 'Estado no disponible'
-      countsByState[presupuestador] = countsByState[presupuestador] || {};
-      countsByState[presupuestador][state] = (countsByState[presupuestador][state] || 0) + 1;
-      return countsByState;
+      const state = item[12];
+      if (!state || state.trim() === '') return countsByPresupuestador;
+      countsByPresupuestador[presupuestador] = countsByPresupuestador[presupuestador] || {};
+      countsByPresupuestador[presupuestador][state] = (countsByPresupuestador[presupuestador][state] || 0) + 1;
+      return countsByPresupuestador;
     }, {});
 
-    const labels = Object.keys(userCountsByState);
-    const datasets = labels.length > 0 ? Object.keys(userCountsByState[labels[0]]).map((state, index) => {
-      const values = labels.map(user => userCountsByState[user][state] || 0);
+    const allStates = new Set(data.map(item => item[12]).filter(state => state && state.trim() !== ''));
+
+    const labels = Object.keys(stateCountsByPresupuestador);
+    const datasets = Array.from(allStates).map((state, index) => {
+      const values = labels.map(presupuestador => stateCountsByPresupuestador[presupuestador][state] || 0);
       return {
         label: state,
         data: values,
@@ -81,7 +85,7 @@ const Graficos = () => {
         borderColor: getBorderColor(state),
         borderWidth: 1,
       };
-    }) : [];
+    });
 
     const ctx = document.getElementById('grafico2');
     if (chartRef.current) {
@@ -96,6 +100,7 @@ const Graficos = () => {
       options: {
         scales: {
           y: {
+            stacked: false,
             beginAtZero: true
           }
         }
@@ -156,7 +161,7 @@ const Graficos = () => {
       case 'ANULADA':
         return 'rgba(0, 255, 255, 0.5)'; // Yellow     
       default:
-        return 'rgba(0, 0, 0, 0.5)'; // Black for 'Total'
+        return 'rgba(0, 0, 0, 0.5)';
     }
   };
 
@@ -172,111 +177,112 @@ const Graficos = () => {
         return 'rgba(128, 0, 128, 0.5)'; // Purple
       case 'DESIERTA':
         return 'rgba(255, 255, 0, 0.5)'; // Yellow
+      case 'ANULADA':
+        return 'rgba(0, 255, 255, 0.5)'; // Yellow  
       default:
-        return 'rgba(0, 0, 0, 0.5)'; // Black for 'Total'
+        return 'rgba(0, 0, 0, 1)';
     }
   };
 
   return (
+    <>
     <div>
       <p>Presentadas</p>
       <div className="grid grid-cols-2 gap-4">
-  <div>
-    <label htmlFor="startMonthSelect">Inicio Mes:</label>
-    <select
-      id="startMonthSelect"
-      onChange={handleStartMonthChange}
-      value={startMonth}
-      className="w-full p-2 border border-gray-300 rounded-md text-center"
-    >
-      <option value="0">Todos los meses</option>
-      {Array.from({ length: 12 }, (_, index) => index + 1).map(month => (
-        <option key={month} value={month}>
-          {new Date(2000, month - 1).toLocaleString('default', { month: 'long' })}
-        </option>
-      ))}
-    </select>
-  </div>
-  <div>
-    <label htmlFor="endMonthSelect">Fin Mes:</label>
-    <select
-      id="endMonthSelect"
-      onChange={handleEndMonthChange}
-      value={endMonth}
-      className="w-full p-2 border border-gray-300 rounded-md text-center"
-    >
-      <option value="0">Todos los meses</option>
-      {Array.from({ length: 12 }, (_, index) => index + 1).map(month => (
-        <option key={month} value={month}>
-          {new Date(2000, month - 1).toLocaleString('default', { month: 'long' })}
-        </option>
-      ))}
-    </select>
-  </div>
-  <div>
-    <label htmlFor="startYearSelect">Inicio Año:</label>
-    <select
-      id="startYearSelect"
-      onChange={handleStartYearChange}
-      value={startYear}
-      className="w-full p-2 border border-gray-300 rounded-md text-center"
-    >
-      <option value="0">Todos los años</option>
-      {staticYears.map(year => (
-        <option key={year} value={year}>
-          {year}
-        </option>
-      ))}
-    </select>
-  </div>
-  <div>
-    <label htmlFor="endYearSelect">Fin Año:</label>
-    <select
-      id="endYearSelect"
-      onChange={handleEndYearChange}
-      value={endYear}
-      className="w-full p-2 border border-gray-300 rounded-md text-center"
-    >
-      <option value="0">Todos los años</option>
-      {staticYears.map(year => (
-        <option key={year} value={year}>
-          {year}
-        </option>
-      ))}
-    </select>
-  </div>
-  <div className="col-span-2 flex flex-col items-center">
-    <label htmlFor="presupuestadorSelect">Presentador:</label>
-    <select
-      id="presupuestadorSelect"
-      onChange={handlePresupuestadorChange}
-      value={selectedPresupuestador}
-      className="w-full p-2 border border-gray-300 rounded-md text-center"
-    >
-      <option value="">Todos los usuarios</option>
-      {presupuestadores
-        .filter(presupuestador => presupuestador !== 'Sin presupuestador')
-        .map((presupuestador, index) => (
-          <option key={index} value={presupuestador}>
-            {presupuestador}
-          </option>
-        ))}
-    </select>
-  </div>
-  <div className="col-span-2">
-    <button
-      onClick={handleResetFilters}
-      className="w-full p-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600"
-    >
-      Resetear Filtros
-    </button>
-  </div>
-  <div className="col-span-2">
-    <canvas id="grafico2" width="600" height="600"></canvas>
-  </div>
-</div>
-
+        <div>
+          <label htmlFor="startMonthSelect">Inicio Mes:</label>
+          <select
+            id="startMonthSelect"
+            onChange={handleStartMonthChange}
+            value={startMonth}
+            className="w-full p-2 border border-gray-300 rounded-md text-center"
+          >
+            <option value="0">Todos los meses</option>
+            {Array.from({ length: 12 }, (_, index) => index + 1).map(month => (
+              <option key={month} value={month}>
+                {new Date(2000, month - 1).toLocaleString('default', { month: 'long' })}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="endMonthSelect">Fin Mes:</label>
+          <select
+            id="endMonthSelect"
+            onChange={handleEndMonthChange}
+            value={endMonth}
+            className="w-full p-2 border border-gray-300 rounded-md text-center"
+          >
+            <option value="0">Todos los meses</option>
+            {Array.from({ length: 12 }, (_, index) => index + 1).map(month => (
+              <option key={month} value={month}>
+                {new Date(2000, month - 1).toLocaleString('default', { month: 'long' })}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="startYearSelect">Inicio Año:</label>
+          <select
+            id="startYearSelect"
+            onChange={handleStartYearChange}
+            value={startYear}
+            className="w-full p-2 border border-gray-300 rounded-md text-center"
+          >
+            <option value="0">Todos los años</option>
+            {staticYears.map(year => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="endYearSelect">Fin Año:</label>
+          <select
+            id="endYearSelect"
+            onChange={handleEndYearChange}
+            value={endYear}
+            className="w-full p-2 border border-gray-300 rounded-md text-center"
+          >
+            <option value="0">Todos los años</option>
+            {staticYears.map(year => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="col-span-2 flex flex-col items-center">
+          <label htmlFor="presupuestadorSelect">Presentador:</label>
+          <select
+            id="presupuestadorSelect"
+            onChange={handlePresupuestadorChange}
+            value={selectedPresupuestador}
+            className="w-full p-2 border border-gray-300 rounded-md text-center"
+          >
+            <option value="">Todos los usuarios</option>
+            {presupuestadores.map((presupuestador, index) => (
+              <option key={index} value={presupuestador}>
+                {presupuestador}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="col-span-2">
+          <button
+            onClick={handleResetFilters}
+            className="w-full p-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600"
+          >
+            Resetear Filtros
+          </button>
+        </div>
+        <div className="col-span-2">
+          <canvas id="grafico2" width="600" height="600"></canvas>
+        </div>
+      </div>
     </div>
+    </>
   );
 };
 

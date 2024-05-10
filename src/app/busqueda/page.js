@@ -11,7 +11,7 @@ export default async function Home() {
 
     return (
         <>
-            <div className="mx-auto w-[80%]">
+            <div className="mx-auto w-[100%]">
             <Buscador/>
 
             </div>

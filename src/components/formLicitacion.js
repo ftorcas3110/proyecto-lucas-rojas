@@ -28,7 +28,7 @@ async function Form({ action, title, licitacion, disabled = false, onClick }) {
         <form action={action}>
 
             <input type='hidden' name='item' value={licitacion?.item} />
-            <input type='hidden' name='captadapor' value={session?.user?.name} />
+            <input type='hidden' name='captadapor' value={licitacion.captadapor ? licitacion.captadapor : session?.user?.name} defaultValue={licitacion.captadapor}/>            
             <fieldset disabled={disabled}>
                 <div className='flex flex-col items-center mb-4 text-black'>
                     <div className='grid grid-cols-2 w-[80vw] items-center justify-center align-middle text-right'>

@@ -20,7 +20,7 @@ export default async function Home() {
                     licitaciones.map((licitacion) => (
                         <Licitacion key={licitacion.item} licitacion={licitacion}>
                             <div className="grid grid-cols-1 w-[200px] justify-center align-middle text-center px-[10px]">
-                            <div className="h-[50px]">
+                            <div className="h-[40%] mx-auto">
                                     <Link
                                         className='enlace flex justify-center align-middle text-center items-center h-full mb-2 w-full bg-gray-300 py-2 rounded-lg'
                                         href={{ pathname: '/dashboard/edit', query: { item: licitacion.item } }}>
