@@ -7,7 +7,6 @@ import { redirect } from 'next/navigation';
 import { google } from 'googleapis';
 import fs from 'fs';
 
-const session = await auth();
 // REGISTER
 export async function register(formData) {
   const name = formData.get("name");
@@ -145,6 +144,7 @@ export async function getLicitacionesBuscador(formData) {
 
 
 export async function getLicitacionesAsignadas() {
+  const session = await auth();
   try {
     const licitaciones = await prisma.licitacion.findMany({
       orderBy: [{ item: "desc" }],
@@ -168,6 +168,7 @@ export async function getLicitacionesAsignadas() {
 }
 
 export async function getLicitacionesEnPresupuesto() {
+  const session = await auth();
   try {
     const licitaciones = await prisma.licitacion.findMany({
       orderBy: [{ item: "desc" }],
@@ -185,6 +186,7 @@ export async function getLicitacionesEnPresupuesto() {
 }
 
 export async function misLicitaciones(formData) {
+  const session = await auth();
   const item = Number(formData.get('item'))
   const presupuestopor = session.user.name
 
