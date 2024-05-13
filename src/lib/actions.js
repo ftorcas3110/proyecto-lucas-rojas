@@ -326,7 +326,7 @@ export async function newLicitacion(formData) {
     const observaciones = formData.get('observaciones');
     const captadapor = formData.get('captadapor');
     const estudiopor = formData.get('estudiopor');
-    const presupuestopor = formData.get('presupuesto');
+    const presupuestopor = formData.get('presupuestopor');
     const presentadapor = formData.get('presentadapor');
 
     const licitacion = await prisma.licitacion.create({
@@ -425,7 +425,7 @@ export async function editLicitacion(formData) {
   const fechaformalizacion = formData.get('fechaformalizacion');
   const observaciones = formData.get('observaciones');
   const presentadapor = formData.get('presentadapor');
-  const presupuestopor = formData.get('presupuesto');
+  const presupuestopor = formData.get('presupuestopor');
   const estudiopor = formData.get('estudiopor');
   const titulo = formData.get('titulo');
   const captadapor = formData.get('captadapor');

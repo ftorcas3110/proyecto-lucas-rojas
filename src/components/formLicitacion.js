@@ -28,7 +28,7 @@ async function Form({ action, title, licitacion, disabled = false, onClick }) {
         <form action={action}>
 
             <input type='hidden' name='item' value={licitacion?.item} />
-            <input type='hidden' name='captadapor' value={licitacion.captadapor ? licitacion.captadapor : session?.user?.name} defaultValue={licitacion.captadapor}/>            
+            <input type='hidden' name='captadapor' value={licitacion?.captadapor ? licitacion.captadapor : session?.user?.name} defaultValue={licitacion?.captadapor}/>            
             <fieldset disabled={disabled}>
                 <div className='flex flex-col items-center mb-4 text-black'>
                     <div className='grid grid-cols-2 w-[80vw] items-center justify-center align-middle text-right'>
@@ -178,18 +178,17 @@ async function Form({ action, title, licitacion, disabled = false, onClick }) {
 
                         {!licitacion?.presupuestopor == '' || disabled ? (
                             <>
-                                <label htmlFor='presupuestopor' className='mb-2 text-3xl mr-20'>Presupuesto por:</label>
+                                <label htmlFor='presupuestopor' className='mb-2 text-3xl mr-20'>Presupuesto por</label>
                                 <select id='presupuestopor' name='presupuestopor' className="border p-2 rounded text-center text-xl my-1">
                                     {licitacion?.presupuestopor !== '' && (
                                         <option value={licitacion?.presupuestopor}>{licitacion?.presupuestopor}</option>
                                     )}
                                     <option value="">En blanco</option>
-                                    <option value="ELENA ALCAIDE">Elena Alcaide</option>
                                     <option value="JOSÉ M QUERO">José M Quero</option>
+                                    <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
                                     <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
                                     <option value="MARIAM SIERRA">Mariam Sierra</option>
                                     <option value="MIGUEL JURADO">Miguel Jurado</option>
-                                    <option value="PILAR MARÍN">Pilar Marín</option>
                                     <option value="SANTIAGO MONTEJO">Santiago Montejo</option>
                                     <option value="SARA REYES">Sara Reyes</option>
                                     <option value="SILVIA ALCAIDE">Silvia Alcaide</option>
@@ -197,18 +196,17 @@ async function Form({ action, title, licitacion, disabled = false, onClick }) {
                             </>
                         ) : (
                             <>
-                                <label htmlFor='presupuestopor' className='mb-2 text-3xl mr-20'>Presupuesto por:</label>
+                                <label htmlFor='presupuestopor' className='mb-2 text-3xl mr-20'>Presupuesto por</label>
                                 <select id='presupuestopor' name='presupuestopor' className="border p-2 rounded text-center text-xl my-1">
                                     {licitacion?.presupuestopor && (
                                         <option value={licitacion?.presupuestopor}>{licitacion?.presupuestopor}</option>
                                     )}
                                     <option value="">En blanco</option>
-                                    <option value="ELENA ALCAIDE">Elena Alcaide</option>
                                     <option value="JOSÉ M QUERO">José M Quero</option>
+                                    <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
                                     <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
                                     <option value="MARIAM SIERRA">Mariam Sierra</option>
                                     <option value="MIGUEL JURADO">Miguel Jurado</option>
-                                    <option value="PILAR MARÍN">Pilar Marín</option>
                                     <option value="SANTIAGO MONTEJO">Santiago Montejo</option>
                                     <option value="SARA REYES">Sara Reyes</option>
                                     <option value="SILVIA ALCAIDE">Silvia Alcaide</option>
@@ -323,7 +321,7 @@ async function Form({ action, title, licitacion, disabled = false, onClick }) {
 
                         <label htmlFor='rutacarpeta' className='mb-2 text-3xl mr-20'>Ruta de la carpeta</label>
                         <input type='text' id='rutacarpeta' name='rutacarpeta'
-                            defaultValue={licitacion?.rutacarpeta} className="border p-2 rounded text-center text-xl my-1" required/>
+                            defaultValue={licitacion?.rutacarpeta} className="border p-2 rounded text-center text-xl my-1"/>
 
                         <label htmlFor='observaciones' className='mb-2 text-3xl mr-20'>Observaciones</label>
                         <textarea id='observaciones' name='observaciones'

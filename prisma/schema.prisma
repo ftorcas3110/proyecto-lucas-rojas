@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -43,7 +43,7 @@ model Account {
 
 model Licitacion {
   item                  Int @id @default(autoincrement())
-  fechapresentacion     DateTime @db.DateTime
+  fechapresentacion     DateTime @db.Date
   cliente               String
   titulo                String
   numexpediente         String 
@@ -66,8 +66,8 @@ model Evento {
   id                    Int   @id @default(autoincrement())
   creador               String
   title                 String
-  start                 DateTime @db.DateTime
-  end                   DateTime @db.DateTime
+  start                 DateTime @db.Date
+  end                   DateTime @db.Date
   categoria             String  
   idLicitacion          Int? @unique
 }

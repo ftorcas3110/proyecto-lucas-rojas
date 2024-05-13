@@ -30,13 +30,17 @@ function Licitacion({ children, licitacion }) {
             case "ADJUDICADA":
                 return (<span className="rounded-xl bg-[#83f28f] text-black border-2 p-1">{licitacion.estadofinal}</span>)
 
+            case "ANULADA":
+                return (<span className="rounded-xl bg-[#ff474c] text-white border-2 p-1">{licitacion.estadofinal}</span>)
+
             case "DESESTIMADA":
                 return (<span className="rounded-xl bg-[#d3d3d3] text-black border-2 p-1">{licitacion.estadofinal}</span>)
-               
+            
+            case "DESIERTA":
+                return (<span className="rounded-xl bg-[#cab53f] text-black border-2 p-1">{licitacion.estadofinal}</span>)       
 
             case "EN ESPERA RESOLUCIÓN":
                 return (<span className="rounded-xl bg-[#ADD8E6] text-black border-2 p-1">{licitacion.estadofinal}</span>)
-               
 
             case "NO ADJUDICADA":
                 return (<span className="rounded-xl bg-[#ff474c] text-white border-2 p-1">{licitacion.estadofinal}</span>)
