@@ -1,5 +1,6 @@
 import Credentials from "@auth/core/providers/credentials";
 import bcrypt from "bcryptjs";
+import { getUserByEmail } from "@/lib/data";
 //import { prisma } from "@/lib/prisma";
 
 export default {
