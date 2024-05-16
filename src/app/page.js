@@ -12,10 +12,8 @@ export default async function Home() {
         <div className="text-center container items-center border-2 border-black relative p-8 rounded-lg shadow-lg text-black">
           <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
           </div>
-          <h1 className=" text-[30px]">Inicia sesión</h1>
-          <p>
-            <LoginForm/>
-          </p>
+          <h1 className=" text-[30px]">Inicia sesión</h1>          
+          <LoginForm/>         
         </div>
       </div>
     </div>
