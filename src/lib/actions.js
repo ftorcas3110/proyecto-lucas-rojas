@@ -151,15 +151,13 @@ export async function getLicitacionesAsignadas() {
       where: {
         AND: [
           {
-            presupuestopor: null,
-            estudiopor: {
-                contains: session?.user?.name, 
+            estadofinal: {
+                equals: "ADJUDICADA", 
             },
           },
         ],
       },
     })
-    console.log(licitaciones);
     return licitaciones;
   } catch (error) {
     console.log(error);  
@@ -330,6 +328,14 @@ export async function newLicitacion(formData) {
     const estudiopor = formData.get('estudiopor');
     const presupuestopor = formData.get('presupuestopor');
     const presentadapor = formData.get('presentadapor');
+    const importeanual = formData.get('importeanual');
+    const fechafincontrato = formData.get('fechafincontrato') ? new Date(formData.get('fechafincontrato')).toISOString() : null;
+    const prorrogas = formData.get('prorrogas');
+    const prorroga1 = formData.get('prorroga1') ? new Date(formData.get('prorroga1')).toISOString() : null;
+    const prorroga2 = formData.get('prorroga2') ? new Date(formData.get('prorroga2')).toISOString() : null;
+    const prorroga3 = formData.get('prorroga3') ? new Date(formData.get('prorroga3')).toISOString() : null;    
+    const fianza = formData.get('fianza') ? Number(formData.get('fianza')) : null;
+    const garantia = formData.get('garantia');
 
     const licitacion = await prisma.licitacion.create({
       data: {
@@ -349,7 +355,15 @@ export async function newLicitacion(formData) {
         captadapor,
         estudiopor,
         presupuestopor,
-        presentadapor
+        presentadapor,
+        importeanual,
+        fechafincontrato,
+        prorrogas,
+        prorroga1,
+        prorroga2,
+        prorroga3,
+        fianza,
+        garantia
       },
       select: {
         item: true,
@@ -369,7 +383,15 @@ export async function newLicitacion(formData) {
         captadapor: true,
         estudiopor: true,
         presupuestopor: true,
-        presentadapor: true
+        presentadapor: true,
+        importeanual: true,
+        fechafincontrato: true,
+        prorrogas: true,
+        prorroga1: true,
+        prorroga2: true,
+        prorroga3: true,
+        fianza: true,
+        garantia: true
       }
     });
 
@@ -404,11 +426,11 @@ export async function newLicitacion(formData) {
       item: licitacion.item
     })
 
-    revalidatePath('/dashboard');
-    redirect('/dashboard'); // Redirect after successful creation
+    revalidatePath('/calendario');
+    redirect('/calendario'); // Redirect after successful creation
   } catch (error) {
     console.log(error);
-    redirect('/dashboard'); // Redirect in case of error
+    redirect('/calendario'); // Redirect in case of error
   }
 }
 

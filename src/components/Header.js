@@ -9,7 +9,7 @@ async function Header() {
   // Contenidos para la primera fila
   const firstRowContent = [
     { href: "/mislicitaciones", text: "Mis licitaciones" },
-    { href: "/asignadas", text: "Asignadas" },
+    { href: "/adjudicadas", text: "Adjudicadas" },
     { href: "/dashboard", text: "Todas las licitaciones" },
     { href: "/busqueda", text: "Buscador" }
   ];

@@ -1,5 +1,6 @@
-import { auth } from '@/auth'
+"use client"
 import Button from '@/components/button-form'
+import React, { useState } from 'react';
 
 function formatForInput(dateString) {
     const date = new Date(dateString);
@@ -20,15 +21,20 @@ function formatForInput(dateString) {
     return `${date.getFullYear()}-${month}-${day}T${hours}:${minutes}`;
 }
 
-async function Form({ action, title, licitacion, disabled = false, onClick }) {
-    const session = await auth();
+function Form({ action, title, licitacion, disabled = false, onClick, usuario }) {
+
+    const [estadoFinal, setEstadoFinal] = useState(licitacion?.estadofinal || '');
+
+    const handleEstadoFinalChange = (event) => {
+        setEstadoFinal(event.target.value);
+    };
 
     return (
 
         <form action={action}>
 
             <input type='hidden' name='item' value={licitacion?.item} />
-            <input type='hidden' name='captadapor' value={licitacion?.captadapor ? licitacion.captadapor : session?.user?.name} defaultValue={licitacion?.captadapor}/>            
+            <input type='hidden' name='captadapor' value={licitacion?.captadapor ? licitacion.captadapor : usuario} defaultValue={licitacion?.captadapor}/>            
             <fieldset disabled={disabled}>
                 <div className='flex flex-col items-center mb-4 text-black'>
                     <div className='grid grid-cols-2 w-[80vw] items-center justify-center align-middle text-right'>
@@ -283,32 +289,30 @@ async function Form({ action, title, licitacion, disabled = false, onClick }) {
                         {disabled ? (
                             <>
                                 <label htmlFor='estadofinal' className='mb-2 text-3xl mr-20'>Estado final</label>
-                                <select id='estadofinal' name='estadofinal' className="my-1 border p-2 rounded text-center text-xl">
+                                <select id='estadofinal' name='estadofinal' onChange={handleEstadoFinalChange} className="my-1 border p-2 rounded text-center text-xl">
                                     {licitacion?.estadofinal !== '' && (
                                         <option value={licitacion?.estadofinal}>{licitacion?.estadofinal}</option>
                                     )}
-                                    <option value="">En blanco</option>
+                                    <option value="EN ESPERA RESOLUCIÓN">En espera resolución</option>
                                     <option value="ADJUDICADA">Adjudicada</option>
                                     <option value="ANULADA">Anulada</option>
                                     <option value="DESESTIMADA">Desestimada</option>
                                     <option value="DESIERTA">Desierta</option>
-                                    <option value="EN ESPERA RESOLUCIÓN">En espera resolución</option>
                                     <option value="NO ADJUDICADA">No adjudicada</option>
                                 </select>
                             </>
                         ) : (
                             <>
                                 <label htmlFor='estadofinal' className='mb-2 text-3xl mr-20'>Estado final</label>
-                                <select id='estadofinal' name='estadofinal' className="my-1 border p-2 rounded text-center text-xl">
+                                <select id='estadofinal' name='estadofinal' onChange={handleEstadoFinalChange} className="my-1 border p-2 rounded text-center text-xl">
                                     {licitacion?.estadofinal && (
                                         <option value={licitacion?.estadofinal}>{licitacion?.estadofinal}</option>
                                     )}
-                                    <option value="">En blanco</option>
+                                    <option value="EN ESPERA RESOLUCIÓN">En espera resolución</option>
                                     <option value="ADJUDICADA">Adjudicada</option>
                                     <option value="ANULADA">Anulada</option>
                                     <option value="DESESTIMADA">Desestimada</option>
                                     <option value="DESIERTA">Desierta</option>
-                                    <option value="EN ESPERA RESOLUCIÓN">En espera resolución</option>
                                     <option value="NO ADJUDICADA">No adjudicada</option>
                                 </select>
                             </>
@@ -329,6 +333,60 @@ async function Form({ action, title, licitacion, disabled = false, onClick }) {
                             cols="50"
                             defaultValue={licitacion?.observaciones}
                             className="border p-2 rounded text-center text-xl my-1" />
+                        
+                        {estadoFinal === 'ADJUDICADA' && (
+                            <>
+                                <label htmlFor='importeanual' className='mb-2 text-3xl mr-20'>Importe Anual (sin símbolo de €)</label>
+                                <input type='number' id='importeanual' name='importeanual' min='0' step={0.01}
+                                    defaultValue={Number(licitacion?.importeanual)}
+                                    className="border p-2 rounded text-center text-xl my-1"
+                                    pattern='/^\d*\.?\,?\d*$/' />
+
+                            <label htmlFor='fechaformalizacion' className='mb-2 text-3xl mr-20'>Fecha de inicio de contrato</label>
+                            <input type="datetime-local" id="fechaformalizacion" name="fechaformalizacion"
+                                defaultValue={licitacion?.fechaformalizacion ? formatForInput(licitacion.fechaformalizacion) : ''} // Se muestra el valor existente si existe
+                                className="border p-2 rounded text-center text-xl my-1"
+                                pattern='^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$' />
+
+                            <label htmlFor='fechafincontrato' className='mb-2 text-3xl mr-20'>Fecha de fin de contrato</label>
+                            <input type="datetime-local" id="fechafincontrato" name="fechafincontrato"
+                                defaultValue={licitacion?.fechafincontrato ? formatForInput(licitacion.fechafincontrato) : ''} // Se muestra el valor existente si existe
+                                className="border p-2 rounded text-center text-xl my-1"
+                                pattern='^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$' />
+
+                            <label htmlFor='prorrogas' className='mb-2 text-3xl mr-20'>Prórrogas</label>
+                            <input type='text' id='prorrogas' name='prorrogas'
+                                defaultValue={licitacion?.prorrogas} className="border p-2 rounded text-center text-xl my-1"/>
+                            
+                            <label htmlFor='prorroga1' className='mb-2 text-3xl mr-20'>Prórroga 1</label>
+                            <input type="datetime-local" id="prorroga1" name="prorroga1"
+                                defaultValue={licitacion?.prorroga1 ? formatForInput(licitacion.prorroga1) : ''} // Se muestra el valor existente si existe
+                                className="border p-2 rounded text-center text-xl my-1"
+                                pattern='^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$' />
+                           
+                           <label htmlFor='prorroga2' className='mb-2 text-3xl mr-20'>Prórroga 2</label>
+                            <input type="datetime-local" id="prorroga2" name="prorroga2"
+                                defaultValue={licitacion?.prorroga2 ? formatForInput(licitacion.prorroga2) : ''} // Se muestra el valor existente si existe
+                                className="border p-2 rounded text-center text-xl my-1"
+                                pattern='^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$' />
+                           
+                           <label htmlFor='prorroga3' className='mb-2 text-3xl mr-20'>Prórroga 3</label>
+                            <input type="datetime-local" id="prorroga3" name="prorroga3"
+                                defaultValue={licitacion?.prorroga3 ? formatForInput(licitacion.prorroga3) : ''} // Se muestra el valor existente si existe
+                                className="border p-2 rounded text-center text-xl my-1"
+                                pattern='^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$' />
+                           
+                           <label htmlFor='fianza' className='mb-2 text-3xl mr-20'>Fianza (sin símbolo de €)</label>
+                                <input type='number' id='fianza' name='fianza' min='0' step={0.01}
+                                    defaultValue={Number(licitacion?.fianza)}
+                                    className="border p-2 rounded text-center text-xl my-1"
+                                    pattern='/^\d*\.?\,?\d*$/' />
+
+                            <label htmlFor='garantia' className='mb-2 text-3xl mr-20'>Garantía</label>
+                            <input type='text' id='garantia' name='garantia'
+                                defaultValue={licitacion?.garantia} className="border p-2 rounded text-center text-xl my-1"/>
+                           </>
+                        )}
                     </div>
                 </div>
             </fieldset>

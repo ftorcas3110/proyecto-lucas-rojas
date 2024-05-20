@@ -11,7 +11,6 @@ export default async function Home() {
     const licitaciones = await getLicitacionesAsignadas()
     const sesion = await auth();
     if (!sesion) redirect('/')
-    console.log(licitaciones);
 
     return (
         <>
@@ -26,11 +25,6 @@ export default async function Home() {
                                         className='enlace col-span-2 flex justify-center align-middle text-center items-center h-full pt-[15%] mb-2'
                                         href={{ pathname: '/dashboard/edit', query: { item: licitacion.item } }}>
                                         Editar licitación
-                                    </Link>
-                                    <Link
-                                        className='enlace col-span-2 flex justify-center align-middle text-center items-center h-full pt-[5%] my-1'
-                                        href={{ pathname: '/asignadas/asignar', query: { item: licitacion.item } }}>
-                                        Añadir a mis licitaciones
                                     </Link>
                                     <Link
                                         className='enlace col-span-2 flex justify-center align-middle text-center items-center h-full pt-[15%] mt-2'

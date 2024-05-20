@@ -80,11 +80,11 @@ function Licitacion({ children, licitacion }) {
         setTimeout(cambiarEnlaces, 1000);
     }, []); // Ejecutar una vez después del montaje del componente
 
-    const dia = licitacion.fechapresentacion.getDate()
-    const mes = licitacion.fechapresentacion.getMonth()+1
-    const anyo = licitacion.fechapresentacion.getFullYear()
-    const hora = (licitacion.fechapresentacion.getHours() < 10 ? '0' : '') + licitacion.fechapresentacion.getHours() 
-    const minuto = (licitacion.fechapresentacion.getMinutes() < 10 ? '0' : '') + licitacion.fechapresentacion.getMinutes() 
+    const dia = licitacion?.fechapresentacion?.getDate()
+    const mes = licitacion?.fechapresentacion?.getMonth()+1
+    const anyo = licitacion?.fechapresentacion?.getFullYear()
+    const hora = (licitacion?.fechapresentacion?.getHours() < 10 ? '0' : '') + licitacion?.fechapresentacion?.getHours() 
+    const minuto = (licitacion?.fechapresentacion?.getMinutes() < 10 ? '0' : '') + licitacion?.fechapresentacion?.getMinutes() 
 
     const rutacarpeta = "file:///"+ licitacion.rutacarpeta
 
@@ -96,18 +96,19 @@ function Licitacion({ children, licitacion }) {
                         <p><strong>Cliente: {licitacion.cliente}</strong></p>
                         <p><strong>Número expediente: {licitacion.numexpediente}</strong></p>
                         <p>Título: {licitacion.titulo}</p>
-                        <p>Fecha de presentación: {dia}/{mes}/{anyo} - {hora}:{minuto}h</p>
+                        {anyo == null ? (<p>Fecha de presentación no disponible</p>):(<p>Fecha de presentación: {dia}/{mes}/{anyo} - {hora}:{minuto}h</p>)} 
                     </div>
                     <div className="w-1/3 pl-8">
-                        <p>Tipo de Contrato: {licitacion.tipocontrato}</p>
-                        <p>Tipo: {licitacion.tipo}</p>
-                        <p>Importe: {licitacion.importe.toString()} €</p>
+                        {licitacion?.tipocontrato == null ? (<p>Tipo de contrato no disponible</p>):(<p>Tipo de contrato: {licitacion?.tipocontrato}</p>)}
+                        {licitacion?.tipo == null ? (<p>Tipo licitación no disponible</p>):(<p>Tipo: {licitacion?.tipo}</p>)}
+                        {licitacion?.importe == null ? (<p>Importe vacío</p>):(<p>Importe: {licitacion?.importe?.toString()} €</p>)}
+                        
                     </div>
                     <div className="w-1/3 pl-8">
-                        <p>Captada por: <strong>{licitacion.captadapor}</strong></p>
-                        <p>Estudio por: <strong>{licitacion.estudiopor}</strong></p>
-                        <p>Presupuesto por: <strong>{licitacion.presupuestopor}</strong></p>
-                        <p>Presentada por: <strong>{licitacion.presentadapor}</strong></p>
+                        <p>Captada por: {licitacion?.captadapor == null || licitacion?.captadapor == '' ? (<span>No disponible</span>):(<strong>{licitacion.captadapor}</strong>)}</p>
+                        <p>Estudio por: {licitacion?.estudiopor == null || licitacion?.estudiopor == '' ? (<span>No disponible</span>):(<strong>{licitacion.estudiopor}</strong>)}</p>
+                        <p>Presupuesto por: {licitacion?.presupuestopor == null || licitacion?.presupuestopor == '' ? (<span>No disponible</span>):(<strong>{licitacion.presupuestopor}</strong>)}</p>
+                        <p>Presentada por: {licitacion?.presentadapor == null || licitacion?.presentadapor == '' ? (<span>No disponible</span>):(<strong>{licitacion.presentadapor}</strong>)}</p>
                     </div>
                     <div className="w-1/3 pl-8 content-center">
                         <p className="pb-2">Estado inicial: {estadoInicialLicitacion({licitacion})}</p>

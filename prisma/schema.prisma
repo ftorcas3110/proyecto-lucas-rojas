@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
+  provider  = "mysql"
   url       = env("DATABASE_URL")
 }
 
@@ -43,31 +43,39 @@ model Account {
 
 model Licitacion {
   item                  Int @id @default(autoincrement())
-  fechapresentacion     DateTime @db.Date
-  cliente               String
-  titulo                String
-  numexpediente         String 
-  tipo                  String
-  tipocontrato          String
+  fechapresentacion     DateTime? @db.DateTime
+  cliente               String?
+  titulo                String?
+  numexpediente         String? 
+  tipo                  String?
+  tipocontrato          String?
   importe               Decimal? @db.Decimal(12,2)
-  fechaformalizacion    String?
+  fechaformalizacion    String? //Fecha Formalizacion Contrato (Fecha inicio)
   captadapor            String?
   presupuestopor        String?
   estudiopor            String?
   presentadapor         String?
-  estadoini             String
-  estadofinal           String
-  duracioncontratoanyo  String
-  rutacarpeta           String?
+  estadoini             String?
+  estadofinal           String?
+  duracioncontratoanyo  String?
+  rutacarpeta           String? @db.VarChar(255)
   observaciones         String?
+  importeanual          Decimal?  @db.Decimal(12,2)
+  fechafincontrato      DateTime? @db.DateTime
+  prorrogas             String?
+  prorroga1             DateTime? @db.DateTime
+  prorroga2             DateTime? @db.DateTime
+  prorroga3             DateTime? @db.DateTime
+  fianza                Decimal?  @db.Decimal(12,2)
+  garantia              String?
 }
 
 model Evento {
   id                    Int   @id @default(autoincrement())
   creador               String
   title                 String
-  start                 DateTime @db.Date
-  end                   DateTime @db.Date
+  start                 DateTime @db.DateTime
+  end                   DateTime @db.DateTime
   categoria             String  
   idLicitacion          Int? @unique
 }
