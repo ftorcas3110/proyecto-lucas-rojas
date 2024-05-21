@@ -414,6 +414,13 @@ export async function newLicitacion(formData) {
       captadapor: licitacion.captadapor,
       estudiopor: licitacion.estudiopor,      
       rutacarpeta: licitacion.rutacarpeta,
+      importeanual: licitacion.importeanual,
+      fechafincontrato: licitacion.fechafincontrato,
+      prorrogas: licitacion.prorrogas,
+      prorroga1: licitacion.prorroga1,
+      prorroga2: licitacion.prorroga2,
+      prorroga3: licitacion.prorroga3,
+      fianza:  licitacion.fianza
     });
     
     await newEventoLicitacion({
@@ -453,6 +460,14 @@ export async function editLicitacion(formData) {
   const estudiopor = formData.get('estudiopor');
   const titulo = formData.get('titulo');
   const captadapor = formData.get('captadapor');
+  const importeanual = formData.get('importeanual');
+  const fechafincontrato = formData.get('fechafincontrato') ? new Date(formData.get('fechafincontrato')).toISOString() : null;
+  const prorrogas = formData.get('prorrogas');
+  const prorroga1 = formData.get('prorroga1') ? new Date(formData.get('prorroga1')).toISOString() : null;
+  const prorroga2 = formData.get('prorroga2') ? new Date(formData.get('prorroga2')).toISOString() : null;
+  const prorroga3 = formData.get('prorroga3') ? new Date(formData.get('prorroga3')).toISOString() : null;    
+  const fianza = formData.get('fianza') ? Number(formData.get('fianza')) : null;
+  const garantia = formData.get('garantia');
   try {
     // Update the database
     const updatedLicitacion = await prisma.licitacion.update({
@@ -475,7 +490,15 @@ export async function editLicitacion(formData) {
         presupuestopor,
         titulo,
         captadapor,
-        rutacarpeta
+        rutacarpeta,
+        importeanual,
+        fechafincontrato,
+        prorrogas,
+        prorroga1,
+        prorroga2,
+        prorroga3,
+        fianza,
+        garantia
       },
     });
 
@@ -498,7 +521,15 @@ export async function editLicitacion(formData) {
       observaciones,
       captadapor,
       estudiopor,
-      rutacarpeta  
+      rutacarpeta,
+      importeanual,
+      fechafincontrato,
+      prorrogas,
+      prorroga1,
+      prorroga2,
+      prorroga3,
+      fianza,
+      garantia  
     });
     
     await editEventoLicitacion({
@@ -569,6 +600,14 @@ const values = [
   newData.captadapor,
   newData.estudiopor,  
   newData.rutacarpeta,
+  newData.importeanual,
+  newData.fechafincontrato,
+  newData.prorrogas,
+  newData.prorroga1,
+  newData.prorroga2,
+  newData.prorroga3,
+  newData.fianza.toString(),
+  newData.garantia  
 ];
 
 

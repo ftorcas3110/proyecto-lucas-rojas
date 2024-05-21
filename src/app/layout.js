@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Background from "@/components/Background";
 import { Toaster } from "react-hot-toast";
+import { auth } from "@/auth";
 
 //const inter = Inter({ subsets: ["latin"] });
 
@@ -19,11 +20,12 @@ export const metadata = {
   manifest: '/manifest.json'
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const session = await auth();
   return (
     <html lang="en">
       <body className={poppins.className}>
-        <Header/>
+        <Header session={session}/>
         <Background/>
         <Toaster position="top-center"
         containerClassName=""
