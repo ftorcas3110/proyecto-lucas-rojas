@@ -4,7 +4,6 @@ import { eliminarEvento } from "@/lib/actions"
 import FormCalendario from "@/components/formCalendario"
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import Button from '@/components/button-form';
 export const dynamic = 'force-dynamic'
 
 async function page({searchParams}) {

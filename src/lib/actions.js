@@ -322,7 +322,7 @@ export async function newLicitacion(formData) {
     const rutacarpeta = formData.get('rutacarpeta');
     const estadoini = formData.get('estadoini');
     const estadofinal = formData.get('estadofinal');
-    const fechaformalizacion = formData.get('fechaformalizacion');
+    const fechaformalizacion = new Date(formData.get('fechaformalizacion')).toISOString();
     const observaciones = formData.get('observaciones');
     const captadapor = formData.get('captadapor');
     const estudiopor = formData.get('estudiopor');
@@ -336,6 +336,7 @@ export async function newLicitacion(formData) {
     const prorroga3 = formData.get('prorroga3') ? new Date(formData.get('prorroga3')).toISOString() : null;    
     const fianza = formData.get('fianza') ? Number(formData.get('fianza')) : null;
     const garantia = formData.get('garantia');
+    const responsable = formData.get('responsable');
 
     const licitacion = await prisma.licitacion.create({
       data: {
@@ -363,7 +364,8 @@ export async function newLicitacion(formData) {
         prorroga2,
         prorroga3,
         fianza,
-        garantia
+        garantia,
+        responsable
       },
       select: {
         item: true,
@@ -391,7 +393,8 @@ export async function newLicitacion(formData) {
         prorroga2: true,
         prorroga3: true,
         fianza: true,
-        garantia: true
+        garantia: true,
+        responsable: true
       }
     });
 
@@ -420,7 +423,9 @@ export async function newLicitacion(formData) {
       prorroga1: licitacion.prorroga1,
       prorroga2: licitacion.prorroga2,
       prorroga3: licitacion.prorroga3,
-      fianza:  licitacion.fianza
+      fianza:  licitacion.fianza,
+      garantia: licitacion.garantia,
+      responsable: licitacion.responsable
     });
     
     await newEventoLicitacion({
@@ -468,6 +473,8 @@ export async function editLicitacion(formData) {
   const prorroga3 = formData.get('prorroga3') ? new Date(formData.get('prorroga3')).toISOString() : null;    
   const fianza = formData.get('fianza') ? Number(formData.get('fianza')) : null;
   const garantia = formData.get('garantia');
+  const responsable = formData.get('responsable');
+
   try {
     // Update the database
     const updatedLicitacion = await prisma.licitacion.update({
@@ -498,7 +505,8 @@ export async function editLicitacion(formData) {
         prorroga2,
         prorroga3,
         fianza,
-        garantia
+        garantia,
+        responsable
       },
     });
 
@@ -529,7 +537,8 @@ export async function editLicitacion(formData) {
       prorroga2,
       prorroga3,
       fianza,
-      garantia  
+      garantia,
+      responsable  
     });
     
     await editEventoLicitacion({
@@ -607,7 +616,8 @@ const values = [
   newData.prorroga2,
   newData.prorroga3,
   newData.fianza.toString(),
-  newData.garantia  
+  newData.garantia,
+  newData.responsable
 ];
 
 

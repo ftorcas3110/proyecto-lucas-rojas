@@ -8,17 +8,17 @@ function Header({ session }) {
 
   // Contenidos para la primera fila
   const firstRowContent = [
-    { href: "/mislicitaciones", text: "Mis licitaciones" },
-    { href: "/adjudicadas", text: "Adjudicadas" },
+    { href: "/mislicitaciones", text: "Mis licitaciones" },    
     { href: "/dashboard", text: "Todas las licitaciones" },
-    { href: "/busqueda", text: "Buscador" }
+    { href: "/busqueda", text: "Buscador" },
+    { href: "/estadisticas", text: "Estadísticas" }
   ];
 
   // Contenidos para la segunda fila
   const secondRowContent = [
     { href: "/calendario", text: "Calendario" },
+    { href: "/adjudicadas", text: "Adjudicadas" },
     { href: "/dashboard/new", text: "Nueva licitación" },
-    { href: "/estadisticas", text: "Estadísticas" }
   ];
 
   return (
@@ -32,25 +32,29 @@ function Header({ session }) {
         <div className="w-[80vw] flex justify-center">
           <div className="relative group">
             <span className="p-2 rounded cursor-default">
-              Desplegable 1
+              Estadísticas licitaciones
             </span>
             <ul className="absolute bg-white border rounded shadow-md mt-0 hidden group-hover:block">
               {firstRowContent.map((item, index) => (
+                <Link className="transition duration-500 hover:text-blue-500 text-center" href={item.href}>
                 <li key={index} className="p-2 hover:bg-gray-100">
-                  <Link className="transition duration-500 hover:text-blue-500" href={item.href}>{item.text}</Link>
+                  {item.text}
                 </li>
+                </Link>
               ))}
             </ul>
           </div>
           <div className="relative ml-4 group">
             <span className="p-2 rounded cursor-default">
-              Desplegable 2
+              Base de datos
             </span>
             <ul className="absolute bg-white border rounded shadow-md mt-0 hidden group-hover:block">
               {secondRowContent.map((item, index) => (
-                <li key={index} className="p-2 hover:bg-gray-100">
-                  <Link className="transition duration-500 hover:text-blue-500" href={item.href}>{item.text}</Link>
+                <Link className="transition duration-500 hover:text-blue-500" href={item.href}>
+                <li key={index} className="p-2 hover:bg-gray-100 text-center">
+                  {item.text}
                 </li>
+                </Link>
               ))}
             </ul>
           </div>

@@ -20,6 +20,7 @@ async function page({searchParams}) {
   return (
     <div>
         <h3 className="text-4xl text-center mb-3">Editar licitación {licitacion.numexpediente}</h3>
+        {console.log(licitacion)}
         <Form action={editLicitacion} title='Editar licitación' onClick='Licitación editada' licitacion={licitacion} edicion={true}  />
     </div>
   )

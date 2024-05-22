@@ -336,11 +336,26 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                         
                         {estadoFinal === 'ADJUDICADA' && (
                             <>
-                                <label htmlFor='importeanual' className='mb-2 text-3xl mr-20'>Importe Anual (sin símbolo de €)</label>
-                                <input type='number' id='importeanual' name='importeanual' min='0' step={0.01}
-                                    defaultValue={Number(licitacion?.importeanual)}
-                                    className="border p-2 rounded text-center text-xl my-1"
-                                    pattern='/^\d*\.?\,?\d*$/' />
+                            <label htmlFor='responsable' className='mb-2 text-3xl mr-20'>Resposable</label>
+                            <select id='responsable' name='responsable' className="border p-2 rounded text-center text-xl my-1" required>
+                                {licitacion?.responsable && (
+                                    <option value={licitacion?.responsable}>{licitacion?.responsable}</option>
+                                )}
+                                <option value="JOSÉ M QUERO">José M Quero</option>
+                                <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
+                                <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
+                                <option value="MARIAM SIERRA">Mariam Sierra</option>
+                                <option value="MIGUEL JURADO">Miguel Jurado</option>
+                                <option value="SANTIAGO MONTEJO">Santiago Montejo</option>
+                                <option value="SARA REYES">Sara Reyes</option>
+                                <option value="SILVIA ALCAIDE">Silvia Alcaide</option>
+                            </select>
+                            
+                            <label htmlFor='importeanual' className='mb-2 text-3xl mr-20'>Importe Anual (sin símbolo de €)</label>
+                            <input type='number' id='importeanual' name='importeanual' min='0' step={0.01}
+                                defaultValue={Number(licitacion?.importeanual)}
+                                className="border p-2 rounded text-center text-xl my-1"
+                                pattern='/^\d*\.?\,?\d*$/' />
 
                             <label htmlFor='fechaformalizacion' className='mb-2 text-3xl mr-20'>Fecha de inicio de contrato</label>
                             <input type="datetime-local" id="fechaformalizacion" name="fechaformalizacion"
