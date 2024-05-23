@@ -4,8 +4,7 @@ import Image from "next/image";
 import { logout } from "@/lib/actions";
 
 function Header({ session }) {
-  console.log(session);
-
+  
   // Contenidos para la primera fila
   const firstRowContent = [
     { href: "/mislicitaciones", text: "Mis licitaciones" },    

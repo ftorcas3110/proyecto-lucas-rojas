@@ -69,8 +69,8 @@ const Calendar = ({ events: initialEvents }) => {
     const additionalData = { key: 'value' }; // Datos adicionales que deseas enviar
     const additionalDataParam = encodeURIComponent(JSON.stringify(additionalData));
     const url = `/calendario/new?date=${arg.dateStr}&events=${eventsParam}&additionalData=${additionalDataParam}`;
-    //window.location.href = url;
-    //console.log(eventsForDate);
+    window.location.href = url;
+    console.log(eventsForDate);
   };
 
   return (
