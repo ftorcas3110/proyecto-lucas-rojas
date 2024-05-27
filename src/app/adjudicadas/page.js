@@ -21,7 +21,7 @@ export default async function Home() {
                                 <div className="border border-black items-center text-center align-middle rounded bg-gray-300 cursor-pointer transition duration-500 hover:bg-green-500 w-[100px] h-[50px] flex">
                                     <Link
                                         className='flex align-right items-right text-center justify-right w-full pl-[10px]'
-                                        href={{ pathname: '/dashboard/delete', query: { item: licitacion.item } }}>
+                                        href={{ pathname: '/adjudicadas/ficha', query: { item: licitacion.item } }}>
                                         Abrir ficha
                                     </Link>
                                 </div>
