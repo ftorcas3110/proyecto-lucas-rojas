@@ -69,7 +69,7 @@ function Licitacion({ children, licitacion }) {
                     // Reemplazar "LocalExplorer:" por "file:///"
                     const newHref = currentHref.replace("LocalExplorer:", "file:///");
                     // Establecer el nuevo valor del href después de medio segundo
-                    setTimeout(() => {
+                    setInterval(() => {
                         link.setAttribute('href', newHref);
                     }, 100);
                 });
