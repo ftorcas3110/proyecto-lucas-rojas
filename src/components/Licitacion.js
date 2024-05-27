@@ -50,37 +50,6 @@ function Licitacion({ children, licitacion }) {
         }
     }
 
-        // useEffect(() => {
-        //     // Verificación de navegador
-        //     const isChrome = navigator.userAgent.indexOf("Chrome") !== -1;
-    
-        //     // Función para cambiar el enlace después de medio segundo
-        //     const cambiarEnlaces = () => {
-        //         if (isChrome) {
-        //             // Obtener todos los enlaces que contienen "LocalExplorer:"
-        //             const localExplorerLinks = document.querySelectorAll('a[href^="LocalExplorer:"]');
-    
-        //             // Iterar sobre los enlaces y cambiar el href
-        //             localExplorerLinks.forEach(link => {
-        //                 // Obtener el valor actual del href
-        //                 const currentHref = link.getAttribute('href');
-        //                 // Reemplazar "LocalExplorer:" por "file:///"
-        //                 const newHref = currentHref.replace("LocalExplorer:", "file:///");
-        //                 // Establecer el nuevo valor del href después de medio segundo
-        //                 setTimeout(() => {
-        //                     link.setAttribute('href', newHref);
-        //                 }, 500);
-        //             });
-        //         }
-        //     };
-    
-        //     // Ejecutar la función al montar el componenteç
-        //     if (isChrome) {
-        //         cambiarEnlaces();
-        //     }            
-        // }, []);
-    
-
     const dia = licitacion?.fechapresentacion?.getDate()
     const mes = licitacion?.fechapresentacion?.getMonth()+1
     const anyo = licitacion?.fechapresentacion?.getFullYear()
@@ -151,11 +120,11 @@ function Licitacion({ children, licitacion }) {
                                 Ruta de carpeta no disponible
                             </div>
                         ) : (
-                            <Link href={rutacarpeta} target="_blank">
+                            <a href={rutacarpeta} target="_blank">
                                 <div className="border border-black rounded bg-gray-300 cursor-pointer trainsition duration-500 hover:bg-blue-500 w-[50%] h-[40px] flex items-center text-center justify-center">
                                 Abrir carpeta
                                 </div>
-                            </Link>
+                            </a>
                         )}
 
                     </div>
@@ -190,11 +159,11 @@ function Licitacion({ children, licitacion }) {
                                                 Ruta de carpeta no disponible
                                             </div>
                                         ) : (
-                                            <Link href={rutacarpeta} target="_self">
+                                            <a href={rutacarpeta} target="_blank">
                                                 <div className="border border-black rounded bg-gray-300 cursor-pointer trainsition duration-500 hover:bg-blue-500 w-[50%] h-[40px] flex items-center text-center justify-center">
                                                 Abrir carpeta
                                                 </div>
-                                            </Link>
+                                            </a>
                                         )}
                 
                                     </div>
