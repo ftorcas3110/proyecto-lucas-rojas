@@ -77,7 +77,10 @@ function Licitacion({ children, licitacion }) {
         };
 
         // Ejecutar la función después de medio segundo
-        setTimeout(cambiarEnlaces, 1000);
+        if(navigator.userAgent.indexOf("Chrome")){
+            setTimeout(cambiarEnlaces, 1000);
+        }
+        
     }, []); // Ejecutar una vez después del montaje del componente
 
     const dia = licitacion?.fechapresentacion?.getDate()

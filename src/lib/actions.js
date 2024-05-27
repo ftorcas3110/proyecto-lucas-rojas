@@ -59,7 +59,7 @@ export async function login(formData) {
   const matchPassword = await bcrypt.compare(password, user.password)
 
   if (user && matchPassword) {  // && user.emailVerified
-    await signIn('credentials', { email, password, redirectTo: '/mislicitaciones' })
+    await signIn('credentials', { email, password, redirectTo: '/inicio' })
     return { success: "Inicio de sesión correcto" }
   } else {
     return { error: 'Credenciales incorrectas.' }
@@ -81,7 +81,7 @@ export async function logout() {
 export async function getLicitaciones() {
   try {
     const licitaciones = await prisma.licitacion.findMany({
-      orderBy: [{ item: "desc" }]
+      orderBy: [{ fechapresentacion: "desc" }]
     })
     return licitaciones;
   } catch (error) {

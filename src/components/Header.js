@@ -35,8 +35,8 @@ function Header({ session }) {
             </span>
             <ul className="absolute bg-white border rounded shadow-md mt-0 hidden group-hover:block">
               {firstRowContent.map((item, index) => (
-                <Link className="transition duration-500 hover:text-blue-500 text-center" href={item.href}>
-                <li key={index} className="p-2 hover:bg-gray-100">
+                <Link href={item.href}>
+                <li key={index} className="p-2 hover:bg-blue-300 transition duration-300 text-center">
                   {item.text}
                 </li>
                 </Link>
@@ -49,8 +49,8 @@ function Header({ session }) {
             </span>
             <ul className="absolute bg-white border rounded shadow-md mt-0 hidden group-hover:block">
               {secondRowContent.map((item, index) => (
-                <Link className="transition duration-500 hover:text-blue-500" href={item.href}>
-                <li key={index} className="p-2 hover:bg-gray-100 text-center">
+                <Link href={item.href}>
+                <li key={index} className="p-2 hover:bg-blue-300 transition duration-300 text-center">
                   {item.text}
                 </li>
                 </Link>
