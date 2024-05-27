@@ -71,14 +71,14 @@ function Licitacion({ children, licitacion }) {
                     // Establecer el nuevo valor del href después de medio segundo
                     setTimeout(() => {
                         link.setAttribute('href', newHref);
-                    }, 1000);
+                    }, 100);
                 });
             }
         };
 
         // Ejecutar la función después de medio segundo
         if(navigator.userAgent.indexOf("Chrome")){
-            setInterval(cambiarEnlaces, 1000);
+            setInterval(cambiarEnlaces, 100);
         }
         
     }, []); // Ejecutar una vez después del montaje del componente
