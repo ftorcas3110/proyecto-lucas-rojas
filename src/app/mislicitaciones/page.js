@@ -8,8 +8,8 @@ export const dynamic = 'force-dynamic'
 
 export default async function Home() {
     const licitaciones = await getLicitacionesEnPresupuesto()
-    // const sesion = await auth();
-    // if (!sesion) redirect('/')
+    const sesion = await auth();
+    if (!sesion) redirect('/')
     //console.log(licitaciones);
 
     return (

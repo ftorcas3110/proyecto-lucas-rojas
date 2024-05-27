@@ -25,7 +25,7 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={poppins.className}>
-        {/* <Header session={session}/> */}
+        <Header session={session}/>
         <Background/>
         <Toaster position="top-center"
         containerClassName=""
