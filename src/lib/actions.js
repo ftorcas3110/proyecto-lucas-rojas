@@ -438,11 +438,11 @@ export async function newLicitacion(formData) {
       item: licitacion.item
     })
 
-    revalidatePath('/calendario');
-    redirect('/calendario'); // Redirect after successful creation
+    revalidatePath('/dashboard');
+    redirect('/dashboard'); // Redirect after successful creation
   } catch (error) {
     console.log(error);
-    redirect('/calendario'); // Redirect in case of error
+    redirect('/dashboard'); // Redirect in case of error
   }
 }
 
