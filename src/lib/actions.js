@@ -81,7 +81,7 @@ export async function logout() {
 export async function getLicitaciones() {
   try {
     const licitaciones = await prisma.licitacion.findMany({
-      orderBy: [{ fechapresentacion: "desc" }]
+      orderBy: [{ item: "desc" }]
     })
     return licitaciones;
   } catch (error) {
