@@ -52,7 +52,8 @@ function Licitacion({ children, licitacion }) {
 
     
 
-    useEffect(() => {
+    setInterval(() => {
+        useEffect(() => {
         // Verificación de navegador
         const isChrome = navigator.userAgent.indexOf("Chrome") !== -1;
 
@@ -69,7 +70,7 @@ function Licitacion({ children, licitacion }) {
                     // Reemplazar "LocalExplorer:" por "file:///"
                     const newHref = currentHref.replace("LocalExplorer:", "file:///");
                     // Establecer el nuevo valor del href después de medio segundo
-                    setInterval(() => {
+                    setTimeout(() => {
                         link.setAttribute('href', newHref);
                     }, 100);
                 });
@@ -78,10 +79,11 @@ function Licitacion({ children, licitacion }) {
 
         // Ejecutar la función después de medio segundo
         if(navigator.userAgent.indexOf("Chrome")){
-            setInterval(cambiarEnlaces, 100);
+            setTimeout(cambiarEnlaces, 100);
         }
         
-    }, []); // Ejecutar una vez después del montaje del componente
+    }, []);
+ }, 100); // Ejecutar una vez después del montaje del componente
 
     const dia = licitacion?.fechapresentacion?.getDate()
     const mes = licitacion?.fechapresentacion?.getMonth()+1
