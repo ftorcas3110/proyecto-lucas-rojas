@@ -14,7 +14,7 @@ function page() {
   return (
     <div>
         <h3 className="text-4xl text-center mb-3">Nuevo evento</h3>
-        <FormCalendario action={newEvento} title='Crear licitación' onClick="Licitación creada con éxito" articulo={null} fecha={date} usuario={usuario}/>
+        <FormCalendario action={newEvento} title='Crear evento' onClick="Evento creado con éxito" articulo={null} fecha={date} usuario={usuario}/>
     </div>
   )
 }
