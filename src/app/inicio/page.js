@@ -26,7 +26,7 @@ export default async function Home() {
             </div>
           </button>
         </Link>
-        <Link href="/buscador">
+        <Link href="/busqueda">
           <button className="flex items-stretch justify-center w-full border border-gray-300 rounded-lg shadow-md hover:bg-blue-300 transition duration-300">
             <div className="p-6">
               <h2 className="text-lg font-semibold mb-2">Buscador</h2>
