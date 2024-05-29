@@ -128,7 +128,8 @@ export async function getLicitacionesBuscador(formData) {
         orderBy: [{ item: "desc" }],
         where: {
           [campoABuscar]: {
-            contains: query,
+            contains: query.toLowerCase(),
+            mode: "insensitive"
           },
         },
       });
