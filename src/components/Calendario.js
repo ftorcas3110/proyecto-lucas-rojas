@@ -55,7 +55,7 @@ const Calendar = ({ events: initialEvents, usuario }) => {
   
   const handleDateClick = (start) => {
     const isoDate = start.date.toISOString(); // Obtener solo la parte de la fecha
-    const url = `http://localhost:3000/calendario/new?date=${isoDate}&usuario=${usuario}`;
+    const url = `calendario/new?date=${isoDate}&usuario=${usuario}`;
     
     console.log(url);
   
