@@ -3,7 +3,6 @@ import React from 'react';
 import Calendario from '@/components/Calendario';
 import { auth } from "@/auth";
 import { getEventos } from '@/lib/actions';
-import Link from 'next/link';
 
 export const dynamic = 'force-dynamic'
 
@@ -14,9 +13,7 @@ export default async function HomePage(){
   // console.log(events);
   return (
     <div className='mb-[4vh]'>
-      <h1>Calendario</h1>
-      <Link href="/calendario/new" className='bg-black text-white rounded align-middle items-center text-center'> Nuevo evento </Link>
-      <Calendario events={events}/>
+      <Calendario events={events} usuario={sesion?.user?.name}/>
     </div>
   );
 };

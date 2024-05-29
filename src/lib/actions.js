@@ -714,13 +714,16 @@ async function deleteFromGoogleSheet(itemId) {
 }
 
 export async function newEvento(formData) {
+  
   try {
     const creador = formData.get('creador');
-    const start = new Date(formData.get('inicio')); 
-    const end = new Date(formData.get('fin'));
+    const start = formData.get('inicio'); 
+    console.log("inicio: "+start);
+    const end = formData.get('fin');
+    console.log("fin: "+end);
     const title = formData.get('descripcion');
     const categoria =formData.get('categoria');
-
+  
     const evento = await prisma.evento.create({
       data: {
         creador,

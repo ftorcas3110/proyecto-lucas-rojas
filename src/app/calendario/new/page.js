@@ -1,15 +1,20 @@
+"use client"
 import FormCalendario from "@/components/formCalendario"
 import { newEvento } from "@/lib/actions"
-import { auth } from "@/auth";
-import { redirect } from "next/navigation";
+import { useSearchParams } from 'next/navigation'
 
-async function page() {
-  const sesion = await auth();
-  if (!sesion) redirect('/')
+function page() {
+
+  const searchParams = useSearchParams()
+ 
+  const date = searchParams.get('date')
+  const usuario = searchParams.get('usuario')
+
+  console.log(date);
   return (
     <div>
         <h3 className="text-4xl text-center mb-3">Nuevo evento</h3>
-        <FormCalendario action={newEvento} title='Crear licitación' onClick="Licitación creada con éxito" articulo={null}  />
+        <FormCalendario action={newEvento} title='Crear licitación' onClick="Licitación creada con éxito" articulo={null} fecha={date} usuario={usuario}/>
     </div>
   )
 }

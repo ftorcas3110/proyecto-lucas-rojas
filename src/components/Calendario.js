@@ -6,7 +6,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
 import Link from 'next/link';
 
-const Calendar = ({ events: initialEvents }) => {
+const Calendar = ({ events: initialEvents, usuario }) => {
 
   const eventContent = ({ event }) => {
     const eventStart = event.start;
@@ -52,26 +52,18 @@ const Calendar = ({ events: initialEvents }) => {
       </Link>
     );
   };
-
-  const getEventsForDate = (dateStr) => {
-    const date = new Date(dateStr);
-    return initialEvents.filter(event => {
-      const eventStart = new Date(event.start);
-      const eventEnd = new Date(event.end || event.start);
-      return eventStart <= date && eventEnd >= date;
-    });
+  
+  const handleDateClick = (start) => {
+    const isoDate = start.date.toISOString(); // Obtener solo la parte de la fecha
+    const url = `http://localhost:3000/calendario/new?date=${isoDate}&usuario=${usuario}`;
+    
+    console.log(url);
+  
+    // Si deseas redirigir a la nueva URL, puedes usar:
+    window.location.href = url;
   };
   
-  const handleDateClick = (arg) => {
-    console.log(arg);
-    const eventsForDate = getEventsForDate(arg.dateStr);
-    const eventsParam = encodeURIComponent(JSON.stringify(eventsForDate));
-    const additionalData = { key: 'value' }; // Datos adicionales que deseas enviar
-    const additionalDataParam = encodeURIComponent(JSON.stringify(additionalData));
-    const url = `/calendario/new?date=${arg.dateStr}&events=${eventsParam}&additionalData=${additionalDataParam}`;
-    window.location.href = url;
-    console.log(eventsForDate);
-  };
+  
 
   return (
     <div className='w-[80%] mx-auto max-h-[calc(100vh - 100px)] overflow-y-auto overflow-x-auto'>
