@@ -225,14 +225,13 @@ export async function deleteMiLicitacion(formData) {
 async function misLicitacionesGoogleSheet(item, presupuestoPor) {
   try {
     // Load credentials from JSON file
-    const credentials = JSON.parse(fs.readFileSync('config/proyecto-lucas-rojas-bee0220e8bba.json'));
 
     // Create authentication client
     const auth = new google.auth.JWT(
-      credentials.client_email,
-      null,
-      credentials.private_key,
-      ['https://www.googleapis.com/auth/spreadsheets']
+  process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
+  null,
+  process.env.GOOGLE_SHEETS_PRIVATE_KEY.replace(/\\n/g, '\n'),
+  ['https://www.googleapis.com/auth/spreadsheets']
     );
 
     // Initialize Google Sheets API
@@ -242,7 +241,7 @@ async function misLicitacionesGoogleSheet(item, presupuestoPor) {
     const spreadsheetId = '1cAcgzxl_N0NG0S14astjJ7cWl-00nDBaWc4Zba6mAew';
 
     // Find the row number corresponding to the specified item
-    const range = 'Sheet1!A:R'; // Adjust as per your spreadsheet structure
+    const range = 'Sheet1!A:AA'; // Adjust as per your spreadsheet structure
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
       range,
@@ -284,11 +283,15 @@ async function misLicitacionesGoogleSheet(item, presupuestoPor) {
 // Function to insert data into Google Spreadsheet
 export async function insertIntoGoogleSheet(data) {
   try {
-    const credentials = JSON.parse(fs.readFileSync('config/proyecto-lucas-rojas-bee0220e8bba.json'));
-    const auth = new google.auth.JWT(credentials.client_email, null, credentials.private_key, ['https://www.googleapis.com/auth/spreadsheets']);
+    const auth = new google.auth.JWT(
+      process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
+      null,
+      process.env.GOOGLE_SHEETS_PRIVATE_KEY.replace(/\\n/g, '\n'),
+      ['https://www.googleapis.com/auth/spreadsheets']
+    );
     const sheets = google.sheets({ version: 'v4', auth });
     const spreadsheetId = '1cAcgzxl_N0NG0S14astjJ7cWl-00nDBaWc4Zba6mAew';
-    const range = 'Sheet1!A:R';
+    const range = 'Sheet1!A:AA';
 
     const values = Object.values(data); // Extract values from the data object
 
@@ -397,7 +400,7 @@ export async function newLicitacion(formData) {
         responsable: true
       }
     });
-
+    {console.log("item:" +licitacion.item)}
     await insertIntoGoogleSheet({
       item: licitacion.item,
       fechapresentacion: licitacion.fechapresentacion,
@@ -563,14 +566,13 @@ export async function editLicitacion(formData) {
 async function updateGoogleSheet(item, newData) {
   try {
     // Load credentials from JSON file
-    const credentials = JSON.parse(fs.readFileSync('config/proyecto-lucas-rojas-bee0220e8bba.json'));
 
     // Create authentication client
     const auth = new google.auth.JWT(
-      credentials.client_email,
-      null,
-      credentials.private_key,
-      ['https://www.googleapis.com/auth/spreadsheets']
+  process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
+  null,
+  process.env.GOOGLE_SHEETS_PRIVATE_KEY.replace(/\\n/g, '\n'),
+  ['https://www.googleapis.com/auth/spreadsheets']
     );
 
     // Initialize Google Sheets API
@@ -662,14 +664,13 @@ export async function deleteLicitacion(formData) {
 async function deleteFromGoogleSheet(itemId) {
   try {
     // Load credentials from JSON file
-    const credentials = JSON.parse(fs.readFileSync('config/proyecto-lucas-rojas-bee0220e8bba.json'));
 
     // Create authentication client
     const auth = new google.auth.JWT(
-      credentials.client_email,
-      null,
-      credentials.private_key,
-      ['https://www.googleapis.com/auth/spreadsheets']
+  process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
+  null,
+  process.env.GOOGLE_SHEETS_PRIVATE_KEY.replace(/\\n/g, '\n'),
+  ['https://www.googleapis.com/auth/spreadsheets']
     );
 
     // Initialize Google Sheets API
