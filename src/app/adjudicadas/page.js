@@ -13,7 +13,6 @@ export default async function Home() {
     if (!sesion) redirect('/')
     return (
         <>
-            <div className="w-[80%] mx-auto">
                 {
                     licitaciones.map((licitacion) => (
                         <>
@@ -29,7 +28,6 @@ export default async function Home() {
                         </>
                     ))
                 }
-            </div>
         </>
     )
 }

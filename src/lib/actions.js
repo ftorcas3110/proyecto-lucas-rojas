@@ -142,6 +142,77 @@ export async function getLicitacionesBuscador(formData) {
   }
 }
 
+export async function getLicitacionesAdjudicadasBuscador(formData) {
+  const campoABuscar = formData.get("campo");
+  const query = formData.get("query");
+
+  try {
+    let licitaciones;
+    if (campoABuscar === 'fechafinalizacion' || campoABuscar === 'fechaformalizacion') {
+      // Parse query to get date part only
+      const queryDate = new Date(query);
+      const queryDateOnly = new Date(queryDate.getFullYear(), queryDate.getMonth(), queryDate.getDate());
+
+      // Adjust the Prisma query to properly filter datetime fields
+      licitaciones = await prisma.licitacion.findMany({
+        orderBy: [{ item: "desc" }],
+        where: {
+          AND: [
+            {
+              [campoABuscar]: {
+                // Comparar solo la parte de la fecha
+                gte: queryDateOnly, // mayor o igual a la fecha de consulta
+                lt: new Date(queryDateOnly.getTime() + 24 * 60 * 60 * 1000), // menor al día siguiente
+              },
+            },
+            {
+              estadofinal: {
+                equals: "ADJUDICADA",
+              },
+            },
+          ],
+        },
+      });
+    } else if (campoABuscar === "importe") {
+      // For "importe" field, use equals operator
+      licitaciones = await prisma.licitacion.findMany({
+        orderBy: [{ item: "desc" }],
+        where: {
+          AND: [{
+            [campoABuscar]: {
+              equals: parseFloat(query), // Parse query to float for comparison
+            },
+            estadofinal: {
+              equals: "ADJUDICADA",
+            },
+          }],
+        },
+      });
+    } else {
+      // For non-datetime fields, use contains operator
+      licitaciones = await prisma.licitacion.findMany({
+        orderBy: [{ item: "desc" }],
+        where: {
+          AND: [
+            {
+            [campoABuscar]: {
+              contains: query.toLowerCase(),
+              mode: "insensitive"
+            },
+            estadofinal: {
+              equals: "ADJUDICADA",
+            },
+        }],
+        },
+      });
+    }
+
+    return licitaciones;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
 
 
 export async function getLicitacionesAsignadas() {
