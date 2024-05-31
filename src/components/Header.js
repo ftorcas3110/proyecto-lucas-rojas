@@ -33,7 +33,7 @@ function Header({ session }) {
             <span className="p-2 rounded cursor-default">
               Estadísticas licitaciones
             </span>
-            <ul className="absolute bg-white border rounded shadow-md mt-0 hidden group-hover:block">
+            <ul className="absolute bg-white border rounded shadow-md mt-0 hidden group-hover:block z-50">
               {firstRowContent.map((item, index) => (
                 <Link href={item.href}>
                 <li key={index} className="p-2 hover:bg-blue-300 transition duration-300 text-center">
@@ -47,7 +47,7 @@ function Header({ session }) {
             <span className="p-2 rounded cursor-default">
               Base de datos
             </span>
-            <ul className="absolute bg-white border rounded shadow-md mt-0 hidden group-hover:block">
+            <ul className="absolute bg-white border rounded shadow-md mt-0 hidden group-hover:block z-50">
               {secondRowContent.map((item, index) => (
                 <Link href={item.href}>
                 <li key={index} className="p-2 hover:bg-blue-300 transition duration-300 text-center">

@@ -335,7 +335,7 @@ async function misLicitacionesGoogleSheet(item, presupuestoPor) {
       // Update the row in the spreadsheet
       await sheets.spreadsheets.values.update({
         spreadsheetId,
-        range: `Sheet1!A${rowToUpdateIndex + 1}:R${rowToUpdateIndex + 1}`, // Adjust the range as per your spreadsheet structure
+        range: `Sheet1!A${rowToUpdateIndex + 1}:AA${rowToUpdateIndex + 1}`, // Adjust the range as per your spreadsheet structure
         valueInputOption: 'RAW',
         resource: {
           values: [values],
@@ -655,7 +655,7 @@ async function updateGoogleSheet(item, newData) {
 
     // Find the row number corresponding to the specified item
     // Find the row number corresponding to the specified item
-const range = 'Sheet1!A:A'; // Adjust as per your spreadsheet structure
+const range = 'Sheet1!A:AA'; // Adjust as per your spreadsheet structure
 const response = await sheets.spreadsheets.values.get({
   spreadsheetId,
   range,
@@ -689,16 +689,16 @@ const values = [
   newData.prorroga1,
   newData.prorroga2,
   newData.prorroga3,
-  newData.fianza.toString(),
+  newData.fianza !== null ? newData.fianza.toString() : newData.fianza,
   newData.garantia,
   newData.responsable
 ];
-
+ console.log(values);
 
     // Update the row in the spreadsheet
     await sheets.spreadsheets.values.update({
       spreadsheetId,
-      range: `Sheet1!A${rowToUpdate}:R${rowToUpdate}`, // Adjust the range as per your spreadsheet structure
+      range: `Sheet1!A${rowToUpdate}:AA${rowToUpdate}`, // Adjust the range as per your spreadsheet structure
       valueInputOption: 'RAW',
       resource: {
         values: [values],

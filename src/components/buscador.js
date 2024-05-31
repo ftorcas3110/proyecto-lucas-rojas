@@ -102,20 +102,22 @@ function Buscador() {
                         {searched && licitaciones.length === 0 && <p className="text-red-500 text-3xl mt-2">No hay resultados.</p>}
                         {searched && licitaciones.length !== 0 && <p className="text-green-500 text-3xl mt-2">Resultados de búsqueda:</p>}
                         {licitaciones.map((licitacion, index) => (
-                            <Licitacion key={index} licitacion={licitacion}>
-                                <div className="grid grid-cols-1 w-[200px] justify-center align-middle text-center px-[10px]">
-                                    <Link
-                                        className="enlace col-span-2 flex justify-center align-middle text-center items-center h-full pt-[15%] mb-2"
-                                        href={{ pathname: "/dashboard/edit", query: { item: licitacion.item } }}
-                                    >
-                                        Editar licitación
-                                    </Link>
-                                    <Link
-                                        className="enlace col-span-2 flex justify-center align-middle text-center items-center h-full pt-[15%] mt-2"
-                                        href={{ pathname: "/dashboard/delete", query: { item: licitacion.item } }}
-                                    >
-                                        Eliminar licitación
-                                    </Link>
+                            <Licitacion key={licitacion.item} licitacion={licitacion}>
+                            <div className="h-[40%] mx-auto">
+                            <div className="border border-black items-center text-center align-middle rounded bg-gray-300 cursor-pointer transition duration-500 hover:bg-green-500 w-[100px] h-[50px] flex my-6">
+                                <Link
+                                    className='flex align-middle items-center text-center justify-center w-full pl-[10px]'
+                                    href={{ pathname: '/dashboard/edit', query: { item: licitacion.item } }}>
+                                    Editar licitación
+                                </Link>
+                                </div>
+                                <div className="border border-black items-center text-center align-middle rounded bg-gray-300 cursor-pointer transition duration-500 hover:bg-green-500 w-[100px] h-[50px] flex">
+                                <Link
+                                    className='flex align-middle items-center text-center justify-center w-full pl-[10px]'                                       
+                                    href={{ pathname: '/dashboard/delete', query: { item: licitacion.item } }}>
+                                    Eliminar licitación
+                                </Link>
+                                </div>
                                 </div>
                             </Licitacion>
                         ))}
