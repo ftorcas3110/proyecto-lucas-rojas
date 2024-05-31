@@ -442,7 +442,7 @@ export async function newLicitacion(formData) {
     const rutacarpeta = formData.get('rutacarpeta');
     const estadoini = formData.get('estadoini');
     const estadofinal = formData.get('estadofinal');
-    const fechaformalizacion = new Date(formData.get('fechaformalizacion')).toISOString();
+    const fechaformalizacion = formData.get("fechaformalizacion") ? new Date(formData.get('fechaformalizacion')).toISOString() : null;
     const observaciones = formData.get('observaciones');
     const captadapor = formData.get('captadapor');
     const estudiopor = formData.get('estudiopor');
@@ -578,7 +578,7 @@ export async function editLicitacion(formData) {
   const rutacarpeta = formData.get('rutacarpeta');
   const estadoini = formData.get('estadoini');
   const estadofinal = formData.get('estadofinal');
-  const fechaformalizacion = formData.get('fechaformalizacion');
+  const fechaformalizacion = formData.get("fechaformalizacion") ? new Date(formData.get('fechaformalizacion')).toISOString() : null;
   const observaciones = formData.get('observaciones');
   const presentadapor = formData.get('presentadapor');
   const presupuestopor = formData.get('presupuestopor');
