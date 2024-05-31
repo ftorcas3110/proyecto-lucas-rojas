@@ -431,7 +431,7 @@ export async function insertIntoGoogleSheet(data) {
 
 export async function newLicitacion(formData) {
   try {
-    const fechapresentacion = new Date(formData.get('fechapresentacion')).toISOString();
+    const fechapresentacion = formData.get("fechapresentacion") ? new Date(formData.get('fechapresentacion')).toISOString() : null;
     const cliente = formData.get('cliente').toUpperCase();
     const importe = Number(formData.get('importe'));
     const numexpediente = formData.get('numexpediente');
@@ -568,7 +568,7 @@ export async function newLicitacion(formData) {
 
 export async function editLicitacion(formData) {
   const item = Number(formData.get('item'));
-  const fechapresentacion = new Date(formData.get('fechapresentacion')).toISOString();
+  const fechapresentacion = formData.get("fechapresentacion") ? new Date(formData.get('fechapresentacion')).toISOString() : null;
   const cliente = formData.get('cliente');
   const importe = Number(formData.get('importe'));
   const numexpediente = formData.get('numexpediente');

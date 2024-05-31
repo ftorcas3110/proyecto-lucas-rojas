@@ -26,6 +26,8 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
     const [estadoFinal, setEstadoFinal] = useState(licitacion?.estadofinal || '');
     const [tipo, setTipo] = useState(licitacion?.tipo || '');
     const [importe, setImporte] = useState(Number(licitacion?.importe) || 0);
+    const [estadoini, setEstadoIni] = useState(licitacion?.estadoini || '');
+    const [estadofinal1, setEstadoFinal1] = useState(licitacion?.estadofinal || '');
 
     useEffect(() => {
         if (tipo === 'ACUERDO MARCO') {
@@ -44,6 +46,21 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
     const handleEstadoFinalChange = (event) => {
         setEstadoFinal(event.target.value);
     };
+
+    useEffect(() => {
+        if (estadoini === 'DESESTIMADA') {
+            setEstadoFinal('DESESTIMADA');
+        }
+    }, [estadoini]);
+
+    const handleEstadoIniChange = (event) => {
+        setEstadoIni(event.target.value);
+    };
+
+    const handleEstadoFinalChange1 = (event) => {
+        setEstadoFinal(event.target.value);
+    };
+
 
     return (
 
@@ -157,7 +174,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                         <label htmlFor='importe' className='mb-2 text-3xl mr-20'>Importe (sin símbolo de €)</label>
                         <input type='number' id='importe' name='importe' min='0' step={0.01}
                             defaultValue={Number(licitacion?.importe)}
-                            onChange={handleImporteChange} disabled={tipo === 'ACUERDO MARCO'}
+                            onChange={handleImporteChange} disabled={tipo.value === 'ACUERDO MARCO'}
                             className="border p-2 rounded text-center text-xl my-1"
                             pattern='/^\d*\.?\,?\d*$/' />
 
@@ -278,7 +295,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                         {disabled ? (
                             <>
                                 <label htmlFor='estadoini' className='mb-2 text-3xl mr-20'>Estado inicial</label>
-                                <select id='estadoini' name='estadoini' className="my-1 border p-2 rounded text-center text-xl">
+                                <select id='estadoini' name='estadoini' className="my-1 border p-2 rounded text-center text-xl" value={estadoini} onChange={handleEstadoIniChange}>
                                     {licitacion?.estadoini !== '' && (
                                         <option value={licitacion?.estadoini}>{licitacion?.estadoini}</option>
                                     )}
@@ -291,7 +308,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                         ) : (
                             <>
                                 <label htmlFor='estadoini' className='mb-2 text-3xl mr-20'>Estado inicial</label>
-                                <select id='estadoini' name='estadoini' className="my-1 border p-2 rounded text-center text-xl">
+                                <select id='estadoini' name='estadoini' className="my-1 border p-2 rounded text-center text-xl" onChange={handleEstadoIniChange}>
                                     {licitacion?.estadoini && (
                                         <option value={licitacion?.estadoini}>{licitacion?.estadoini}</option>
                                     )}
@@ -306,7 +323,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                         {disabled ? (
                             <>
                                 <label htmlFor='estadofinal' className='mb-2 text-3xl mr-20'>Estado final</label>
-                                <select id='estadofinal' name='estadofinal' onChange={handleEstadoFinalChange} className="my-1 border p-2 rounded text-center text-xl">
+                                <select id='estadofinal' name='estadofinal' onChange={handleEstadoFinalChange && handleEstadoFinalChange1} className="my-1 border p-2 rounded text-center text-xl" disabled={estadoini === 'DESESTIMADA' || disabled}>
                                     {licitacion?.estadofinal !== '' && (
                                         <option value={licitacion?.estadofinal}>{licitacion?.estadofinal}</option>
                                     )}
@@ -322,7 +339,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                         ) : (
                             <>
                                 <label htmlFor='estadofinal' className='mb-2 text-3xl mr-20'>Estado final</label>
-                                <select id='estadofinal' name='estadofinal' onChange={handleEstadoFinalChange} className="my-1 border p-2 rounded text-center text-xl">
+                                <select id='estadofinal' name='estadofinal' onChange={handleEstadoFinalChange && handleEstadoFinalChange1} className="my-1 border p-2 rounded text-center text-xl" value={estadoFinal} disabled={estadoini === 'DESESTIMADA' || disabled}>
                                     {licitacion?.estadofinal && (
                                         <option value={licitacion?.estadofinal}>{licitacion?.estadofinal}</option>
                                     )}
