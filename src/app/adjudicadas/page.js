@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import Link from 'next/link'
 import Licitacion from '@/components/LicitacionAsignadas'
 import { getLicitacionesAsignadas } from '@/lib/actions'
+import Buscador from "@/components/buscadorAdjudicadas"
 
 export const dynamic = 'force-dynamic'
 
@@ -13,6 +14,7 @@ export default async function Home() {
     if (!sesion) redirect('/')
     return (
         <>
+            <Buscador/>
                 {
                     licitaciones.map((licitacion) => (
                         <>
