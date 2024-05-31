@@ -31,7 +31,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
 
     return (
 
-        <form action={action}>
+        <form action={action} className='mb-[25px]'>
 
             <input type='hidden' name='item' value={licitacion?.item} />
             <input type='hidden' name='captadapor' value={licitacion?.captadapor ? licitacion.captadapor : usuario} defaultValue={licitacion?.captadapor}/>            
@@ -405,7 +405,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                     </div>
                 </div>
             </fieldset>
-            <Button title={title} onClick={onClick} />
+            <Button title={title} onClick={onClick}/>
         </form>
     )
 }
