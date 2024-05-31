@@ -1,6 +1,6 @@
 "use client"
 import Button from '@/components/button-form'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function formatForInput(dateString) {
     const date = new Date(dateString);
@@ -24,6 +24,22 @@ function formatForInput(dateString) {
 function Form({ action, title, licitacion, disabled = false, onClick, usuario }) {
 
     const [estadoFinal, setEstadoFinal] = useState(licitacion?.estadofinal || '');
+    const [tipo, setTipo] = useState(licitacion?.tipo || '');
+    const [importe, setImporte] = useState(Number(licitacion?.importe) || 0);
+
+    useEffect(() => {
+        if (tipo === 'ACUERDO MARCO') {
+            setImporte(0);
+        }
+    }, [tipo]);
+
+    const handleTipoChange = (event) => {
+        setTipo(event.target.value);
+    };
+
+    const handleImporteChange = (event) => {
+        setImporte(event.target.value);
+    };
 
     const handleEstadoFinalChange = (event) => {
         setEstadoFinal(event.target.value);
@@ -71,7 +87,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                         {disabled ? (
                             <>
                                 <label htmlFor='tipo' className='mb-2 text-3xl mr-20'>Tipo</label>
-                                <select id='tipo' name='tipo' className="border p-2 rounded text-center text-xl my-1">
+                                <select id='tipo' name='tipo' className="border p-2 rounded text-center text-xl my-1" value={tipo} onChange={handleTipoChange}>
                                     {licitacion?.tipo == '' && licitacion?.tipo == null && (
                                         <option value={licitacion?.tipo}>{licitacion?.tipo}</option>
                                     )}
@@ -85,7 +101,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                         ) : (
                             <>
                                 <label htmlFor='tipo' className='mb-2 text-3xl mr-20'>Tipo</label>
-                                <select id='tipo' name='tipo' className="border p-2 rounded text-center text-xl my-1">
+                                <select id='tipo' name='tipo' className="border p-2 rounded text-center text-xl my-1" value={tipo} onChange={handleTipoChange}>
                                     {licitacion?.tipo && (
                                         <option value={licitacion?.tipo}>{licitacion?.tipo}</option>
                                     )}
@@ -141,6 +157,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                         <label htmlFor='importe' className='mb-2 text-3xl mr-20'>Importe (sin símbolo de €)</label>
                         <input type='number' id='importe' name='importe' min='0' step={0.01}
                             defaultValue={Number(licitacion?.importe)}
+                            onChange={handleImporteChange} disabled={tipo === 'ACUERDO MARCO'}
                             className="border p-2 rounded text-center text-xl my-1"
                             pattern='/^\d*\.?\,?\d*$/' />
 
@@ -265,8 +282,8 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                                     {licitacion?.estadoini !== '' && (
                                         <option value={licitacion?.estadoini}>{licitacion?.estadoini}</option>
                                     )}
-                                    <option value="PRESENTADA">Presentada</option>
                                     <option value="EN ESTUDIO">En estudio</option>
+                                    <option value="PRESENTADA">Presentada</option>
                                     <option value="ANULADA">Anulada</option>
                                     <option value="DESESTIMADA">Desestimada</option>
                                 </select>
@@ -278,8 +295,8 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                                     {licitacion?.estadoini && (
                                         <option value={licitacion?.estadoini}>{licitacion?.estadoini}</option>
                                     )}
-                                    <option value="PRESENTADA">Presentada</option>
                                     <option value="EN ESTUDIO">En estudio</option>
+                                    <option value="PRESENTADA">Presentada</option>
                                     <option value="ANULADA">Anulada</option>
                                     <option value="DESESTIMADA">Desestimada</option>
                                 </select>
@@ -293,6 +310,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                                     {licitacion?.estadofinal !== '' && (
                                         <option value={licitacion?.estadofinal}>{licitacion?.estadofinal}</option>
                                     )}
+                                    <option value="">En blanco</option>
                                     <option value="EN ESPERA RESOLUCIÓN">En espera resolución</option>
                                     <option value="ADJUDICADA">Adjudicada</option>
                                     <option value="ANULADA">Anulada</option>
@@ -308,6 +326,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                                     {licitacion?.estadofinal && (
                                         <option value={licitacion?.estadofinal}>{licitacion?.estadofinal}</option>
                                     )}
+                                    <option value="">En blanco</option>
                                     <option value="EN ESPERA RESOLUCIÓN">En espera resolución</option>
                                     <option value="ADJUDICADA">Adjudicada</option>
                                     <option value="ANULADA">Anulada</option>

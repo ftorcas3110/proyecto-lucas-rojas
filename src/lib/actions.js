@@ -432,7 +432,7 @@ export async function insertIntoGoogleSheet(data) {
 export async function newLicitacion(formData) {
   try {
     const fechapresentacion = new Date(formData.get('fechapresentacion')).toISOString();
-    const cliente = formData.get('cliente');
+    const cliente = formData.get('cliente').toUpperCase();
     const importe = Number(formData.get('importe'));
     const numexpediente = formData.get('numexpediente');
     const titulo = formData.get('titulo');
