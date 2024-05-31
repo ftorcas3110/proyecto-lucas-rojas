@@ -50,36 +50,6 @@ function Licitacion({ children, licitacion }) {
         }
     }
 
-
-
-    useEffect(() => {
-        // Verificación de navegador
-        const isChrome = navigator.userAgent.indexOf("Chrome") !== -1;
-
-        // Función para cambiar el enlace después de medio segundo
-        const cambiarEnlaces = () => {
-            if (isChrome) {
-                // Obtener todos los enlaces que contienen "LocalExplorer:"
-                const localExplorerLinks = document.querySelectorAll('a[href^="LocalExplorer:"]');
-
-                // Iterar sobre los enlaces y cambiar el href
-                localExplorerLinks.forEach(link => {
-                    // Obtener el valor actual del href
-                    const currentHref = link.getAttribute('href');
-                    // Reemplazar "LocalExplorer:" por "file:///"
-                    const newHref = currentHref.replace("LocalExplorer:", "file:///");
-                    // Establecer el nuevo valor del href después de medio segundo
-                    setTimeout(() => {
-                        link.setAttribute('href', newHref);
-                    }, 1000);
-                });
-            }
-        };
-
-        // Ejecutar la función después de medio segundo
-        setTimeout(cambiarEnlaces, 1000);
-    }, []); // Ejecutar una vez después del montaje del componente
-
     const diaformalizacion = licitacion?.fechaformalizacion?.getDate()
     const mesformalizacion = licitacion?.fechaformalizacion?.getMonth() + 1
     const anyoformalizacion = licitacion?.fechaformalizacion?.getFullYear()
