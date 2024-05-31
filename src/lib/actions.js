@@ -81,7 +81,12 @@ export async function logout() {
 export async function getLicitaciones() {
   try {
     const licitaciones = await prisma.licitacion.findMany({
-      orderBy: [{ item: "desc" }]
+      orderBy: [{
+        fechapresentacion: {
+          sort: "desc",
+          nulls: "last"
+        }
+      }]
     })
     return licitaciones;
   } catch (error) {
@@ -103,7 +108,12 @@ export async function getLicitacionesBuscador(formData) {
 
       // Adjust the Prisma query to properly filter datetime fields
       licitaciones = await prisma.licitacion.findMany({
-        orderBy: [{ item: "desc" }],
+        orderBy: [{
+          fechapresentacion: {
+            sort: 'desc',
+            nulls: 'last'
+          }
+        }],
         where: {
           [campoABuscar]: {
             // Compare only the date part
@@ -115,7 +125,12 @@ export async function getLicitacionesBuscador(formData) {
     } else if (campoABuscar === "importe") {
       // For "importe" field, use equals operator
       licitaciones = await prisma.licitacion.findMany({
-        orderBy: [{ item: "desc" }],
+        orderBy: [{
+          fechapresentacion: {
+            sort: 'desc',
+            nulls: 'last'
+          }
+        }],
         where: {
           [campoABuscar]: {
             equals: parseFloat(query), // Parse query to float for comparison
@@ -125,7 +140,12 @@ export async function getLicitacionesBuscador(formData) {
     } else {
       // For non-datetime fields, use contains operator
       licitaciones = await prisma.licitacion.findMany({
-        orderBy: [{ item: "desc" }],
+        orderBy: [{
+          fechapresentacion: {
+            sort: 'desc',
+            nulls: 'last'
+          }
+        }],
         where: {
           [campoABuscar]: {
             contains: query.toLowerCase(),
@@ -155,7 +175,12 @@ export async function getLicitacionesAdjudicadasBuscador(formData) {
 
       // Adjust the Prisma query to properly filter datetime fields
       licitaciones = await prisma.licitacion.findMany({
-        orderBy: [{ item: "desc" }],
+        orderBy: [{
+          fechapresentacion: {
+            sort: 'desc',
+            nulls: 'last'
+          }
+        }],
         where: {
           AND: [
             {
@@ -176,7 +201,12 @@ export async function getLicitacionesAdjudicadasBuscador(formData) {
     } else if (campoABuscar === "importe") {
       // For "importe" field, use equals operator
       licitaciones = await prisma.licitacion.findMany({
-        orderBy: [{ item: "desc" }],
+        orderBy: [{
+          fechapresentacion: {
+            sort: 'desc',
+            nulls: 'last'
+          }
+        }],
         where: {
           AND: [{
             [campoABuscar]: {
@@ -191,18 +221,23 @@ export async function getLicitacionesAdjudicadasBuscador(formData) {
     } else {
       // For non-datetime fields, use contains operator
       licitaciones = await prisma.licitacion.findMany({
-        orderBy: [{ item: "desc" }],
+        orderBy: [{
+          fechapresentacion: {
+            sort: 'desc',
+            nulls: 'last'
+          }
+        }],
         where: {
           AND: [
             {
-            [campoABuscar]: {
-              contains: query.toLowerCase(),
-              mode: "insensitive"
-            },
-            estadofinal: {
-              equals: "ADJUDICADA",
-            },
-        }],
+              [campoABuscar]: {
+                contains: query.toLowerCase(),
+                mode: "insensitive"
+              },
+              estadofinal: {
+                equals: "ADJUDICADA",
+              },
+            }],
         },
       });
     }
@@ -219,12 +254,17 @@ export async function getLicitacionesAsignadas() {
   const session = await auth();
   try {
     const licitaciones = await prisma.licitacion.findMany({
-      orderBy: [{ item: "desc" }],
+      orderBy: [{
+        fechapresentacion: {
+          sort: 'desc',
+          nulls: 'last'
+        }
+      }],
       where: {
         AND: [
           {
             estadofinal: {
-                equals: "ADJUDICADA", 
+              equals: "ADJUDICADA",
             },
           },
         ],
@@ -232,7 +272,7 @@ export async function getLicitacionesAsignadas() {
     })
     return licitaciones;
   } catch (error) {
-    console.log(error);  
+    console.log(error);
     return null;
   }
 }
@@ -241,7 +281,12 @@ export async function getLicitacionesEnPresupuesto() {
   const session = await auth();
   try {
     const licitaciones = await prisma.licitacion.findMany({
-      orderBy: [{ item: "desc" }],
+      orderBy: [{
+        fechapresentacion: {
+          sort: 'desc',
+          nulls: 'last'
+        }
+      }],
       where: {
         presupuestopor: {
           endsWith: session.user.name,
@@ -300,10 +345,10 @@ async function misLicitacionesGoogleSheet(item, presupuestoPor) {
 
     // Create authentication client
     const auth = new google.auth.JWT(
-  process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
-  null,
-  process.env.GOOGLE_SHEETS_PRIVATE_KEY.replace(/\\n/g, '\n'),
-  ['https://www.googleapis.com/auth/spreadsheets']
+      process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
+      null,
+      process.env.GOOGLE_SHEETS_PRIVATE_KEY.replace(/\\n/g, '\n'),
+      ['https://www.googleapis.com/auth/spreadsheets']
     );
 
     // Initialize Google Sheets API
@@ -386,7 +431,7 @@ export async function insertIntoGoogleSheet(data) {
 
 export async function newLicitacion(formData) {
   try {
-    const fechapresentacion = new Date(formData.get('fechapresentacion')).toISOString(); 
+    const fechapresentacion = new Date(formData.get('fechapresentacion')).toISOString();
     const cliente = formData.get('cliente');
     const importe = Number(formData.get('importe'));
     const numexpediente = formData.get('numexpediente');
@@ -408,7 +453,7 @@ export async function newLicitacion(formData) {
     const prorrogas = formData.get('prorrogas');
     const prorroga1 = formData.get('prorroga1') ? new Date(formData.get('prorroga1')).toISOString() : null;
     const prorroga2 = formData.get('prorroga2') ? new Date(formData.get('prorroga2')).toISOString() : null;
-    const prorroga3 = formData.get('prorroga3') ? new Date(formData.get('prorroga3')).toISOString() : null;    
+    const prorroga3 = formData.get('prorroga3') ? new Date(formData.get('prorroga3')).toISOString() : null;
     const fianza = formData.get('fianza') ? Number(formData.get('fianza')) : null;
     const garantia = formData.get('garantia');
     const responsable = formData.get('responsable');
@@ -472,7 +517,7 @@ export async function newLicitacion(formData) {
         responsable: true
       }
     });
-    {console.log("item:" +licitacion.item)}
+    { console.log("item:" + licitacion.item) }
     await insertIntoGoogleSheet({
       item: licitacion.item,
       fechapresentacion: licitacion.fechapresentacion,
@@ -490,7 +535,7 @@ export async function newLicitacion(formData) {
       duracioncontratoanyo: licitacion.duracioncontratoanyo,
       observaciones: licitacion.observaciones,
       captadapor: licitacion.captadapor,
-      estudiopor: licitacion.estudiopor,      
+      estudiopor: licitacion.estudiopor,
       rutacarpeta: licitacion.rutacarpeta,
       importeanual: licitacion.importeanual,
       fechafincontrato: licitacion.fechafincontrato,
@@ -498,11 +543,11 @@ export async function newLicitacion(formData) {
       prorroga1: licitacion.prorroga1,
       prorroga2: licitacion.prorroga2,
       prorroga3: licitacion.prorroga3,
-      fianza:  licitacion.fianza,
+      fianza: licitacion.fianza,
       garantia: licitacion.garantia,
       responsable: licitacion.responsable
     });
-    
+
     await newEventoLicitacion({
       fechapresentacion,
       titulo,
@@ -545,7 +590,7 @@ export async function editLicitacion(formData) {
   const prorrogas = formData.get('prorrogas');
   const prorroga1 = formData.get('prorroga1') ? new Date(formData.get('prorroga1')).toISOString() : null;
   const prorroga2 = formData.get('prorroga2') ? new Date(formData.get('prorroga2')).toISOString() : null;
-  const prorroga3 = formData.get('prorroga3') ? new Date(formData.get('prorroga3')).toISOString() : null;    
+  const prorroga3 = formData.get('prorroga3') ? new Date(formData.get('prorroga3')).toISOString() : null;
   const fianza = formData.get('fianza') ? Number(formData.get('fianza')) : null;
   const garantia = formData.get('garantia');
   const responsable = formData.get('responsable');
@@ -613,9 +658,9 @@ export async function editLicitacion(formData) {
       prorroga3,
       fianza,
       garantia,
-      responsable  
+      responsable
     });
-    
+
     await editEventoLicitacion({
       fechapresentacion,
       titulo,
@@ -641,10 +686,10 @@ async function updateGoogleSheet(item, newData) {
 
     // Create authentication client
     const auth = new google.auth.JWT(
-  process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
-  null,
-  process.env.GOOGLE_SHEETS_PRIVATE_KEY.replace(/\\n/g, '\n'),
-  ['https://www.googleapis.com/auth/spreadsheets']
+      process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
+      null,
+      process.env.GOOGLE_SHEETS_PRIVATE_KEY.replace(/\\n/g, '\n'),
+      ['https://www.googleapis.com/auth/spreadsheets']
     );
 
     // Initialize Google Sheets API
@@ -655,45 +700,45 @@ async function updateGoogleSheet(item, newData) {
 
     // Find the row number corresponding to the specified item
     // Find the row number corresponding to the specified item
-const range = 'Sheet1!A:AA'; // Adjust as per your spreadsheet structure
-const response = await sheets.spreadsheets.values.get({
-  spreadsheetId,
-  range,
-});
-const rows = response.data.values;
-const rowToUpdate = rows.findIndex(row => Number(row[0]) === item) + 1;
+    const range = 'Sheet1!A:AA'; // Adjust as per your spreadsheet structure
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range,
+    });
+    const rows = response.data.values;
+    const rowToUpdate = rows.findIndex(row => Number(row[0]) === item) + 1;
 
-// Prepare the values to be updated in the row
-const values = [
-  item, // Remove leading and trailing ' characters
-  newData.fechapresentacion,
-  newData.cliente,
-  newData.titulo,
-  newData.numexpediente,
-  newData.tipo,
-  newData.tipocontrato,
-  newData.importe.toString(),
-  newData.fechaformalizacion,
-  newData.presupuestopor,
-  newData.presentadapor,
-  newData.estadoini,
-  newData.estadofinal,
-  newData.duracioncontratoanyo.toString(),
-  newData.observaciones,
-  newData.captadapor,
-  newData.estudiopor,  
-  newData.rutacarpeta,
-  newData.importeanual,
-  newData.fechafincontrato,
-  newData.prorrogas,
-  newData.prorroga1,
-  newData.prorroga2,
-  newData.prorroga3,
-  newData.fianza !== null ? newData.fianza.toString() : newData.fianza,
-  newData.garantia,
-  newData.responsable
-];
- console.log(values);
+    // Prepare the values to be updated in the row
+    const values = [
+      item, // Remove leading and trailing ' characters
+      newData.fechapresentacion,
+      newData.cliente,
+      newData.titulo,
+      newData.numexpediente,
+      newData.tipo,
+      newData.tipocontrato,
+      newData.importe.toString(),
+      newData.fechaformalizacion,
+      newData.presupuestopor,
+      newData.presentadapor,
+      newData.estadoini,
+      newData.estadofinal,
+      newData.duracioncontratoanyo.toString(),
+      newData.observaciones,
+      newData.captadapor,
+      newData.estudiopor,
+      newData.rutacarpeta,
+      newData.importeanual,
+      newData.fechafincontrato,
+      newData.prorrogas,
+      newData.prorroga1,
+      newData.prorroga2,
+      newData.prorroga3,
+      newData.fianza !== null ? newData.fianza.toString() : newData.fianza,
+      newData.garantia,
+      newData.responsable
+    ];
+    console.log(values);
 
     // Update the row in the spreadsheet
     await sheets.spreadsheets.values.update({
@@ -724,7 +769,7 @@ export async function deleteLicitacion(formData) {
       },
     })
     await deleteFromGoogleSheet(item);
-    await deleteEventoLicitacion({item});
+    await deleteEventoLicitacion({ item });
     revalidatePath('/dashboard')
   } catch (error) {
     console.log(error);
@@ -739,10 +784,10 @@ async function deleteFromGoogleSheet(itemId) {
 
     // Create authentication client
     const auth = new google.auth.JWT(
-  process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
-  null,
-  process.env.GOOGLE_SHEETS_PRIVATE_KEY.replace(/\\n/g, '\n'),
-  ['https://www.googleapis.com/auth/spreadsheets']
+      process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
+      null,
+      process.env.GOOGLE_SHEETS_PRIVATE_KEY.replace(/\\n/g, '\n'),
+      ['https://www.googleapis.com/auth/spreadsheets']
     );
 
     // Initialize Google Sheets API
@@ -785,16 +830,16 @@ async function deleteFromGoogleSheet(itemId) {
 }
 
 export async function newEvento(formData) {
-  
+
   try {
     const creador = formData.get('creador');
-    const start = formData.get('inicio'); 
-    console.log("inicio: "+start);
+    const start = formData.get('inicio');
+    console.log("inicio: " + start);
     const end = formData.get('fin');
-    console.log("fin: "+end);
+    console.log("fin: " + end);
     const title = formData.get('descripcion');
-    const categoria =formData.get('categoria');
-  
+    const categoria = formData.get('categoria');
+
     const evento = await prisma.evento.create({
       data: {
         creador,
@@ -821,17 +866,17 @@ export async function newEvento(formData) {
   }
 }
 
-export async function newEventoLicitacion({     
+export async function newEventoLicitacion({
   fechapresentacion,
   titulo,
   tipo,
   cliente,
   estadoini,
   captadapor,
-  item}) {
+  item }) {
   try {
     const creador = captadapor;
-    const start = new Date(fechapresentacion).toISOString(); 
+    const start = new Date(fechapresentacion).toISOString();
     const end = new Date(fechapresentacion).toISOString();
     const title = `${cliente} ${titulo} ${tipo}`;
     const categoria = estadoini;
@@ -861,18 +906,18 @@ export async function newEventoLicitacion({
   }
 }
 
-export async function editEventoLicitacion({      
+export async function editEventoLicitacion({
   fechapresentacion,
   titulo,
   tipo,
   cliente,
   estadoini,
   captadapor,
-  item}) {
+  item }) {
   try {
     const idLicitacion = item;
     const creador = captadapor;
-    const start = new Date(fechapresentacion).toISOString(); 
+    const start = new Date(fechapresentacion).toISOString();
     const end = new Date(fechapresentacion).toISOString();
     const title = `${cliente} ${titulo} ${tipo}`;
     const categoria = estadoini;
@@ -919,7 +964,7 @@ export async function getEventos() {
 export async function editEvento(formData) {
   const id = Number(formData.get('id'));
   const creador = formData.get('creador');
-  const start = new Date(formData.get('inicio')); 
+  const start = new Date(formData.get('inicio'));
   const end = new Date(formData.get('fin'));
   const title = formData.get('descripcion');
   const categoria = formData.get('categoria')
