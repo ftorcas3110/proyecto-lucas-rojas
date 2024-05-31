@@ -1,54 +1,7 @@
 "use client"
 import Link from "next/link"
-import { useEffect } from 'react';
 
 function Licitacion({ children, licitacion }) {
-
-    function estadoInicialLicitacion({ licitacion }) {
-        switch (licitacion.estadoini) {
-            case "PRESENTADA":
-                return (<span className="rounded-xl bg-[#83f28f] text-black border-2 p-1">{licitacion.estadoini}</span>)
-
-            case "DESESTIMADA":
-                return (<span className="rounded-xl bg-[#d3d3d3] text-black border-2 p-1">{licitacion.estadoini}</span>)
-
-
-            case "EN ESTUDIO":
-                return (<span className="rounded-xl bg-[#ADD8E6] text-black border-2 p-1">{licitacion.estadoini}</span>)
-
-
-            case "ANULADA":
-                return (<span className="rounded-xl bg-[#ff474c] text-white border-2 p-1">{licitacion.estadoini}</span>)
-
-            default:
-                return null; // Añadido para manejar el caso por defecto
-        }
-    }
-
-    function estadoFinalLicitacion({ licitacion }) {
-        switch (licitacion.estadofinal) {
-            case "ADJUDICADA":
-                return (<span className="rounded-xl bg-[#83f28f] text-black border-2 p-1">{licitacion.estadofinal}</span>)
-
-            case "ANULADA":
-                return (<span className="rounded-xl bg-[#ff474c] text-white border-2 p-1">{licitacion.estadofinal}</span>)
-
-            case "DESESTIMADA":
-                return (<span className="rounded-xl bg-[#d3d3d3] text-black border-2 p-1">{licitacion.estadofinal}</span>)
-
-            case "DESIERTA":
-                return (<span className="rounded-xl bg-[#cab53f] text-black border-2 p-1">{licitacion.estadofinal}</span>)
-
-            case "EN ESPERA RESOLUCIÓN":
-                return (<span className="rounded-xl bg-[#ADD8E6] text-black border-2 p-1">{licitacion.estadofinal}</span>)
-
-            case "NO ADJUDICADA":
-                return (<span className="rounded-xl bg-[#ff474c] text-white border-2 p-1">{licitacion.estadofinal}</span>)
-
-            default:
-                return null; // Añadido para manejar el caso por defecto
-        }
-    }
 
     const diaformalizacion = licitacion?.fechaformalizacion?.getDate()
     const mesformalizacion = licitacion?.fechaformalizacion?.getMonth() + 1
@@ -90,7 +43,7 @@ function Licitacion({ children, licitacion }) {
                         Ruta de carpeta no disponible
                     </div>
                 ) : (
-                    <Link href={rutacarpeta} target="_blank" className="flex align-right items-right text-center justify-right">
+                    <Link href={rutacarpeta} target="_self" className="flex align-right items-right text-center justify-right">
                         <div className="border border-black rounded bg-gray-300 cursor-pointer transition duration-500 hover:bg-blue-500 w-[100px] h-[50px] flex">
                             Abrir carpeta
                         </div>
