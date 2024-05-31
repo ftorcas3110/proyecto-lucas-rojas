@@ -43,7 +43,7 @@ function Licitacion({ children, licitacion }) {
                         Ruta de carpeta no disponible
                     </div>
                 ) : (
-                    <Link href={rutacarpeta} target="_self" className="flex align-right items-right text-center justify-right">
+                    <Link href={rutacarpeta} target="_blank" className="flex align-right items-right text-center justify-right">
                         <div className="border border-black rounded bg-gray-300 cursor-pointer transition duration-500 hover:bg-blue-500 w-[100px] h-[50px] flex">
                             Abrir carpeta
                         </div>
