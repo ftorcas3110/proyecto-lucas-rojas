@@ -28,6 +28,22 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
     const [importe, setImporte] = useState(Number(licitacion?.importe) || 0);
     const [estadoini, setEstadoIni] = useState(licitacion?.estadoini || '');
     const [estadofinal1, setEstadoFinal1] = useState(licitacion?.estadofinal || '');
+    const [presentadapor, setPresentadapor] = useState(licitacion?.presentadapor || "");
+    const [estadoini1, setEstadoini1] = useState(licitacion?.estadoini || "");
+
+    useEffect(() => {
+        if (presentadapor !== "") {
+          setEstadoini1("PRESENTADA");
+        }
+      }, [presentadapor]);
+    
+      const handlePresentadaporChange = (e) => {
+        setPresentadapor(e.target.value);
+      };
+    
+      const handleEstadoIniChange1 = (e) => {
+        setEstadoIni(e.target.value);
+      };
 
     useEffect(() => {
         if (tipo === 'ACUERDO MARCO') {
@@ -89,7 +105,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                                 <input type='hidden' id='fechapresentacion' name='fechapresentacion'
                                     value={licitacion?.fechapresentacion} className="border p-2 rounded text-center text-xl my-1" disabled />
                                 <input type='text' id='fechapresentacionmostrada' name='fechapresentacionmostrada'
-                                    value={`${licitacion?.fechapresentacion.getDay()}/${licitacion?.fechapresentacion.getMonth()}/${licitacion?.fechapresentacion.getFullYear()} ${licitacion?.fechapresentacion.getHours()}:${licitacion.fechapresentacion.getMinutes()}`} className="border p-2 rounded text-center text-xl my-1" disabled />
+                                    value={`${licitacion?.fechapresentacion?.getDay()}/${licitacion?.fechapresentacion?.getMonth()}/${licitacion?.fechapresentacion?.getFullYear()} ${licitacion?.fechapresentacion?.getHours()}:${licitacion.fechapresentacion?.getMinutes()}`} className="border p-2 rounded text-center text-xl my-1" disabled />
                                 <select id='fechapresentacion' name='fechapresentacion' className="border p-2 rounded text-center text-xl my-1" hidden>
                                     <option value={licitacion?.fechapresentacion}></option>
                                 </select>
@@ -186,10 +202,10 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                                         <option value={licitacion?.estudiopor}>{licitacion?.estudiopor}</option>
                                     )}
                                     <option value="">En blanco</option>
+                                    <option value="PILAR MARÍN">Pilar Marín</option>
                                     <option value="JOSÉ M QUERO">José M Quero</option>
                                     <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
                                     <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
-                                    <option value="MARIAM SIERRA">Mariam Sierra</option>
                                     <option value="MIGUEL JURADO">Miguel Jurado</option>
                                     <option value="SANTIAGO MONTEJO">Santiago Montejo</option>
                                     <option value="SARA REYES">Sara Reyes</option>
@@ -204,10 +220,10 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                                         <option value={licitacion?.estudiopor}>{licitacion?.estudiopor}</option>
                                     )}
                                     <option value="">En blanco</option>
+                                    <option value="PILAR MARÍN">Pilar Marín</option>
                                     <option value="JOSÉ M QUERO">José M Quero</option>
                                     <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
                                     <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
-                                    <option value="MARIAM SIERRA">Mariam Sierra</option>
                                     <option value="MIGUEL JURADO">Miguel Jurado</option>
                                     <option value="SANTIAGO MONTEJO">Santiago Montejo</option>
                                     <option value="SARA REYES">Sara Reyes</option>
@@ -224,10 +240,10 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                                         <option value={licitacion?.presupuestopor}>{licitacion?.presupuestopor}</option>
                                     )}
                                     <option value="">En blanco</option>
+                                    <option value="PILAR MARÍN">Pilar Marín</option>
                                     <option value="JOSÉ M QUERO">José M Quero</option>
                                     <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
                                     <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
-                                    <option value="MARIAM SIERRA">Mariam Sierra</option>
                                     <option value="MIGUEL JURADO">Miguel Jurado</option>
                                     <option value="SANTIAGO MONTEJO">Santiago Montejo</option>
                                     <option value="SARA REYES">Sara Reyes</option>
@@ -242,10 +258,10 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                                         <option value={licitacion?.presupuestopor}>{licitacion?.presupuestopor}</option>
                                     )}
                                     <option value="">En blanco</option>
+                                    <option value="PILAR MARÍN">Pilar Marín</option>
                                     <option value="JOSÉ M QUERO">José M Quero</option>
                                     <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
                                     <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
-                                    <option value="MARIAM SIERRA">Mariam Sierra</option>
                                     <option value="MIGUEL JURADO">Miguel Jurado</option>
                                     <option value="SANTIAGO MONTEJO">Santiago Montejo</option>
                                     <option value="SARA REYES">Sara Reyes</option>
@@ -257,15 +273,15 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                         {!licitacion?.presentadapor == '' || disabled ? (
                             <>
                                 <label htmlFor='presentadapor' className='mb-2 text-3xl mr-20'>Presentada por</label>
-                                <select id='presentadapor' name='presentadapor' className="border p-2 rounded text-center text-xl my-1">
+                                <select id='presentadapor' name='presentadapor' onChange={handlePresentadaporChange} className="border p-2 rounded text-center text-xl my-1">
                                     {licitacion?.presentadapor !== '' && (
                                         <option value={licitacion?.presentadapor}>{licitacion?.presentadapor}</option>
                                     )}
                                     <option value="">En blanco</option>
+                                    <option value="PILAR MARÍN">Pilar Marín</option>
                                     <option value="JOSÉ M QUERO">José M Quero</option>
                                     <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
                                     <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
-                                    <option value="MARIAM SIERRA">Mariam Sierra</option>
                                     <option value="MIGUEL JURADO">Miguel Jurado</option>
                                     <option value="SANTIAGO MONTEJO">Santiago Montejo</option>
                                     <option value="SARA REYES">Sara Reyes</option>
@@ -275,15 +291,15 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                         ) : (
                             <>
                                 <label htmlFor='presentadapor' className='mb-2 text-3xl mr-20'>Presentada por</label>
-                                <select id='presentadapor' name='presentadapor' className="border p-2 rounded text-center text-xl my-1">
+                                <select id='presentadapor' name='presentadapor' onChange={handlePresentadaporChange} className="border p-2 rounded text-center text-xl my-1">
                                     {licitacion?.presentadapor && (
                                         <option value={licitacion?.presentadapor}>{licitacion?.presentadapor}</option>
                                     )}
                                     <option value="">En blanco</option>
+                                    <option value="PILAR MARÍN">Pilar Marín</option>
                                     <option value="JOSÉ M QUERO">José M Quero</option>
                                     <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
                                     <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
-                                    <option value="MARIAM SIERRA">Mariam Sierra</option>
                                     <option value="MIGUEL JURADO">Miguel Jurado</option>
                                     <option value="SANTIAGO MONTEJO">Santiago Montejo</option>
                                     <option value="SARA REYES">Sara Reyes</option>
@@ -295,7 +311,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                         {disabled ? (
                             <>
                                 <label htmlFor='estadoini' className='mb-2 text-3xl mr-20'>Estado inicial</label>
-                                <select id='estadoini' name='estadoini' className="my-1 border p-2 rounded text-center text-xl" value={estadoini} onChange={handleEstadoIniChange}>
+                                <select id='estadoini' name='estadoini' className="my-1 border p-2 rounded text-center text-xl" value={estadoini1} onChange={handleEstadoIniChange && handleEstadoIniChange1}>
                                     {licitacion?.estadoini !== '' && (
                                         <option value={licitacion?.estadoini}>{licitacion?.estadoini}</option>
                                     )}
@@ -308,7 +324,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                         ) : (
                             <>
                                 <label htmlFor='estadoini' className='mb-2 text-3xl mr-20'>Estado inicial</label>
-                                <select id='estadoini' name='estadoini' className="my-1 border p-2 rounded text-center text-xl" onChange={handleEstadoIniChange}>
+                                <select id='estadoini' name='estadoini' className="my-1 border p-2 rounded text-center text-xl" value={estadoini1} onChange={handleEstadoIniChange && handleEstadoIniChange1}>
                                     {licitacion?.estadoini && (
                                         <option value={licitacion?.estadoini}>{licitacion?.estadoini}</option>
                                     )}
@@ -380,7 +396,6 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                                 <option value="JOSÉ M QUERO">José M Quero</option>
                                 <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
                                 <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
-                                <option value="MARIAM SIERRA">Mariam Sierra</option>
                                 <option value="MIGUEL JURADO">Miguel Jurado</option>
                                 <option value="SANTIAGO MONTEJO">Santiago Montejo</option>
                                 <option value="SARA REYES">Sara Reyes</option>

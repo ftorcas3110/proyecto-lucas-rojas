@@ -68,7 +68,7 @@ async function page() {
 
         <div className="col-span-2">
           <div className="text-center container items-center border-2 border-black relative p-2 rounded-lg shadow-lg text-black mt-4 w-[80%] mx-auto h-auto pb-5">
-            <div className="h-full w-[80%] mx-auto">
+            <div className="h-full w-[90%] mx-auto">
               <GraficoPresupuestoTabla/>
             </div>
           </div>
@@ -76,7 +76,7 @@ async function page() {
 
         <div className="col-span-2">
           <div className="text-center container items-center border-2 border-black relative p-2 rounded-lg shadow-lg text-black mt-4 w-[80%] mx-auto h-auto pb-5 mb-[4vh]">
-            <div className="h-full w-[80%] mx-auto">
+            <div className="h-full w-[90%] mx-auto">
               <GraficoPresentadasTabla/>
             </div>
           </div>

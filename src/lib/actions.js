@@ -448,7 +448,7 @@ export async function newLicitacion(formData) {
     const estudiopor = formData.get('estudiopor');
     const presupuestopor = formData.get('presupuestopor');
     const presentadapor = formData.get('presentadapor');
-    const importeanual = formData.get('importeanual');
+    const importeanual = Number(formData.get('importeanual'));
     const fechafincontrato = formData.get('fechafincontrato') ? new Date(formData.get('fechafincontrato')).toISOString() : null;
     const prorrogas = formData.get('prorrogas');
     const prorroga1 = formData.get('prorroga1') ? new Date(formData.get('prorroga1')).toISOString() : null;
@@ -585,7 +585,7 @@ export async function editLicitacion(formData) {
   const estudiopor = formData.get('estudiopor');
   const titulo = formData.get('titulo');
   const captadapor = formData.get('captadapor');
-  const importeanual = formData.get('importeanual');
+  const importeanual = Number(formData.get('importeanual'));
   const fechafincontrato = formData.get('fechafincontrato') ? new Date(formData.get('fechafincontrato')).toISOString() : null;
   const prorrogas = formData.get('prorrogas');
   const prorroga1 = formData.get('prorroga1') ? new Date(formData.get('prorroga1')).toISOString() : null;
