@@ -1,7 +1,4 @@
 "use client"
-import Link from "next/link"
-import { useEffect } from 'react';
-
 function Licitacion({ children, licitacion }) {
 
     function estadoInicialLicitacion({ licitacion }) {

@@ -557,7 +557,7 @@ export async function newLicitacion(formData) {
       captadapor,
       item: licitacion.item
     })
-
+    console.log("Creada licitacion "+ licitacion.item);
     revalidatePath('/dashboard');
     redirect('/dashboard'); // Redirect after successful creation
   } catch (error) {
@@ -670,7 +670,7 @@ export async function editLicitacion(formData) {
       captadapor,
       item
     })
-
+    console.log("Editada licitacion "+item);
     revalidatePath('/dashboard');
     redirect('/dashboard');
   } catch (error) {
@@ -823,6 +823,7 @@ async function deleteFromGoogleSheet(itemId) {
         ],
       },
     });
+    console.log("Eliminada licitacion "+item);
   } catch (error) {
     console.error('Error deleting from Google Sheet:', error);
     throw error;

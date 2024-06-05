@@ -12,7 +12,7 @@ export default async function HomePage(){
   const events = await getEventos();
   // console.log(events);
   return (
-    <div className='mb-[4vh]'>
+    <div className='mb-[4vh] mt-[150px]'>
       <Calendario events={events} usuario={sesion?.user?.name}/>
     </div>
   );

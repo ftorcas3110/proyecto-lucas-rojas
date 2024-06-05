@@ -1,14 +1,12 @@
-import { auth } from "@/auth"
 
 async function layoutLicitaciones({ children }) {
-    const session = await auth()
     return (
-        <section>
-            <h1 className="text-4xl">Licitaciones en presupuesto por {session.user?.name}</h1>
-            <hr />
-            {children}
-        </section>
-    )
+        <section className="mt-[150px]">
+      <div className="w-[80%] mx-auto">
+        {children}
+      </div>
+    </section>
+  );
 }
 
 export default layoutLicitaciones

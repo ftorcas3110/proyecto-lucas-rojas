@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 
-const Graficos = () => {
+const Graficos = ({ valor }) => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(0);
@@ -10,6 +10,52 @@ const Graficos = () => {
   const [endMonth, setEndMonth] = useState(0);
   const [startYear, setStartYear] = useState(0);
   const [endYear, setEndYear] = useState(0);
+  const [isSelectOpen1, setIsSelectOpen1] = useState(false);
+  const [isSelectOpen2, setIsSelectOpen2] = useState(false);
+  const [isSelectOpen3, setIsSelectOpen3] = useState(false);
+  const [isSelectOpen4, setIsSelectOpen4] = useState(false);
+
+  const handleSelectFocus1 = () => {
+    setIsSelectOpen1(true);
+  };
+
+  const handleSelectBlur1 = () => {
+    setIsSelectOpen1(false);
+  };
+  
+  const handleSelectFocus2 = () => {
+    setIsSelectOpen2(true);
+  };
+
+  const handleSelectBlur2 = () => {
+    setIsSelectOpen2(false);
+  };
+
+  const handleSelectFocus3 = () => {
+    setIsSelectOpen3(true);
+  };
+
+  const handleSelectBlur3 = () => {
+    setIsSelectOpen3(false);
+  };
+  
+  const handleSelectFocus4 = () => {
+    setIsSelectOpen4(true);
+  };
+
+  const handleSelectBlur4 = () => {
+    setIsSelectOpen4(false);
+  };
+  
+  let texto;
+
+  if (valor === 9) {
+    texto = 'Presupuestos';
+  } else if (valor === 10) {
+    texto = 'Presentadas';
+  } else {
+    texto = 'Valor no reconocido';
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,79 +118,110 @@ const Graficos = () => {
   const countOccurrences = () => {
     const occurrences = {};
     let totalSum = 0;
+    let totalImporte = 0;
     filteredData.forEach(item => {
-      const columnKData = item[9];
+      const columnKData = item[valor];
       const valueM = item[12];
+      const importe = parseFloat(item[7]) || 0;
       if (columnKData && valueM) {
         if (!occurrences[columnKData]) {
-          occurrences[columnKData] = {};
+          occurrences[columnKData] = { total: 0, importe: 0 };
         }
         occurrences[columnKData][valueM] = (occurrences[columnKData][valueM] || 0) + 1;
+        occurrences[columnKData].total++;
+        occurrences[columnKData].importe += importe;
         totalSum++;
+        totalImporte += importe;
       }
     });
-    return { occurrences, totalSum };
+    return { occurrences, totalSum, totalImporte };
   };
 
-  const renderTableHeaders = (occurrences, totalSum) => {
+  const renderTableHeaders = (occurrences) => {
     const valuesM = new Set();
     Object.values(occurrences).forEach(columnKOccurrences => {
       Object.keys(columnKOccurrences).forEach(valueM => {
-        valuesM.add(valueM);
+        if (valueM !== 'total' && valueM !== 'importe') {
+          valuesM.add(valueM);
+        }
       });
     });
     return (
       <tr>
         <th className="py-2 px-4">Presupuesto por</th>
+        <th className="py-2 px-4">Total</th>
         {[...valuesM].map(valueM => (
           <th key={valueM} className="py-2 px-4">{valueM}</th>
         ))}
-        <th className="py-2 px-4">Total</th>
-        <th className="py-2 px-4">Porcentaje</th> {/* Agregar el encabezado para la columna de porcentajes */}
+        <th className="py-2 px-4">Porcentaje</th>
+        <th className="py-2 px-4">Importe</th>
       </tr>
     );
   };
 
-  const renderTableRows = (filteredData) => {
-    const { occurrences, totalSum } = countOccurrences(filteredData);
-    const columnKData = Object.keys(occurrences);
-    const allValuesM = new Set();
-    columnKData.forEach(columnK => {
-      Object.keys(occurrences[columnK]).forEach(valueM => {
+const renderTableRows = (filteredData) => {
+  const { occurrences, totalSum, totalImporte } = countOccurrences(filteredData);
+  const columnKData = Object.keys(occurrences);
+  const allValuesM = new Set();
+  columnKData.forEach(columnK => {
+    Object.keys(occurrences[columnK]).forEach(valueM => {
+      if (valueM !== 'total' && valueM !== 'importe') {
         allValuesM.add(valueM);
-      });
+      }
     });
+  });
 
-    console.log("Total sum:", totalSum);
+  const totals = { total: 0, importe: 0 };
 
-    return columnKData.map(columnK => {
-      const total = Object.values(occurrences[columnK]).reduce((acc, curr) => acc + curr, 0);
-      const percentage = totalSum !== 0 ? (total / totalSum * 100).toFixed(2) : 0;
+  const rows = columnKData.map(columnK => {
+    const total = occurrences[columnK].total;
+    const percentage = totalSum !== 0 ? (total / totalSum * 100).toFixed(2) : 0;
+    const importe = occurrences[columnK].importe.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 
-      return (
-        <tr key={columnK}>
-          <td className="py-2 px-4">{columnK}</td>
-          {[...allValuesM].map(valueM => (
-            <td key={valueM} className="py-2 px-4">{occurrences[columnK][valueM] || 0}</td>
-          ))}
-          <td className="py-2 px-4">{total}</td>
-          <td className="py-2 px-4">{isNaN(percentage) ? "0%" : percentage}%</td> {/* Asegúrate de manejar el caso en el que el porcentaje sea NaN */}
-        </tr>
-      );
+    [...allValuesM].forEach(valueM => {
+      totals[valueM] = (totals[valueM] || 0) + (occurrences[columnK][valueM] || 0);
     });
-  };
+    totals.total += total;
+    totals.importe += parseFloat(importe.replace(/\s/g, '').replace(',', '.')); // Elimina los espacios en blanco antes de la conversión a número
+
+    return (
+      <tr key={columnK}>
+        <td className="py-2 px-4">{columnK}</td>
+        <td className="py-2 px-4">{total}</td>
+        {[...allValuesM].map(valueM => (
+          <td key={valueM} className="py-2 px-4">{occurrences[columnK][valueM] || 0}</td>
+        ))}
+        <td className="py-2 px-4">{isNaN(percentage) ? "0%" : percentage}%</td>
+        <td className="py-2 px-4">{importe} €</td>
+      </tr>
+    );
+  });
+
+  const totalPercentage = totalSum !== 0 ? (totals.total / totalSum * 100).toFixed(2) : 0;
+  const formattedTotalImporte = totals.importe.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+
+  const totalRow = (
+    <tr>
+      <td className="py-2 px-4 font-bold">Total</td>
+      <td className="py-2 px-4 font-bold">{totals.total}</td>
+      {[...allValuesM].map(valueM => (
+        <td key={valueM} className="py-2 px-4 font-bold">{totals[valueM]}</td>
+      ))}
+      <td className="py-2 px-4 font-bold">{isNaN(totalPercentage) ? "0%" : totalPercentage}%</td>
+      <td className="py-2 px-4 font-bold">{formattedTotalImporte} €</td>
+    </tr>
+  );
+
+  return [...rows, totalRow];
+};
 
 
-  const { occurrences, totalSum } = countOccurrences(); // Obtiene tanto las ocurrencias como el total general
-  // const totalSum = Object.values(occurrences).reduce((acc, columnKOccurrences) => {
-  //   const columnKSum = Object.values(columnKOccurrences).reduce((sum, value) => sum + value, 0);
-  //   return acc + columnKSum;
-  // }, 0);
+  const { occurrences } = countOccurrences(); // Obtiene tanto las ocurrencias como el total general
 
   return (
     <>
       <div className='justify-center'>
-        <p className='text-center'>Presupuestos</p>
+      <p className='text-center font-bold text-2xl'>{texto}</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 justify-center">
           <div>
             <label htmlFor="startMonthSelect" className='text-center block'>Inicio Mes</label>
@@ -152,12 +229,14 @@ const Graficos = () => {
               id="startMonthSelect"
               onChange={handleStartMonthChange}
               value={startMonth}
-              className="w-full p-2 border border-gray-300 rounded-md text-center"
-            >
+              onFocus={handleSelectFocus1}
+              onBlur={handleSelectBlur1}
+              className={`w-full p-2 border border-gray-300 rounded-md text-center ${!isSelectOpen1 && startMonth !== 0 ? 'bg-blue-100' : ''}`}
+              >
               <option value="0">Todos los meses</option>
               {Array.from({ length: 12 }, (_, index) => index + 1).map(month => (
                 <option key={month} value={month}>
-                  {new Date(2000, month - 1).toLocaleString('default', { month: 'long' })}
+                  {new Date(2000, month - 1).toLocaleString('default', { month: 'long' }).charAt(0).toUpperCase() + new Date(2000, month - 1).toLocaleString('default', { month: 'long' }).slice(1)}
                 </option>
               ))}
             </select>
@@ -168,12 +247,14 @@ const Graficos = () => {
               id="endMonthSelect"
               onChange={handleEndMonthChange}
               value={endMonth}
-              className="w-full p-2 border border-gray-300 rounded-md text-center"
+              onFocus={handleSelectFocus2}
+              onBlur={handleSelectBlur2}
+              className={`w-full p-2 border border-gray-300 rounded-md text-center ${!isSelectOpen2 && endMonth !== 0 ? 'bg-blue-100' : ''}`}
             >
               <option value="0">Todos los meses</option>
               {Array.from({ length: 12 }, (_, index) => index + 1).map(month => (
                 <option key={month} value={month}>
-                  {new Date(2000, month - 1).toLocaleString('default', { month: 'long' })}
+                  {new Date(2000, month - 1).toLocaleString('default', { month: 'long' }).charAt(0).toUpperCase() + new Date(2000, month - 1).toLocaleString('default', { month: 'long' }).slice(1)}
                 </option>
               ))}
             </select>
@@ -183,8 +264,10 @@ const Graficos = () => {
             <select
               id="startYearSelect"
               onChange={handleStartYearChange}
-              value={startYear}
-              className="w-full p-2 border border-gray-300 rounded-md text-center"
+              value={startYear}              
+              onFocus={handleSelectFocus3}
+              onBlur={handleSelectBlur3}
+              className={`w-full p-2 border border-gray-300 rounded-md text-center ${!isSelectOpen3 && startYear !== 0 ? 'bg-blue-100' : ''}`}
             >
               <option value="0">Todos los años</option>
               {Array.from({ length: 8 }, (_, index) => 2023 + index).map(year => (
@@ -200,7 +283,9 @@ const Graficos = () => {
               id="endYearSelect"
               onChange={handleEndYearChange}
               value={endYear}
-              className="w-full p-2 border border-gray-300 rounded-md text-center"
+              onFocus={handleSelectFocus4}
+              onBlur={handleSelectBlur4}
+              className={`w-full p-2 border border-gray-300 rounded-md text-center ${!isSelectOpen4 && endYear !== 0 ? 'bg-blue-100' : ''}`}
             >
               <option value="0">Todos los años</option>
               {Array.from({ length: 8 }, (_, index) => 2023 + index).map(year => (
@@ -228,7 +313,6 @@ const Graficos = () => {
               </tbody>
             </table>
           </div>
-
         </div>
       </div>
       <style>

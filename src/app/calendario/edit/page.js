@@ -5,6 +5,7 @@ import FormCalendario from "@/components/formCalendario"
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 export const dynamic = 'force-dynamic'
+import Link from 'next/link';
 
 async function page({searchParams}) {
 
@@ -22,6 +23,11 @@ async function page({searchParams}) {
         <h3 className="text-4xl text-center mb-3">Editar evento {evento.title}</h3>
         <FormCalendario action={editEvento} title='Editar evento' onClick='Evento editado' evento={evento} edicion={true} />
         <FormCalendario action={eliminarEvento} title='Eliminar evento' onClick='Evento eliminado' evento={evento} edicion={true} eliminar={true} />
+        <div className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer mb-4 text-center w-[150px]">
+          <Link href="/calendario">
+              Volver atrás
+          </Link>
+        </div>
     </div>
   )
 }

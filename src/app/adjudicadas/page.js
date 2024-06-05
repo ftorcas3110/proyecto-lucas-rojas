@@ -14,7 +14,9 @@ export default async function Home() {
     if (!sesion) redirect('/')
     return (
         <>
+        <h1 className="text-4xl font-bold text-gray-900 text-center mt-[150px] mb-8">Licitaciones Adjudicadas</h1>
             <Buscador/>
+            <br/>
                 {
                     licitaciones.map((licitacion) => (
                         <>
