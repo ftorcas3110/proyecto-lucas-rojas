@@ -311,7 +311,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                         {disabled ? (
                             <>
                                 <label htmlFor='estadoini' className='mb-2 text-3xl mr-20'>Estado inicial</label>
-                                <select id='estadoini' name='estadoini' className="my-1 border p-2 rounded text-center text-xl" value={estadoini1} onChange={handleEstadoIniChange && handleEstadoIniChange1}>
+                                <select id='estadoini' name='estadoini' className="my-1 border p-2 rounded text-center text-xl" value={estadoini} onChange={handleEstadoIniChange && handleEstadoIniChange1}>
                                     {licitacion?.estadoini !== '' && (
                                         <option value={licitacion?.estadoini}>{licitacion?.estadoini}</option>
                                     )}
@@ -324,7 +324,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                         ) : (
                             <>
                                 <label htmlFor='estadoini' className='mb-2 text-3xl mr-20'>Estado inicial</label>
-                                <select id='estadoini' name='estadoini' className="my-1 border p-2 rounded text-center text-xl" value={estadoini1} onChange={handleEstadoIniChange && handleEstadoIniChange1}>
+                                <select id='estadoini' name='estadoini' className="my-1 border p-2 rounded text-center text-xl" value={estadoini} onChange={handleEstadoIniChange && handleEstadoIniChange1}>
                                     {licitacion?.estadoini && (
                                         <option value={licitacion?.estadoini}>{licitacion?.estadoini}</option>
                                     )}
