@@ -203,6 +203,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                                     )}
                                     <option value="">En blanco</option>
                                     <option value="PILAR MARÍN">Pilar Marín</option>
+                                    <option value="SERGIO ORTEGA">Sergio Ortega</option>
                                     <option value="JOSÉ M QUERO">José M Quero</option>
                                     <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
                                     <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
@@ -221,6 +222,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                                     )}
                                     <option value="">En blanco</option>
                                     <option value="PILAR MARÍN">Pilar Marín</option>
+                                    <option value="SERGIO ORTEGA">Sergio Ortega</option>
                                     <option value="JOSÉ M QUERO">José M Quero</option>
                                     <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
                                     <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
@@ -241,6 +243,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                                     )}
                                     <option value="">En blanco</option>
                                     <option value="PILAR MARÍN">Pilar Marín</option>
+                                    <option value="SERGIO ORTEGA">Sergio Ortega</option>
                                     <option value="JOSÉ M QUERO">José M Quero</option>
                                     <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
                                     <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
@@ -259,6 +262,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                                     )}
                                     <option value="">En blanco</option>
                                     <option value="PILAR MARÍN">Pilar Marín</option>
+                                    <option value="SERGIO ORTEGA">Sergio Ortega</option>
                                     <option value="JOSÉ M QUERO">José M Quero</option>
                                     <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
                                     <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
@@ -279,6 +283,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                                     )}
                                     <option value="">En blanco</option>
                                     <option value="PILAR MARÍN">Pilar Marín</option>
+                                    <option value="SERGIO ORTEGA">Sergio Ortega</option>
                                     <option value="JOSÉ M QUERO">José M Quero</option>
                                     <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
                                     <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
@@ -297,6 +302,7 @@ function Form({ action, title, licitacion, disabled = false, onClick, usuario })
                                     )}
                                     <option value="">En blanco</option>
                                     <option value="PILAR MARÍN">Pilar Marín</option>
+                                    <option value="SERGIO ORTEGA">Sergio Ortega</option>
                                     <option value="JOSÉ M QUERO">José M Quero</option>
                                     <option value="JUAN G. MARTÍNEZ">Juan G. Martínez</option>
                                     <option value="MARÍA JOSÉ FERNÁNDEZ">María José Fernández</option>
