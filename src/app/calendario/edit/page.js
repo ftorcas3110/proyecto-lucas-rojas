@@ -20,7 +20,7 @@ async function page({searchParams}) {
 
   return (
     <div>
-        <h3 className="text-4xl text-center mb-3">Editar evento {evento.title}</h3>
+        <h3 className="text-4xl text-center mb-3 mt-[150px]">Editar evento {evento.title}</h3>
         <FormCalendario action={editEvento} title='Editar evento' onClick='Evento editado' evento={evento} edicion={true} />
         <FormCalendario action={eliminarEvento} title='Eliminar evento' onClick='Evento eliminado' evento={evento} edicion={true} eliminar={true} />
         <div className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer mb-4 text-center w-[150px]">

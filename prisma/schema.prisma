@@ -51,6 +51,7 @@ model Licitacion {
   fianza                Decimal?  @db.Decimal(12,2)
   garantia              String?
   responsable           String?
+  eventos               Evento[]
 }
 
 model Evento {
@@ -61,4 +62,5 @@ model Evento {
   end                   DateTime @db.Date
   categoria             String  
   idLicitacion          Int? @unique
+  licitacion            Licitacion? @relation(fields: [idLicitacion], references: [item])
 }
