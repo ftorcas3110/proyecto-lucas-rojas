@@ -153,67 +153,66 @@ const Graficos = ({ valor }) => {
         {[...valuesM].map(valueM => (
           <th key={valueM} className="py-2 px-4">{valueM}</th>
         ))}
-        <th className="py-2 px-4">Porcentaje</th>
         <th className="py-2 px-4">Importe</th>
       </tr>
     );
   };
 
-const renderTableRows = (filteredData) => {
-  const { occurrences, totalSum, totalImporte } = countOccurrences(filteredData);
-  const columnKData = Object.keys(occurrences);
-  const allValuesM = new Set();
-  columnKData.forEach(columnK => {
-    Object.keys(occurrences[columnK]).forEach(valueM => {
-      if (valueM !== 'total' && valueM !== 'importe') {
-        allValuesM.add(valueM);
-      }
+  const renderTableRows = (filteredData) => {
+    const { occurrences, totalSum, totalImporte } = countOccurrences(filteredData);
+    const columnKData = Object.keys(occurrences);
+    const allValuesM = new Set();
+    columnKData.forEach(columnK => {
+      Object.keys(occurrences[columnK]).forEach(valueM => {
+        if (valueM !== 'total' && valueM !== 'importe') {
+          allValuesM.add(valueM);
+        }
+      });
     });
-  });
 
-  const totals = { total: 0, importe: 0 };
+    const totals = { total: 0, importe: 0 };
 
-  const rows = columnKData.map(columnK => {
-    const total = occurrences[columnK].total;
-    const percentage = totalSum !== 0 ? (total / totalSum * 100).toFixed(2) : 0;
-    const importe = occurrences[columnK].importe.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    const rows = columnKData.map(columnK => {
+      const total = occurrences[columnK].total;
+      const percentage = totalSum !== 0 ? (total / totalSum * 100).toFixed(2) : 0;
+      const importe = occurrences[columnK].importe.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+      const importePercentage = totalImporte !== 0 ? (occurrences[columnK].importe / totalImporte * 100).toFixed(2) : 0;
 
-    [...allValuesM].forEach(valueM => {
-      totals[valueM] = (totals[valueM] || 0) + (occurrences[columnK][valueM] || 0);
+      [...allValuesM].forEach(valueM => {
+        totals[valueM] = (totals[valueM] || 0) + (occurrences[columnK][valueM] || 0);
+      });
+      totals.total += total;
+      totals.importe += parseFloat(importe.replace(/\s/g, '').replace(',', '.')); // Elimina los espacios en blanco antes de la conversión a número
+
+      return (
+        <tr key={columnK}>
+          <td className="py-2 px-4">{columnK}</td>
+          <td className="py-2 px-4">{total} - {isNaN(percentage) ? "0%" : percentage}%</td>
+          {[...allValuesM].map(valueM => (
+            <td key={valueM} className="py-2 px-4">{occurrences[columnK][valueM] || 0}</td>
+          ))}
+          <td className="py-2 px-4">{importe} € - {isNaN(importePercentage) ? "0%" : importePercentage}%</td>
+        </tr>
+      );
     });
-    totals.total += total;
-    totals.importe += parseFloat(importe.replace(/\s/g, '').replace(',', '.')); // Elimina los espacios en blanco antes de la conversión a número
 
-    return (
-      <tr key={columnK}>
-        <td className="py-2 px-4">{columnK}</td>
-        <td className="py-2 px-4">{total}</td>
+    const totalPercentage = totalSum !== 0 ? (totals.total / totalSum * 100).toFixed(2) : 0;
+    const formattedTotalImporte = totals.importe.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    const totalImportePercentage = totalImporte !== 0 ? (totals.importe / totalImporte * 100).toFixed(2) : 0;
+
+    const totalRow = (
+      <tr>
+        <td className="py-2 px-4 font-bold">Total</td>
+        <td className="py-2 px-4 font-bold">{totals.total} - {isNaN(totalPercentage) ? "0%" : totalPercentage}%</td>
         {[...allValuesM].map(valueM => (
-          <td key={valueM} className="py-2 px-4">{occurrences[columnK][valueM] || 0}</td>
+          <td key={valueM} className="py-2 px-4 font-bold">{totals[valueM]}</td>
         ))}
-        <td className="py-2 px-4">{isNaN(percentage) ? "0%" : percentage}%</td>
-        <td className="py-2 px-4">{importe} €</td>
+        <td className="py-2 px-4 font-bold">{formattedTotalImporte} € - {isNaN(totalImportePercentage) ? "0%" : totalImportePercentage}%</td>
       </tr>
     );
-  });
 
-  const totalPercentage = totalSum !== 0 ? (totals.total / totalSum * 100).toFixed(2) : 0;
-  const formattedTotalImporte = totals.importe.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-
-  const totalRow = (
-    <tr>
-      <td className="py-2 px-4 font-bold">Total</td>
-      <td className="py-2 px-4 font-bold">{totals.total}</td>
-      {[...allValuesM].map(valueM => (
-        <td key={valueM} className="py-2 px-4 font-bold">{totals[valueM]}</td>
-      ))}
-      <td className="py-2 px-4 font-bold">{isNaN(totalPercentage) ? "0%" : totalPercentage}%</td>
-      <td className="py-2 px-4 font-bold">{formattedTotalImporte} €</td>
-    </tr>
-  );
-
-  return [...rows, totalRow];
-};
+    return [...rows, totalRow];
+  };
 
 
   const { occurrences } = countOccurrences(); // Obtiene tanto las ocurrencias como el total general
@@ -221,7 +220,7 @@ const renderTableRows = (filteredData) => {
   return (
     <>
       <div className='justify-center'>
-      <p className='text-center font-bold text-2xl'>{texto}</p>
+        <p className='text-center font-bold text-2xl'>{texto}</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 justify-center">
           <div>
             <label htmlFor="startMonthSelect" className='text-center block'>Inicio Mes</label>
@@ -232,7 +231,7 @@ const renderTableRows = (filteredData) => {
               onFocus={handleSelectFocus1}
               onBlur={handleSelectBlur1}
               className={`w-full p-2 border border-gray-300 rounded-md text-center ${!isSelectOpen1 && startMonth !== 0 ? 'bg-blue-100' : ''}`}
-              >
+            >
               <option value="0">Todos los meses</option>
               {Array.from({ length: 12 }, (_, index) => index + 1).map(month => (
                 <option key={month} value={month}>
