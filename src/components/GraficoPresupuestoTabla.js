@@ -119,29 +119,35 @@ const Graficos = ({ valor }) => {
     const occurrences = {};
     let totalSum = 0;
     let totalImporte = 0;
+    let noAdjudicadaImporte = 0;
     filteredData.forEach(item => {
       const columnKData = item[valor];
       const valueM = item[12];
       const importe = parseFloat(item[7]) || 0;
       if (columnKData && valueM) {
         if (!occurrences[columnKData]) {
-          occurrences[columnKData] = { total: 0, importe: 0 };
+          occurrences[columnKData] = { total: 0, importe: 0, noAdjudicadaImporte: 0 };
         }
         occurrences[columnKData][valueM] = (occurrences[columnKData][valueM] || 0) + 1;
         occurrences[columnKData].total++;
-        occurrences[columnKData].importe += importe;
+        if (valueM === "NO ADJUDICADA") {
+          occurrences[columnKData].noAdjudicadaImporte += importe;
+          noAdjudicadaImporte += importe;
+        } else {
+          occurrences[columnKData].importe += importe;
+          totalImporte += importe;
+        }
         totalSum++;
-        totalImporte += importe;
       }
     });
-    return { occurrences, totalSum, totalImporte };
+    return { occurrences, totalSum, totalImporte, noAdjudicadaImporte };
   };
 
   const renderTableHeaders = (occurrences) => {
     const valuesM = new Set();
     Object.values(occurrences).forEach(columnKOccurrences => {
       Object.keys(columnKOccurrences).forEach(valueM => {
-        if (valueM !== 'total' && valueM !== 'importe') {
+        if (valueM !== 'total' && valueM !== 'importe' && valueM !== 'noAdjudicadaImporte') {
           valuesM.add(valueM);
         }
       });
@@ -154,44 +160,49 @@ const Graficos = ({ valor }) => {
           <th key={valueM} className="py-2 px-4">{valueM}</th>
         ))}
         <th className="py-2 px-4">Importe</th>
+        <th className="py-2 px-4">Importe NO ADJUDICADA</th>
       </tr>
     );
   };
 
   const renderTableRows = (filteredData) => {
-    const { occurrences, totalSum, totalImporte } = countOccurrences(filteredData);
+    const { occurrences, totalSum, totalImporte, noAdjudicadaImporte } = countOccurrences(filteredData);
     const columnKData = Object.keys(occurrences);
     const allValuesM = new Set();
     columnKData.forEach(columnK => {
       Object.keys(occurrences[columnK]).forEach(valueM => {
-        if (valueM !== 'total' && valueM !== 'importe') {
+        if (valueM !== 'total' && valueM !== 'importe' && valueM !== 'noAdjudicadaImporte') {
           allValuesM.add(valueM);
         }
       });
     });
 
-    const totals = { total: 0, importe: 0 };
+    const totals = { total: 0, importe: 0, noAdjudicadaImporte: 0 };
 
     const rows = columnKData.map(columnK => {
       const total = occurrences[columnK].total;
       const percentage = totalSum !== 0 ? (total / totalSum * 100).toFixed(2) : 0;
       const importe = occurrences[columnK].importe.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
       const importePercentage = totalImporte !== 0 ? (occurrences[columnK].importe / totalImporte * 100).toFixed(2) : 0;
+      const noAdjudicadaImporteFormatted = occurrences[columnK].noAdjudicadaImporte.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+      const noAdjudicadaImportePercentage = noAdjudicadaImporte !== 0 ? (occurrences[columnK].noAdjudicadaImporte / noAdjudicadaImporte * 100).toFixed(2) : 0;
 
       [...allValuesM].forEach(valueM => {
         totals[valueM] = (totals[valueM] || 0) + (occurrences[columnK][valueM] || 0);
       });
       totals.total += total;
       totals.importe += parseFloat(importe.replace(/\s/g, '').replace(',', '.')); // Elimina los espacios en blanco antes de la conversión a número
+      totals.noAdjudicadaImporte += parseFloat(noAdjudicadaImporteFormatted.replace(/\s/g, '').replace(',', '.'));
 
       return (
         <tr key={columnK}>
           <td className="py-2 px-4">{columnK}</td>
-          <td className="py-2 px-4">{total} - {isNaN(percentage) ? "0%" : percentage}%</td>
+          <td className="py-2 px-4">{total} - {percentage}%</td>
           {[...allValuesM].map(valueM => (
             <td key={valueM} className="py-2 px-4">{occurrences[columnK][valueM] || 0}</td>
           ))}
-          <td className="py-2 px-4">{importe} € - {isNaN(importePercentage) ? "0%" : importePercentage}%</td>
+          <td className="py-2 px-4">{importe} € - {importePercentage}%</td>
+          <td className="py-2 px-4">{noAdjudicadaImporteFormatted} € - {noAdjudicadaImportePercentage}%</td>
         </tr>
       );
     });
@@ -199,23 +210,25 @@ const Graficos = ({ valor }) => {
     const totalPercentage = totalSum !== 0 ? (totals.total / totalSum * 100).toFixed(2) : 0;
     const formattedTotalImporte = totals.importe.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     const totalImportePercentage = totalImporte !== 0 ? (totals.importe / totalImporte * 100).toFixed(2) : 0;
+    const formattedTotalNoAdjudicadaImporte = totals.noAdjudicadaImporte.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    const totalNoAdjudicadaImportePercentage = noAdjudicadaImporte !== 0 ? (totals.noAdjudicadaImporte / noAdjudicadaImporte * 100).toFixed(2) : 0;
 
     const totalRow = (
-      <tr>
+      <tr key="totals">
         <td className="py-2 px-4 font-bold">Total</td>
-        <td className="py-2 px-4 font-bold">{totals.total} - {isNaN(totalPercentage) ? "0%" : totalPercentage}%</td>
+        <td className="py-2 px-4 font-bold">{totals.total} - {totalPercentage}%</td>
         {[...allValuesM].map(valueM => (
           <td key={valueM} className="py-2 px-4 font-bold">{totals[valueM]}</td>
         ))}
-        <td className="py-2 px-4 font-bold">{formattedTotalImporte} € - {isNaN(totalImportePercentage) ? "0%" : totalImportePercentage}%</td>
+        <td className="py-2 px-4 font-bold">{formattedTotalImporte} € - {totalImportePercentage}%</td>
+        <td className="py-2 px-4 font-bold">{formattedTotalNoAdjudicadaImporte} € - {totalNoAdjudicadaImportePercentage}%</td>
       </tr>
     );
 
     return [...rows, totalRow];
   };
 
-
-  const { occurrences } = countOccurrences(); // Obtiene tanto las ocurrencias como el total general
+  const { occurrences } = countOccurrences();
 
   return (
     <>
