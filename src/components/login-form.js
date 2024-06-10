@@ -28,7 +28,7 @@ export function LoginForm() {
         <input
           type="email"
           name="email"
-          placeholder="asdasd@lucasrojas.com"
+          placeholder="correo@lucasrojas.com"
           className="border p-2 rounded"
         />
       </div>
