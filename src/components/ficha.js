@@ -83,11 +83,24 @@ function Form({ action, licitacion, disabled = false, usuario }) {
                         <input type='text' id='presentadapor' name='presentadapor'
                             defaultValue={licitacion?.presentadapor} className="border p-2 rounded text-center text-xl my-1" required />
 
-<div className='grid grid-cols-2 gap-y-4 w-[80vw]'>
-    <div className="flex flex-col items-center justify-center">
+                        <label htmlFor='observaciones' className='mb-2 text-3xl mr-20'>Observaciones</label>
+                        <textarea id='observaciones' name='observaciones'
+                            rows="2"
+                            cols="50"
+                            defaultValue={licitacion?.observaciones}
+                            className="border p-2 rounded text-center text-xl my-1" />
+
+<div className='grid grid-cols-3 gap-y-4 w-[80vw]'>
+<div className="flex flex-col items-center justify-center">
         <label htmlFor='fianza' className='mb-2 text-3xl'>Fianza</label>
         <input type='number' id='fianza' name='fianza' min='0' step={0.01}
             value={Number(licitacion?.fianza)}
+            className="border p-2 rounded text-center text-xl my-1" />
+    </div>
+    <div className="flex flex-col items-center justify-center">
+        <label htmlFor='garantia' className='mb-2 text-3xl'>Garantía</label>
+        <input type='text' id='garantia' name='garantia'
+            value={licitacion?.garantia}
             className="border p-2 rounded text-center text-xl my-1" />
     </div>
     <div className="flex flex-col items-center justify-center">
