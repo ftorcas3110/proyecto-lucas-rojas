@@ -22,9 +22,9 @@ function Header({ session }) {
   return (
     <header className="bg-blue-100 text-black flex md:flex-row justify-between fixed top-0 left-0 right-0 z-10 items-center md:justify-between md:px-5 py-2 font-Rounded font-bold mb-3">
       <div className="hidden lg:flex">
-        <a href="/">
+        <Link href="/">
           <Image src="/images/logo.png" alt="Logo" width={100} height={24} />
-        </a>
+        </Link>
       </div>
       {session && (
         <div className="w-[80vw] flex justify-center">

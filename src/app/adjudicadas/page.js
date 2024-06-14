@@ -21,7 +21,7 @@ export default async function Home() {
                     licitaciones.map((licitacion) => (
                         <>
                             <Licitacion key={licitacion.item} licitacion={licitacion}>
-                                <div className="border border-black items-center text-center align-middle rounded bg-gray-300 cursor-pointer transition duration-500 hover:bg-green-500 w-[100px] h-[50px] flex">
+                                <div className="border border-gray-400 rounded bg-gray-100 cursor-pointer transition duration-500 hover:bg-green-400 w-24 h-12 flex items-center justify-center my-2">
                                     <Link
                                         className='flex align-right items-right text-center justify-right w-full pl-[10px]'
                                         href={{ pathname: '/adjudicadas/ficha', query: { item: licitacion.item } }}>

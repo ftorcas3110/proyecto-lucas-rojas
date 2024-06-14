@@ -44,7 +44,7 @@ function Licitacion({ children, licitacion }) {
                     </div>
                 ) : (
                     <a href={rutacarpeta} target="_blank" className="flex align-right items-right text-center justify-right">
-                        <div className="border border-black rounded bg-gray-300 cursor-pointer transition duration-500 hover:bg-blue-500 w-[100px] h-[50px] flex">
+                        <div className="border border-gray-400 rounded bg-gray-100 cursor-pointer transition duration-500 hover:bg-blue-400 w-[100px] h-[50px] flex items-center justify-center text-center">
                             Abrir carpeta
                         </div>
                     </a>
