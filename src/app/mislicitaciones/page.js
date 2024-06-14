@@ -14,24 +14,27 @@ export default async function Home() {
 
     return (
         <>
-        <h1 className="text-4xl font-bold text-gray-900 text-center mt-[150px] mb-8">Licitaciones en presupuesto por {sesion?.user?.name}</h1>
+            <h1 className="text-4xl font-bold text-gray-900 text-center mt-[150px] mb-8">Licitaciones en presupuesto por {sesion?.user?.name}</h1>
             <div className="w-[80%] mx-auto">
 
                 {
                     licitaciones.map((licitacion) => (
                         <>
                             <Licitacion key={licitacion.item} licitacion={licitacion}>
-                                <div className="h-[40%] mx-auto">
-                                    <div className="border border-black items-center text-center align-middle rounded bg-gray-300 cursor-pointer transition duration-500 hover:bg-blue-500 w-[100px] h-[50px] flex my-6">
+                                <div className="mx-auto w-[200px] px-6 grid grid-cols-1 justify-center">
+                                    <div className="font-bold mb-2 mx-auto text-center">
+                                        <h3>Acciones</h3>
+                                    </div>
+                                    <div className="border border-gray-400 rounded bg-gray-100 cursor-pointer transition duration-500 hover:bg-blue-400 w-24 h-12 flex items-center justify-center my-2">
                                         <Link
-                                            className='flex align-middle items-center text-center justify-center w-full pl-[10px]'
+                                            className="w-full h-full flex items-center justify-center text-center"
                                             href={{ pathname: '/dashboard/edit', query: { item: licitacion.item } }}>
                                             Editar licitación
                                         </Link>
                                     </div>
-                                    <div className="border border-black items-center text-center align-middle rounded bg-gray-300 cursor-pointer transition duration-500 hover:bg-red-500 w-[100px] h-[50px] flex">
+                                    <div className="border border-gray-400 rounded bg-gray-100 cursor-pointer transition duration-500 hover:bg-red-400 w-24 h-12 flex items-center justify-center my-2">
                                         <Link
-                                            className='flex align-middle items-center text-center justify-center w-full pl-[10px]'
+                                            className="w-full h-full flex items-center justify-center text-center"
                                             href={{ pathname: '/dashboard/delete', query: { item: licitacion.item } }}>
                                             Eliminar licitación
                                         </Link>

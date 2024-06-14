@@ -90,80 +90,169 @@ function Licitacion({ children, licitacion }) {
             <div className="col-span-4">
                 <div style={{ 'border': '1px solid black', 'padding': '20px' }} className="mb-4 rounded-xl flex text-black text-left w-[100%]">
                     {licitacion.estadofinal !== "ADJUDICADA" ? (
-                    <>
-                        <div className="w-1/3 pr-8">
-                        <p><strong>Cliente: {licitacion.cliente}</strong></p>
-                        <p><strong>Número expediente: {licitacion.numexpediente}</strong></p>
-                        <p>Título: {licitacion.titulo}</p>
-                        {anyo == null ? (<p>Fecha de presentación no disponible</p>):(<p>Fecha de presentación: {dia}/{mes}/{anyo} - {hora}:{minuto}h</p>)} 
+                        <>
+                        <div className="grid grid-cols-4 gap-4">
+    <div className="col-span-1">
+        <h3 className="font-bold mb-2 text-center">Detalles de la Licitación</h3>
+        <div className="w-full pr-6 flex flex-col justify-center">
+            <p><strong>Cliente: {licitacion.cliente}</strong></p>
+            <p><strong>Número expediente: {licitacion.numexpediente}</strong></p>
+            <p>Título: {licitacion.titulo}</p>
+            {anyo == null ? (
+                <p>Fecha de presentación no disponible</p>
+            ) : (
+                <p>Fecha de presentación: {dia}/{mes}/{anyo} - {hora}:{minuto}h</p>
+            )}
+        </div>
+    </div>
+    <div className="col-span-1 border-l border-gray-200">
+        <h3 className="font-bold mb-2 text-center">Información del Contrato</h3>
+        <div className="w-full px-6 flex flex-col justify-center">
+            {licitacion?.tipo == null ? (
+                <p>Tipo licitación no disponible</p>
+            ) : (
+                <p>Tipo: {licitacion?.tipo}</p>
+            )}
+            {licitacion?.tipocontrato == null ? (
+                <p>Tipo de contrato no disponible</p>
+            ) : (
+                <p>Tipo de contrato: {licitacion?.tipocontrato}</p>
+            )}
+            {licitacion?.importe == null ? (
+                <p>Importe vacío</p>
+            ) : (
+                <p>Importe: {licitacion?.importe?.toString()} €</p>
+            )}
+        </div>
+    </div>
+    <div className="col-span-1 border-l border-gray-200">
+        <h3 className="font-bold mb-2 text-center">Responsables</h3>
+        <div className="w-full pl-6 flex flex-col justify-center">
+            <p>Captada por: {licitacion?.captadapor == null || licitacion?.captadapor == '' ? (<span>No disponible</span>) : (<strong>{licitacion.captadapor}</strong>)}</p>
+            <p>Estudio por: {licitacion?.estudiopor == null || licitacion?.estudiopor == '' ? (<span>No disponible</span>) : (<strong>{licitacion.estudiopor}</strong>)}</p>
+            <p>Presupuesto por: {licitacion?.presupuestopor == null || licitacion?.presupuestopor == '' ? (<span>No disponible</span>) : (<strong>{licitacion.presupuestopor}</strong>)}</p>
+            <p>Presentada por: {licitacion?.presentadapor == null || licitacion?.presentadapor == '' ? (<span>No disponible</span>) : (<strong>{licitacion.presentadapor}</strong>)}</p>
+        </div>
+    </div>
+    <div className="col-span-1 border-x border-gray-200">
+        <h3 className="font-bold mb-2 text-center">Estado y Archivos</h3>
+        <div className="w-full pl-6 flex flex-col justify-center items-center">
+            <p className="pb-2">Estado inicial: {estadoInicialLicitacion({licitacion})}</p>
+            <p className="pb-2">Estado final: {estadoFinalLicitacion({licitacion})}</p>
+            {licitacion.rutacarpeta == null ? (                         
+                <div className="border border-gray-400 rounded bg-gray-100 transition duration-500 hover:bg-red-400 w-[80%] h-[50px] flex items-center justify-center text-center">
+                    Ruta de carpeta no disponible
+                </div>
+            ) : (
+                <a href={licitacion.rutacarpeta} target="_blank" rel="noopener noreferrer">
+                    <div className="border border-gray-400 rounded bg-gray-100 cursor-pointer transition duration-500 hover:bg-blue-400 w-[80%] h-[50px] flex items-center justify-center text-center">
+                        Abrir carpeta
                     </div>
-                    <div className="w-1/3 pl-8">
-                        {licitacion?.tipo == null ? (<p>Tipo licitación no disponible</p>):(<p>Tipo: {licitacion?.tipo}</p>)}
-                        {licitacion?.tipocontrato == null ? (<p>Tipo de contrato no disponible</p>):(<p>Tipo de contrato: {licitacion?.tipocontrato}</p>)}
-                        {licitacion?.importe == null ? (<p>Importe vacío</p>):(<p>Importe: {licitacion?.importe?.toString()} €</p>)}
-                        
-                    </div>
-                    <div className="w-1/3 pl-8">
-                        <p>Captada por: {licitacion?.captadapor == null || licitacion?.captadapor == '' ? (<span>No disponible</span>):(<strong>{licitacion.captadapor}</strong>)}</p>
-                        <p>Estudio por: {licitacion?.estudiopor == null || licitacion?.estudiopor == '' ? (<span>No disponible</span>):(<strong>{licitacion.estudiopor}</strong>)}</p>
-                        <p>Presupuesto por: {licitacion?.presupuestopor == null || licitacion?.presupuestopor == '' ? (<span>No disponible</span>):(<strong>{licitacion.presupuestopor}</strong>)}</p>
-                        <p>Presentada por: {licitacion?.presentadapor == null || licitacion?.presentadapor == '' ? (<span>No disponible</span>):(<strong>{licitacion.presentadapor}</strong>)}</p>
-                    </div>
-                    <div className="w-1/3 pl-8 content-center">
-                        <p className="pb-2">Estado inicial: {estadoInicialLicitacion({licitacion})}</p>
-                        <p className="pb-2">Estado final: {estadoFinalLicitacion({licitacion})}</p>
-                        {licitacion.rutacarpeta == null ? (                         
-                            <div className="border border-black rounded bg-gray-300 transition duration-500 hover:bg-red-300 w-[50%] h-[50px] flex items-center text-center justify-center">
-                                Ruta de carpeta no disponible
-                            </div>
-                        ) : (
-                            <a href={rutacarpeta} target="_blank">
-                                <div className="border border-black rounded bg-gray-300 cursor-pointer trainsition duration-500 hover:bg-blue-500 w-[50%] h-[40px] flex items-center text-center justify-center">
-                                Abrir carpeta
-                                </div>
-                            </a>
-                        )}
+                </a>
+            )}
+        </div>
+    </div>
+</div>
 
-                    </div>
+
                 </>):(
                 <>
-                                    <div className="w-1/3 pr-8">
-                                        <p><strong>Cliente: {licitacion.cliente}</strong></p>
-                                        <p><strong>Número expediente: {licitacion.numexpediente}</strong></p>
-                                        <p>Título: {licitacion.titulo}</p>
-                                        {licitacion.fechaformalizacion == null ? (<p>Duración no disponible</p>):(<p>Duración de contrato: <br/>{diaformalizacion}/{mesformalizacion}/{anyoformalizacion} - {horaformalizacion}:{minutoformalizacion}h // {diafinalizacion}/{mesfinalizacion}/{anyofinalizacion} - {horafinalizacion}:{minutofinalizacion}h</p>)} 
-                                    </div>
-                                    <div className="w-1/3 pl-8">
-                                        {licitacion?.tipo == null ? (<p>Tipo licitación no disponible</p>):(<p>Tipo: {licitacion?.tipo}</p>)}
-                                        {licitacion?.tipocontrato == null ? (<p>Tipo de contrato no disponible</p>):(<p>Tipo de contrato: {licitacion?.tipocontrato}</p>)}
-                                        {licitacion?.importe == null ? (<p>Importe vacío</p>):(<p>Importe: {licitacion?.importe?.toString()} €</p>)}
-                                        {licitacion?.importeanual == null ? (<p>Importe anual no disponible</p>):(<p>Importe anual: {licitacion?.importeanual?.toString()} €</p>)}
-                                        </div>
-                                    <div className="w-1/3 pl-8">
-                                        <p>Responsable: {licitacion?.responsable == null || licitacion?.responsable == '' ? (<span>No disponible</span>):(<strong>{licitacion.responsable}</strong>)}</p>
-                                        {licitacion?.fianza == null || licitacion?.fianza == '' ? (<p>Fianza no disponible</p>):(<p>Fianza: {licitacion?.fianza} €</p>)}
-                                        {licitacion?.garantia == null || licitacion?.garantia == '' ? (<p>Garantía no disponible</p>):(<p>Garantía: {licitacion?.garantia}</p>)}
-                                        {licitacion?.prorrogas == null || licitacion?.prorrogas == '' ? (<p>No hay prórroga</p>):(<p>Duración de prórroga: {licitacion?.prorrogas}</p>)}
-                                        {licitacion?.prorroga1 !== null || licitacion?.prorroga1 == '' && (<p>Prórroga 1: {dia1}/{mes1}/{anyo1} - {hora1}:{minuto1}h</p>)}
-                                        {licitacion?.prorroga2 !== null || licitacion?.prorroga2 == '' && (<p>Prórroga 2: {dia2}/{mes2}/{anyo2} - {hora2}:{minuto2}h</p>)}
-                                        {licitacion?.prorroga3 !== null || licitacion?.prorroga3 == '' && (<p>Prórroga 3: {dia3}/{mes3}/{anyo3} - {hora3}:{minuto3}h</p>)}
-                                    </div>
-                                    <div className="w-1/3 pl-8 content-center">
-                                        <p className="pb-2">Estado inicial: {estadoInicialLicitacion({licitacion})}</p>
-                                        <p className="pb-2">Estado final: {estadoFinalLicitacion({licitacion})}</p>
-                                        {licitacion.rutacarpeta == null ? (                         
-                                            <div className="border border-black rounded bg-gray-300 transition duration-500 hover:bg-red-300 w-[50%] h-[50px] flex items-center text-center justify-center">
-                                                Ruta de carpeta no disponible
-                                            </div>
-                                        ) : (
-                                            <a href={rutacarpeta} target="_blank">
-                                                <div className="border border-black rounded bg-gray-300 cursor-pointer trainsition duration-500 hover:bg-blue-500 w-[50%] h-[40px] flex items-center text-center justify-center">
-                                                Abrir carpeta
-                                                </div>
-                                            </a>
-                                        )}
-                
-                                    </div>
+                                    <div className="w-1/3 pr-6 flex flex-col">
+    <h3 className="font-bold mb-2 text-center">Detalles del Cliente</h3>
+    <div className="flex flex-col justify-center flex-grow">
+        <p><strong>Cliente: {licitacion.cliente}</strong></p>
+        <p><strong>Número expediente: {licitacion.numexpediente}</strong></p>
+        <p>Título: {licitacion.titulo}</p>
+        {licitacion.fechaformalizacion == null ? (
+            <p>Duración no disponible</p>
+        ) : (
+            <p>
+                Duración de contrato: <br/>
+                {diaformalizacion}/{mesformalizacion}/{anyoformalizacion} - {horaformalizacion}:{minutoformalizacion}h
+                <br/>
+                {diafinalizacion}/{mesfinalizacion}/{anyofinalizacion} - {horafinalizacion}:{minutofinalizacion}h
+            </p>
+        )}
+    </div>
+</div>
+<div className="w-1/3 px-6 border-l border-gray-200 flex flex-col">
+    <h3 className="font-bold mb-2 text-center">Información del Contrato</h3>
+    <div className="flex flex-col justify-center flex-grow">
+        {licitacion?.tipo == null ? (
+            <p>Tipo licitación no disponible</p>
+        ) : (
+            <p>Tipo: {licitacion?.tipo}</p>
+        )}
+        {licitacion?.tipocontrato == null ? (
+            <p>Tipo de contrato no disponible</p>
+        ) : (
+            <p>Tipo de contrato: {licitacion?.tipocontrato}</p>
+        )}
+        {licitacion?.importe == null ? (
+            <p>Importe vacío</p>
+        ) : (
+            <p>Importe: {licitacion?.importe?.toString()} €</p>
+        )}
+        {licitacion?.importeanual == null ? (
+            <p>Importe anual no disponible</p>
+        ) : (
+            <p>Importe anual: {licitacion?.importeanual?.toString()} €</p>
+        )}
+    </div>
+</div>
+<div className="w-1/3 pl-6 border-l border-gray-200 flex flex-col">
+    <h3 className="font-bold mb-2 text-center">Responsables</h3>
+    <div className="flex flex-col justify-center flex-grow">
+        <p>Responsable: {licitacion?.responsable == null || licitacion?.responsable == '' ? (
+            <span>No disponible</span>
+        ) : (
+            <strong>{licitacion.responsable}</strong>
+        )}</p>
+        {licitacion?.fianza == null || licitacion?.fianza == '' ? (
+            <p>Fianza no disponible</p>
+        ) : (
+            <p>Fianza: {licitacion?.fianza} €</p>
+        )}
+        {licitacion?.garantia == null || licitacion?.garantia == '' ? (
+            <p>Garantía no disponible</p>
+        ) : (
+            <p>Garantía: {licitacion?.garantia}</p>
+        )}
+        {licitacion?.prorrogas == null || licitacion?.prorrogas == '' ? (
+            <p>No hay prórroga</p>
+        ) : (
+            <p>Duración de prórroga: {licitacion?.prorrogas}</p>
+        )}
+        {licitacion?.prorroga1 !== null && licitacion?.prorroga1 !== '' && (
+            <p>Prórroga 1: {dia1}/{mes1}/{anyo1} - {hora1}:{minuto1}h</p>
+        )}
+        {licitacion?.prorroga2 !== null && licitacion?.prorroga2 !== '' && (
+            <p>Prórroga 2: {dia2}/{mes2}/{anyo2} - {hora2}:{minuto2}h</p>
+        )}
+        {licitacion?.prorroga3 !== null && licitacion?.prorroga3 !== '' && (
+            <p>Prórroga 3: {dia3}/{mes3}/{anyo3} - {hora3}:{minuto3}h</p>
+        )}
+    </div>
+</div>
+<div className="w-1/3 pl-6 border-x border-gray-200 flex flex-col">
+    <h3 className="font-bold mb-2 text-center">Estado y Archivos</h3>
+    <div className="flex flex-col justify-center items-center flex-grow">
+        <p className="pb-2">Estado inicial: {estadoInicialLicitacion({licitacion})}</p>
+        <p className="pb-2">Estado final: {estadoFinalLicitacion({licitacion})}</p>
+        {licitacion.rutacarpeta == null ? (
+            <div className="border border-gray-400 rounded bg-gray-100 transition duration-500 hover:bg-red-400 w-[80%] h-[50px] flex items-center justify-center text-center">
+                Ruta de carpeta no disponible
+            </div>
+        ) : (
+            <a href={rutacarpeta} target="_blank">
+                <div className="border border-gray-400 rounded bg-gray-100 cursor-pointer transition duration-500 hover:bg-blue-400 w-[80%] h-[50px] flex items-center justify-center text-center">
+                    Abrir carpeta
+                </div>
+            </a>
+        )}
+    </div>
+</div>
+
                                     </>
                 )}
 
