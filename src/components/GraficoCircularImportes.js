@@ -2,6 +2,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
+const clientEmail = process.env.GOOGLE_SHEETS_CLIENT_EMAIL;
+const privateKey = process.env.GOOGLE_SHEETS_PRIVATE_KEY.replace(/\\n/g, '\n');
+
 const Graficos = () => {
   const [data, setData] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(0);
@@ -17,15 +20,34 @@ const Graficos = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://sheets.googleapis.com/v4/spreadsheets/1cAcgzxl_N0NG0S14astjJ7cWl-00nDBaWc4Zba6mAew/values/Sheet1!A:AA?key=AIzaSyDGmjbYq0W7f60bCn8yjwMZzKCm8KBm420');
-        const jsonData = await response.json();
-        const sheetData = jsonData.values || [];
-        setData(sheetData.slice(1));
-        updatePresupuestadores(sheetData);
+        // Autenticación con la cuenta de servicio
+        const auth = new google.auth.GoogleAuth({
+          credentials: {
+            client_email: clientEmail,
+            private_key: privateKey,
+          },
+          scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+        });
+    
+        const authClient = await auth.getClient();
+        const sheets = google.sheets({ version: 'v4', auth: authClient });
+    
+        const response = await sheets.spreadsheets.values.get({
+          spreadsheetId: '1cAcgzxl_N0NG0S14astjJ7cWl-00nDBaWc4Zba6mAew',
+          range: 'Sheet1!A:AA',
+        });
+    
+        const jsonData = response.data.values || [];
+        console.log('Datos de la hoja de cálculo:', jsonData);
+    
+        // Aquí puedes usar los datos obtenidos, por ejemplo, para actualizar tu aplicación
+        setData(jsonData.slice(1));
+        updatePresupuestadores(jsonData);
+    
       } catch (error) {
         console.error('Error fetching data:', error);
       }
-    };
+    }
 
     fetchData();
   }, []);
